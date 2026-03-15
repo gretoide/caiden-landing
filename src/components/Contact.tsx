@@ -1,13 +1,18 @@
-import banner3 from '../assets/caiden/1_elden_ring/banner_3.webp';
+import DeferredBackground from './DeferredBackground';
+import { IMAGES } from '../content/images';
+
+const CONTACT_BG = IMAGES.contact.background;
 
 export default function Contact() {
   return (
     <section id="contact" className="py-48 relative bg-black w-full overflow-hidden border-t border-white/5">
       {/* Background Image */}
-      <div 
-        className="absolute inset-0 z-0 opacity-20 bg-cover bg-center pointer-events-none" 
-        style={{ backgroundImage: `url(${banner3})` }}
-      ></div>
+      <DeferredBackground
+        publicId={CONTACT_BG}
+        className="absolute inset-0 z-0 opacity-20 bg-cover bg-center pointer-events-none"
+        width={1024}
+        rootMargin="1200px"
+      />
       
       {/* Cinematic Gradient Overlay */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-black/80 to-black"></div>

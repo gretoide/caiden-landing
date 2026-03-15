@@ -1,0 +1,68 @@
+export type GalleryItem = {
+  id: string;
+  title?: string;
+  publicId: string;
+};
+
+export const IMAGES = {
+  hero: {
+    background: 'elden_ring_2_hhaclm',
+  },
+  contact: {
+    background: 'elden_ring_4_y0e6ou',
+  },
+  featured: {
+    eldenRing: {
+      main: 'elden_ring_1_e7ast7',
+      sub1: 'elden_ring_7_mpj69h',
+      sub2: 'elden_ring_6_k5z39c',
+      detail1: 'elden_ring_10_n1jah8',
+      bg: 'v1773586265/4d1442bd6c1ab961e1fdb99498c10bfc_x51l89.jpg',
+    },
+    diabloIV: {
+      img1: 'diablo_iv_3_yuwkeo',
+      img2: 'diablo_iv_5_k4ddrg',
+      bg: 'diablo_iv_4_hwuzom',
+    },
+    skyrim: {
+      img1: 'skyrim_7_yqhwyx',
+      img2: 'skyrim_8_nabnf5',
+      bg: 'skyrim_6_b9efrf',
+    },
+    chainsawMan: {
+      img1: 'chainsaw_1_azfqly',
+      img2: 'chainsaw_2_qwerzf',
+      bg: 'chainsaw_3_uligns',
+    },
+  },
+} as const;
+
+export const GALLERIES = {
+  props: [
+    { id: 'god1', title: 'God of War - Blades', publicId: 'wp_god_of_war_1_rskssx' },
+    { id: 'god2', title: 'God of War - Blades', publicId: 'wp_god_of_war_2_degwwu' },
+    { id: 'god3', title: 'God of War - Blades', publicId: 'wp_god_of_war_3_ai7nzt' },
+    { id: 'god4', title: 'God of War - Blades', publicId: 'wp_god_of_war_4_t2ib62' },
+    { id: 'god5', title: 'God of War - Blades', publicId: 'wp_god_of_war_5_shbod3' },
+    { id: 'drag1', title: 'Dragon Sculpture', publicId: 'wp_añ_1_nsin4f' },
+    { id: 'drag2', title: 'Dragon Sculpture', publicId: 'wp_añ_2_yatjho' },
+    { id: 'drag3', title: 'Dragon Sculpture', publicId: 'wp_añ_3_ykcir7' },
+    { id: 'drag4', title: 'Dragon Sculpture', publicId: 'wp_añ_4_so6ypj' },
+    { id: 'apex1', title: 'Apex Legends - Heirloom', publicId: 'wp_al_hacha_1_citmzg' },
+    { id: 'apex2', title: 'Apex Legends - Wraith Kunai', publicId: 'wp_al_kunai_1_m96nky' },
+  ] satisfies GalleryItem[],
+  fx: [
+    { id: 'dmc1', title: 'Devil May Cry FX', publicId: 'fx_devil_may_cry_1_e2s58p' },
+    { id: 'dmc2', title: 'Devil May Cry Arm', publicId: 'fx_devil_may_cry_2_blk2ha' },
+  ] satisfies GalleryItem[],
+  commercial: [
+    { id: 'fate1', title: 'Fate / Mordred', publicId: 'mordred_fate_1_hvpnwf' },
+    { id: 'fate2', title: 'Fate / Mordred', publicId: 'mordred_fate_2_rkpzpt' },
+    { id: 'fate3', title: 'Fate / Mordred', publicId: 'mordred_fate_3_jubhnt' },
+    { id: 'fate4', title: 'Fate / Mordred', publicId: 'mordred_fate_4_m9vvia' },
+    { id: 'fate5', title: 'Fate / Mordred', publicId: 'mordred_fate_5_nyqtza' },
+    { id: 'aion1', title: 'Aion', publicId: 'aion_1_ojmqpf' },
+    { id: 'starwars1', title: 'Star Wars Event', publicId: 'star_wars_1_thmzfu' },
+  ] satisfies GalleryItem[],
+} as const;
+

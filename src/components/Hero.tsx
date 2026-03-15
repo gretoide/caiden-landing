@@ -1,16 +1,23 @@
-import heroImage from '../assets/caiden/1_elden_ring/banner.webp';
+import OptimizedImage from './OptimizedImage';
+import { IMAGES } from '../content/images';
+
+const HERO_BG = IMAGES.hero.background;
 
 export default function Hero() {
   return (
     <section className="relative w-full h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image Setup */}
-      <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ 
-          backgroundImage: `url(${heroImage})`,
-          backgroundAttachment: 'fixed' // Simple parallax effect
-        }}
-      >
+      <div className="absolute inset-0 z-0">
+        <OptimizedImage
+          publicId={HERO_BG}
+          alt="Hero background"
+          variant="hero"
+          loading="eager"
+          fetchPriority="high"
+          className="absolute inset-0"
+          imgClassName="w-full h-full object-cover"
+          sizes="100vw"
+        />
         {/* Dark subtle overlay for contrast */}
         <div className="absolute inset-0 bg-brand-900/40 mix-blend-multiply"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-brand-900 via-transparent to-transparent"></div>
