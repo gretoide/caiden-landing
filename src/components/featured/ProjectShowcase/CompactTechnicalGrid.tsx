@@ -1,4 +1,10 @@
+import { useRef } from 'react';
 import OptimizedImage from '../../OptimizedImage';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 type ZoomDetail = {
   id: number;
@@ -16,11 +22,29 @@ type Props = {
 
 export default function CompactTechnicalGrid({ imageIds, details, onOpen, reversed = false }: Props) {
   const [img1, img2, zoomImg] = imageIds;
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    const items = gsap.utils.toArray('.compact-item-anim', containerRef.current);
+    
+    gsap.from(items, {
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.15,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top 85%',
+        toggleActions: 'play none none reverse',
+      }
+    });
+  }, { scope: containerRef });
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-3 h-auto md:h-[70vh]">
+    <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-3 h-auto md:h-[70vh]">
       {/* Zoom Study Column (Ordered first or last) */}
-      <div className={`md:col-span-4 grid grid-rows-2 gap-2 md:gap-3 h-[60vh] md:h-full ${reversed ? 'md:order-first' : 'md:order-last'}`}>
+      <div className={`compact-item-anim md:col-span-4 grid grid-rows-2 gap-2 md:gap-3 h-[60vh] md:h-full ${reversed ? 'md:order-first' : 'md:order-last'}`}>
         {details.slice(0, 2).map((detail, idx) => (
           <div key={detail.id} className="relative group overflow-hidden border border-white/5 h-full">
             <OptimizedImage
@@ -42,7 +66,7 @@ export default function CompactTechnicalGrid({ imageIds, details, onOpen, revers
       </div>
 
       {/* Static View 1 */}
-      <div className="md:col-span-4 h-[40vh] md:h-full relative group overflow-hidden border border-white/5">
+      <div className="compact-item-anim md:col-span-4 h-[40vh] md:h-full relative group overflow-hidden border border-white/5">
         <OptimizedImage
           publicId={img1}
           alt="Compact View 1"
@@ -55,7 +79,7 @@ export default function CompactTechnicalGrid({ imageIds, details, onOpen, revers
       </div>
 
       {/* Static View 2 */}
-      <div className="md:col-span-4 h-[40vh] md:h-full relative group overflow-hidden border border-white/5">
+      <div className="compact-item-anim md:col-span-4 h-[40vh] md:h-full relative group overflow-hidden border border-white/5">
         <OptimizedImage
           publicId={img2}
           alt="Compact View 2"

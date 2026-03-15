@@ -1,4 +1,10 @@
+import { useRef } from 'react';
 import OptimizedImage from '../../OptimizedImage';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 type Props = {
   publicId: string;
@@ -7,10 +13,26 @@ type Props = {
 };
 
 export default function ShowcaseBanner({ publicId, title, onOpen }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    gsap.from(containerRef.current, {
+      y: 100,
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top 85%',
+        toggleActions: 'play none none reverse',
+      }
+    });
+  }, { scope: containerRef });
+
   if (!publicId) return null;
 
   return (
-    <div className="w-full aspect-video mb-12 relative group overflow-hidden border border-white/10 shadow-2xl">
+    <div ref={containerRef} className="w-full aspect-video mb-12 relative group overflow-hidden border border-white/10 shadow-2xl">
       <OptimizedImage
         publicId={publicId}
         alt={`${title} Featured Banner`}

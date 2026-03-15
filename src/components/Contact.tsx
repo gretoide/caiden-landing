@@ -1,5 +1,6 @@
 import DeferredBackground from './DeferredBackground';
 import { IMAGES } from '../content/images';
+import { Mail, Phone, Instagram } from 'lucide-react';
 
 const CONTACT_BG = IMAGES.contact.background;
 
@@ -25,7 +26,7 @@ export default function Contact() {
           
           {/* Section Header */}
           <div className="mb-24 flex flex-col items-center text-center">
-            <span className="text-blue-500 font-sans tracking-[0.5em] text-xs uppercase mb-6 font-bold">Inquiries & Commissions</span>
+            <span className="text-white/40 font-sans tracking-[0.5em] text-xs uppercase mb-6 font-bold">Inquiries & Commissions</span>
             <h2 className="text-5xl md:text-8xl font-serif text-white tracking-tighter leading-none mb-8">
               Let's craft the <br/> <span className="text-white/40 italic">extraordinary</span>
             </h2>
@@ -40,25 +41,34 @@ export default function Contact() {
             {/* Contact Information */}
             <div className="lg:col-span-2 space-y-12">
               <div className="space-y-8">
-                <a href="mailto:scyther149@gmail.com" className="flex flex-col group">
-                  <span className="text-xs font-sans tracking-[0.3em] text-white/30 uppercase mb-3">Electronic Mail</span>
-                  <span className="text-xl md:text-2xl font-serif text-white group-hover:text-blue-400 transition-colors duration-500">scyther149@gmail.com</span>
+                <a href="mailto:scyther149@gmail.com" className="flex flex-col group items-start">
+                  <span className="text-[10px] md:text-xs font-sans tracking-[0.3em] text-white/40 uppercase mb-3 flex items-center gap-3">
+                    <Mail className="w-4 h-4 text-white/40 group-hover:text-white transition-colors duration-500" />
+                    Electronic Mail
+                  </span>
+                  <span className="text-xl md:text-2xl font-sans font-light text-white group-hover:text-white/60 transition-colors duration-500 tracking-wide">scyther149@gmail.com</span>
                 </a>
 
-                <a href="tel:0494412012" className="flex flex-col group">
-                  <span className="text-xs font-sans tracking-[0.3em] text-white/30 uppercase mb-3">Direct Line</span>
-                  <span className="text-xl md:text-2xl font-serif text-white group-hover:text-blue-400 transition-colors duration-500">0494 412 012</span>
+                <a href="tel:0494412012" className="flex flex-col group items-start">
+                  <span className="text-[10px] md:text-xs font-sans tracking-[0.3em] text-white/40 uppercase mb-3 flex items-center gap-3">
+                    <Phone className="w-4 h-4 text-white/40 group-hover:text-white transition-colors duration-500" />
+                    Direct Line
+                  </span>
+                  <span className="text-xl md:text-2xl font-sans font-light text-white group-hover:text-white/60 transition-colors duration-500 tracking-wide">0494 412 012</span>
                 </a>
 
-                <a href="https://instagram.com/cai.cosplay" target="_blank" rel="noreferrer" className="flex flex-col group">
-                  <span className="text-xs font-sans tracking-[0.3em] text-white/30 uppercase mb-3">Social Identity</span>
-                  <span className="text-xl md:text-2xl font-serif text-white group-hover:text-blue-400 transition-colors duration-500">@cai.cosplay</span>
+                <a href="https://instagram.com/cai.cosplay" target="_blank" rel="noreferrer" className="flex flex-col group items-start">
+                  <span className="text-[10px] md:text-xs font-sans tracking-[0.3em] text-white/40 uppercase mb-3 flex items-center gap-3">
+                    <Instagram className="w-4 h-4 text-white/40 group-hover:text-white transition-colors duration-500" />
+                    Social Identity
+                  </span>
+                  <span className="text-xl md:text-2xl font-sans font-light text-white group-hover:text-white/60 transition-colors duration-500 tracking-wide">@cai.cosplay</span>
                 </a>
               </div>
 
               <div className="pt-12 border-t border-white/10">
                 <div className="flex items-center gap-2 text-white/40 font-sans text-xs tracking-widest uppercase">
-                  <span className="w-2 h-2 rounded-full bg-cyan-500/80 animate-pulse"></span>
+                  <span className="w-2 h-2 rounded-full bg-green-500/80 animate-pulse"></span>
                   Currently receiving new project briefs
                 </div>
               </div>
@@ -66,50 +76,78 @@ export default function Contact() {
 
             {/* Inquiry Form */}
             <div className="lg:col-span-3">
-              <form className="glass p-8 md:p-12 border border-white/5 shadow-2xl space-y-8" onSubmit={(e) => e.preventDefault()}>
+              <form className="bg-black/40 p-8 md:p-12 border border-white/5 space-y-8" onSubmit={(e) => e.preventDefault()}>
                 <div className="grid md:grid-cols-2 gap-8">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-sans tracking-[0.3em] text-white/40 uppercase">Full Name</label>
+                  <div className="relative group">
                     <input 
-                      type="text" 
-                      className="w-full bg-white/5 border-b border-white/10 py-3 text-white focus:outline-none focus:border-blue-500 transition-all duration-500 font-sans placeholder:text-white/10" 
-                      placeholder="Your name" 
+                      type="text"
+                      id="name"
+                      className="peer w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-white transition-all duration-500 font-sans placeholder-transparent" 
+                      placeholder="Full Name" 
+                      required
                     />
+                    <label 
+                      htmlFor="name" 
+                      className="absolute left-0 -top-4 text-[10px] font-sans tracking-[0.2em] text-white/60 uppercase transition-all duration-300 peer-placeholder-shown:text-white/40 peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-white cursor-text"
+                    >
+                      Full Name
+                    </label>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-sans tracking-[0.3em] text-white/40 uppercase">Email Address</label>
+                  <div className="relative group">
                     <input 
-                      type="email" 
-                      className="w-full bg-white/5 border-b border-white/10 py-3 text-white focus:outline-none focus:border-blue-500 transition-all duration-500 font-sans placeholder:text-white/10" 
-                      placeholder="your@email.com" 
+                      type="email"
+                      id="email"
+                      className="peer w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-white transition-all duration-500 font-sans placeholder-transparent" 
+                      placeholder="Email Address" 
+                      required
                     />
+                    <label 
+                      htmlFor="email" 
+                      className="absolute left-0 -top-4 text-[10px] font-sans tracking-[0.2em] text-white/60 uppercase transition-all duration-300 peer-placeholder-shown:text-white/40 peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-white cursor-text"
+                    >
+                      Email Address
+                    </label>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-sans tracking-[0.3em] text-white/40 uppercase">Project Category</label>
-                  <select className="w-full bg-transparent border-b border-white/10 py-3 text-white focus:outline-none focus:border-blue-500 transition-all duration-500 font-sans appearance-none cursor-pointer [&>option]:bg-black">
-                    <option>Film & Stage Prop</option>
-                    <option>Commercial Advertising</option>
-                    <option>Private Collector Commission</option>
-                    <option>Other / Collaboration</option>
-                  </select>
+                  <label className="text-[10px] font-sans tracking-[0.3em] text-white/40 uppercase mb-2 block">Project Category</label>
+                  <div className="relative">
+                    <select className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white hover:border-white/50 focus:outline-none focus:border-white transition-all duration-300 font-sans appearance-none cursor-pointer [&>option]:bg-black">
+                      <option>Film & Stage Prop</option>
+                      <option>Commercial Advertising</option>
+                      <option>Private Collector Commission</option>
+                      <option>Other / Collaboration</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-white/40">
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                        <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] font-sans tracking-[0.3em] text-white/40 uppercase">Project Brief</label>
+                <div className="relative group pt-4">
                   <textarea 
+                    id="brief"
                     rows={4} 
-                    className="w-full bg-white/5 border-b border-white/10 py-3 text-white focus:outline-none focus:border-blue-500 transition-all duration-500 font-sans resize-none placeholder:text-white/10" 
-                    placeholder="Describe your vision..."
+                    className="peer w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white hover:border-white/50 focus:outline-none focus:border-white transition-all duration-300 font-sans resize-none placeholder-transparent" 
+                    placeholder="Project Brief"
+                    required
                   ></textarea>
+                  <label 
+                    htmlFor="brief" 
+                    className="absolute left-4 -top-0 bg-transparent px-1 text-[10px] font-sans tracking-[0.2em] text-white/60 uppercase transition-all duration-300 peer-placeholder-shown:text-white/40 peer-placeholder-shown:top-8 peer-placeholder-shown:left-4 peer-focus:-top-0 peer-focus:bg-black peer-focus:text-white cursor-text z-10"
+                  >
+                    Describe your vision...
+                  </label>
                 </div>
 
                 <button 
                   type="submit" 
-                  className="w-full bg-white text-black font-sans font-black py-5 tracking-[0.4em] uppercase hover:bg-blue-600 hover:text-white transition-all duration-500 group relative overflow-hidden"
+                  className="w-full bg-white text-black font-sans font-black py-5 tracking-[0.4em] uppercase hover:bg-white/90 transition-all duration-500"
                 >
-                  <span className="relative z-10">Send Inquiry</span>
+                  Send Inquiry
                 </button>
               </form>
             </div>

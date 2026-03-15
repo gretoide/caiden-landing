@@ -1,4 +1,10 @@
+import { useRef } from 'react';
 import OptimizedImage from '../../OptimizedImage';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 type Props = {
   galleryIds: readonly string[];
@@ -6,12 +12,31 @@ type Props = {
 };
 
 export default function MosaicGallery({ galleryIds, onOpen }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    const items = gsap.utils.toArray('.mosaic-item-anim', containerRef.current);
+    
+    gsap.from(items, {
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.15,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top 85%',
+        toggleActions: 'play none none reverse',
+      }
+    });
+  }, { scope: containerRef });
+
   if (!galleryIds || galleryIds.length < 4) return null;
 
   return (
-    <div className="grid grid-cols-12 auto-rows-[25vh] md:auto-rows-[30vh] gap-3 mb-12">
+    <div ref={containerRef} className="grid grid-cols-12 auto-rows-[25vh] md:auto-rows-[30vh] gap-3 mb-12">
       {/* Shot 1 - Small Portrait */}
-      <div className="col-span-6 md:col-span-3 row-span-1 relative group overflow-hidden bg-white/5 border border-white/5">
+      <div className="mosaic-item-anim col-span-6 md:col-span-3 row-span-1 relative group overflow-hidden bg-white/5 border border-white/5">
         <OptimizedImage
           publicId={galleryIds[0]}
           alt="Showcase Shot 1"
@@ -27,7 +52,7 @@ export default function MosaicGallery({ galleryIds, onOpen }: Props) {
       </div>
 
       {/* Shot 2 - Horizontal Rect */}
-      <div className="col-span-6 md:col-span-5 row-span-1 relative group overflow-hidden bg-white/5 border border-white/5">
+      <div className="mosaic-item-anim col-span-6 md:col-span-5 row-span-1 relative group overflow-hidden bg-white/5 border border-white/5">
         <OptimizedImage
           publicId={galleryIds[1]}
           alt="Showcase Shot 2"
@@ -43,7 +68,7 @@ export default function MosaicGallery({ galleryIds, onOpen }: Props) {
       </div>
 
       {/* Shot 3 - Large Square/Tall */}
-      <div className="col-span-7 md:col-span-4 row-span-1 md:row-span-2 relative group overflow-hidden bg-white/5 border border-white/10">
+      <div className="mosaic-item-anim col-span-7 md:col-span-4 row-span-1 md:row-span-2 relative group overflow-hidden bg-white/5 border border-white/10">
         <OptimizedImage
           publicId={galleryIds[2]}
           alt="Showcase Shot 3"
@@ -59,7 +84,7 @@ export default function MosaicGallery({ galleryIds, onOpen }: Props) {
       </div>
 
       {/* Shot 4 - Horizontal Bottom Left */}
-      <div className="col-span-5 md:col-span-8 row-span-1 relative group overflow-hidden bg-white/5 border border-white/5">
+      <div className="mosaic-item-anim col-span-5 md:col-span-8 row-span-1 relative group overflow-hidden bg-white/5 border border-white/5">
         <OptimizedImage
           publicId={galleryIds[3]}
           alt="Showcase Shot 4"

@@ -1,4 +1,10 @@
+import { useRef } from 'react';
 import OptimizedImage from '../../OptimizedImage';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 type ZoomDetail = {
   id: number;
@@ -20,10 +26,29 @@ type Props = {
 };
 
 export default function ZoomFocusGrid({ mainImageId, details, onOpen, overlayDetails }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    const items = gsap.utils.toArray('.zoom-item-anim', containerRef.current);
+    
+    gsap.from(items, {
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.15,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top 85%',
+        toggleActions: 'play none none reverse',
+      }
+    });
+  }, { scope: containerRef });
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 h-auto md:h-[120vh]">
+    <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 h-auto md:h-[120vh]">
       {/* Main View - Large Left */}
-      <div className="md:col-span-7 h-[60vh] md:h-full relative group">
+      <div className="zoom-item-anim md:col-span-7 h-[60vh] md:h-full relative group">
         <OptimizedImage
           publicId={mainImageId}
           alt="Main Showcase View"
@@ -58,7 +83,7 @@ export default function ZoomFocusGrid({ mainImageId, details, onOpen, overlayDet
       <div className="md:col-span-5 grid grid-cols-1 gap-2 md:gap-4 h-auto md:h-full">
         {/* Top Detail - First Zoom */}
         {details[0] && (
-          <div className="h-[40vh] md:h-full relative group overflow-hidden border border-white/5">
+          <div className="zoom-item-anim h-[40vh] md:h-full relative group overflow-hidden border border-white/5">
             <OptimizedImage
               publicId={mainImageId}
               alt={details[0].label}
@@ -78,7 +103,7 @@ export default function ZoomFocusGrid({ mainImageId, details, onOpen, overlayDet
         {/* Bottom Details Grid */}
         <div className="grid grid-cols-2 gap-2 md:gap-4 h-[40vh] md:h-full">
           {details.slice(1, 3).map((detail, idx) => (
-            <div key={detail.id} className="relative group overflow-hidden border border-white/5">
+            <div key={detail.id} className="zoom-item-anim relative group overflow-hidden border border-white/5">
               <OptimizedImage
                 publicId={mainImageId}
                 alt={detail.label}
