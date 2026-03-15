@@ -22,6 +22,8 @@ type Props = {
   onPointerEnter?: () => void;
   onTouchStart?: () => void;
   fill?: boolean;
+  objectPosition?: string;
+  zoom?: number;
 };
 
 function widthsFor(variant: CloudinaryVariant): number[] {
@@ -54,17 +56,28 @@ export default function OptimizedImage({
   onPointerEnter,
   onTouchStart,
   fill = false,
+  objectPosition,
+  zoom = 1,
 }: Props) {
   const [loaded, setLoaded] = useState(false);
 
-  const widths = useMemo(() => widthsFor(variant), [variant]);
-  const src = useMemo(() => cloudinaryUrl(publicId, { variant, width: widths[0] }), [publicId, variant, widths]);
+  const widths = useMemo(() => {
+    const baseWidths = widthsFor(variant);
+    // Si hay zoom, pedimos resoluciones mucho más altas.
+    // Ej: Para zoom 2.5x, multiplicamos la resolución base para no perder nitidez.
+    const multiplier = zoom > 1.8 ? 2.5 : zoom > 1.1 ? 1.5 : 1;
+    return baseWidths.map((w) => Math.round(w * multiplier));
+  }, [variant, zoom]);
+
+  // Si hay zoom, nos saltamos la primera resolución (pequeña) para el src inicial
+  const srcWidth = zoom > 1.2 && widths.length > 1 ? widths[1] : widths[0];
+  const src = useMemo(() => cloudinaryUrl(publicId, { variant, width: srcWidth }), [publicId, variant, srcWidth]);
   const srcSet = useMemo(() => variantSrcSet(publicId, variant, widths), [publicId, variant, widths]);
   const placeholder = useMemo(() => cloudinaryPlaceholderUrl(publicId), [publicId]);
 
   const wrapperClass = [
     className,
-    'bg-center bg-cover',
+    'bg-center bg-cover overflow-hidden',
     fill ? 'absolute inset-0' : undefined,
   ]
     .filter(Boolean)
@@ -72,8 +85,8 @@ export default function OptimizedImage({
 
   const imageClass = [
     imgClassName,
-    fill ? 'absolute inset-0 w-full h-full object-cover' : 'block',
-    'transition-[opacity,filter] duration-500 will-change-[opacity,filter]',
+    fill ? 'absolute inset-0 w-full h-full' : 'block w-full h-full text-transparent',
+    'transition-all duration-700 will-change-transform',
     loaded ? 'opacity-100 blur-0' : 'opacity-0 blur-md',
   ]
     .filter(Boolean)
@@ -87,6 +100,14 @@ export default function OptimizedImage({
         sizes={sizes}
         alt={alt}
         className={imageClass}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: objectPosition ?? 'center',
+          transform: zoom !== 1 ? `scale(${zoom})` : 'scale(1)',
+          transformOrigin: objectPosition ?? 'center',
+        }}
         loading={loading}
         decoding={decoding}
         fetchPriority={fetchPriority}

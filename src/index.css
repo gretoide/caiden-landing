@@ -16,6 +16,13 @@
   body {
     @apply bg-brand-900 text-slate-100 font-sans antialiased;
   }
+
+  /* Hide cursor on desktop for custom cursor experience */
+  @media (pointer: fine) {
+    * {
+      cursor: none !important;
+    }
+  }
   
   /* Custom scrollbar */
   ::-webkit-scrollbar {

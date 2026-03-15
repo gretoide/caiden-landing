@@ -13,11 +13,15 @@ export const IMAGES = {
   },
   featured: {
     eldenRing: {
-      main: 'elden_ring_1_e7ast7',
-      sub1: 'elden_ring_7_mpj69h',
-      sub2: 'elden_ring_6_k5z39c',
-      detail1: 'elden_ring_10_n1jah8',
+      main: 'elden_ring_6_k5z39c',
+      banner: 'elden_ring_1_e7ast7',
       bg: 'v1773586265/4d1442bd6c1ab961e1fdb99498c10bfc_x51l89.jpg',
+      gallery: [
+        'elden_ring_5_nbxteg',
+        'elden_ring_10_n1jah8',
+        'elden_ring_8_gmazch',
+        'elden_ring_7_mpj69h',
+      ],
     },
     diabloIV: {
       img1: 'diablo_iv_3_yuwkeo',

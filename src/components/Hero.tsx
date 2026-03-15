@@ -19,27 +19,31 @@ export default function Hero() {
           sizes="100vw"
         />
         {/* Dark subtle overlay for contrast */}
-        <div className="absolute inset-0 bg-brand-900/40 mix-blend-multiply"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-900 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-black/40 mix-blend-multiply"></div>
+        {/* Main transition to black at the bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
+        {/* Extra bottom vignette for seamless cut */}
+        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black to-transparent"></div>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto flex flex-col items-center mt-20">
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-white tracking-widest leading-tight mb-4 drop-shadow-2xl">
+      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto flex flex-col items-center">
+        <h1 className="text-5xl md:text-7xl lg:text-9xl font-serif text-white tracking-widest leading-tight mb-4 drop-shadow-[0_0_30px_rgba(0,0,0,0.5)]">
           CAIDEN MIKAEL DRI
         </h1>
-        <h2 className="text-xl md:text-3xl font-sans tracking-[0.3em] text-brand-400 uppercase drop-shadow-lg">
+        <h2 className="text-xl md:text-3xl font-sans tracking-[0.4em] text-brand-400 uppercase drop-shadow-lg font-bold">
           Prop Maker
         </h2>
         
-        <p className="mt-8 md:mt-12 text-sm md:text-base font-sans text-white/80 max-w-2xl text-center leading-relaxed">
+        <p className="mt-8 md:mt-12 text-sm md:text-base font-sans text-white/60 max-w-2xl text-center leading-relaxed tracking-wide">
           I am a passionate artist and creator with a strong work ethic and an unwavering commitment to excellence. 
           Honesty, dedication, and creativity are the pillars of my work.
         </p>
 
-        {/* Scroll indicator */}
-        <div className="absolute -bottom-32 md:-bottom-48 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-[1px] h-16 bg-gradient-to-b from-white to-transparent"></div>
+        {/* Scroll indicator - fixed position and bridging the transition */}
+        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-4 animate-pulse">
+           <span className="text-white/20 text-[10px] uppercase tracking-[0.5em] font-sans">Discover Work</span>
+           <div className="w-[1px] h-20 bg-gradient-to-b from-brand-400 via-white/50 to-transparent"></div>
         </div>
       </div>
     </section>

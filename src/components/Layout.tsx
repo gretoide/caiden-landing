@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 
+import CustomCursor from './CustomCursor';
+
 export default function Layout({ children }: { children: ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
 
@@ -13,11 +15,13 @@ export default function Layout({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-brand-900 overflow-x-hidden">
+    <div className="min-h-screen bg-black overflow-x-hidden">
+      <CustomCursor />
+      
       {/* Navigation */}
       <nav 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? 'py-4 glass !border-none shadow-lg' : 'py-6 bg-transparent'
+        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
+          scrolled ? 'py-4 glass shadow-lg' : 'py-6 bg-transparent'
         }`}
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
