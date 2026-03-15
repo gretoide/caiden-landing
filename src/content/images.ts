@@ -108,6 +108,23 @@ export const PROJECTS: Record<string, ProjectShowcaseData> = {
       { id: 2, label: 'Engine', zoom: 1.5, position: '40% 10%' },
     ],
   },
+  hipo: {
+    title: 'Hiccup Haddock',
+    subtitle: 'How to Train Your Dragon',
+    subtitleClassName: 'text-[#dc2626]',
+    description: 'Complete character recreation featuring highly detailed flight suit mechanics, custom leatherwork, and scale-accurate weathering matching the cinematic references.',
+    descBorderClassName: 'border-[#dc2626]',
+    main: 'hipo_1_lsxprc', 
+    bg: 'hipo_1_lsxprc',   
+    gallery: [
+      'hipo_1_lsxprc',
+      'hipo_2_j75ppj',
+    ],
+    zoomDetails: [
+      { id: 1, label: 'Details', zoom: 2.2, position: '70% 60%' },
+      { id: 2, label: 'Leatherwork', zoom: 3.0, position: '40% 40%' },
+    ],
+  },
 };
 
 export type SkillItem = string;
