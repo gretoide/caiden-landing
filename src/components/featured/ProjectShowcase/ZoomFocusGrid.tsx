@@ -7,13 +7,19 @@ type ZoomDetail = {
   position: string;
 };
 
+type OverlayDetail = {
+  title: string;
+  description: string;
+};
+
 type Props = {
   mainImageId: string;
   details: ZoomDetail[];
   onOpen: (publicId: string) => void;
+  overlayDetails?: OverlayDetail[];
 };
 
-export default function ZoomFocusGrid({ mainImageId, details, onOpen }: Props) {
+export default function ZoomFocusGrid({ mainImageId, details, onOpen, overlayDetails }: Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 h-auto md:h-[120vh]">
       {/* Main View - Large Left */}
@@ -28,6 +34,21 @@ export default function ZoomFocusGrid({ mainImageId, details, onOpen }: Props) {
           onClick={() => onOpen(mainImageId)}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+        
+        {/* Overlay Details */}
+        {overlayDetails && (
+          <div className="absolute bottom-16 left-6 right-6 flex flex-wrap gap-8 md:gap-12 animate-in fade-in duration-1000">
+            {overlayDetails.map((detail, idx) => (
+              <div key={idx} className="max-w-xs drop-shadow-lg">
+                <p className="text-white font-serif text-lg md:text-xl mb-1">{detail.title}</p>
+                <p className="text-white/70 font-sans uppercase tracking-[0.2em] text-[8px] md:text-[10px] leading-relaxed">
+                  {detail.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+
         <div className="absolute bottom-6 left-6">
           <span className="text-white/40 font-sans text-xs tracking-widest uppercase italic">Master Composition</span>
         </div>

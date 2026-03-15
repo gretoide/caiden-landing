@@ -3,7 +3,10 @@ import type { ReactNode } from 'react';
 export type GalleryItem = {
   id: string;
   title?: string;
+  description?: string;
+  technicalInfo?: string[];
   publicId: string;
+  additionalImages?: string[];
 };
 
 export type ZoomDetail = {
@@ -107,6 +110,159 @@ export const PROJECTS: Record<string, ProjectShowcaseData> = {
   },
 };
 
+export type SkillItem = string;
+
+export type CraftsmanshipCategory = {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  expandedDetails: string;
+  publicId: string;
+  projects: GalleryItem[];
+};
+
+export const TECHNICAL_SKILLS: Record<string, SkillItem[]> = {
+  fabrication: [
+    'Fiberglass',
+    'Resin casting & mold making',
+    'Foam crafting',
+    'Polyurethane',
+    'Polyethylene',
+    'Silicone rubber molds',
+    'Thermoforming materials',
+    'Wood',
+    'Impresión 3D',
+    'Professional handheld power tools'
+  ],
+  finishing: [
+    'Painting & airbrushing',
+    'Weathering',
+    'SFX',
+    'Sculpting',
+    'LED design',
+    'Electronics'
+  ],
+  digital: [
+    '3D Design (Blender)',
+    '3D Printing',
+    'Drawing'
+  ]
+};
+
+export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
+  {
+    id: 'inorganic',
+    title: 'Inorganic textures',
+    subtitle: 'Metal, Stone & Synthetic',
+    description: 'Mastery of non-organic surfaces through advanced painting, weathering, and material manipulation.',
+    expandedDetails: 'Our process for inorganic surfaces involves complex multi-layering techniques. We use automotive-grade paints and custom-mixed washes to simulate everything from oxidized iron to ancient basalt. High-durability clear coats ensure these finishes withstand the rigors of production use.',
+    publicId: 'elden_ring_8_gmazch',
+    projects: [
+      { 
+        id: 'malenia', 
+        title: 'Malenia Armor Detail', 
+        description: 'Advanced metallic finishing using multi-stage reactive paints to achieve authentic aged gold and bronze patinas.',
+        technicalInfo: ['Reactive Metallic Paints', 'Hand-applied oxidation', 'Industrial clear-coat'],
+        publicId: 'elden_ring_8_gmazch' 
+      },
+      { 
+        id: 'diablo_texture', 
+        title: 'Diablo IV Surface Study', 
+        description: 'Creating realistic stone and bone textures through specialized texturing pastes and organic-inspired weathering.',
+        technicalInfo: ['Texture pastes', 'Raw pigment layering', 'Structural resin'],
+        publicId: 'diablo_iv_3_yuwkeo' 
+      },
+      { 
+        id: 'skyrim_metal', 
+        title: 'Steel Plate Engraving', 
+        description: 'Combining traditional Nord motifs with professional weathering to create a surface that tells a story of a thousand battles.',
+        technicalInfo: ['Deep engraving', 'Oil-based aging', 'Cold-cast iron'],
+        publicId: 'skyrim_8_nabnf5' 
+      }
+    ]
+  },
+  {
+    id: 'woodworking',
+    title: 'Wood working',
+    subtitle: 'Classic Craftsmanship',
+    description: 'Traditional and modern woodworking techniques for structural prop integrity and organic finishes.',
+    expandedDetails: 'Combining CNC precision with hand-carved finishing. We specialize in choosing the right timber for weight, durability, and grain aesthetics. From structural cores to intricate decorative engravings, our woodwork forms the backbone of our premium weaponry.',
+    publicId: 'skyrim_6_b9efrf',
+    projects: [
+      { 
+        id: 'skyrim_wood', 
+        title: 'Skyrim Nordic Bow', 
+        description: 'Fully structural bow core combining lightweight wood with rigid fiberglass reinforcement for performance and visual fidelity.',
+        technicalInfo: ['Composite wood core', 'Heat-formed limbs', 'Nordic carving'],
+        publicId: 'skyrim_7_yqhwyx' 
+      },
+      { 
+        id: 'drag1', 
+        title: 'Ancient Dragon Sculpture', 
+        description: 'Intricate wood-sculpted elements integrated into multi-material builds to provide organic warmth and structural depth.',
+        technicalInfo: ['Hand-carved detail', 'Grain enhancement', 'Structural anchoring'],
+        publicId: 'wp_añ_1_nsin4f' 
+      }
+    ]
+  },
+  {
+    id: 'fx-makeup',
+    title: 'FX makeup',
+    subtitle: 'Prosthetics & Skin',
+    description: 'High-end SFX work involving silicone appliances, dental acrylics, and realistic flesh textures.',
+    expandedDetails: 'Using industry-standard materials like Platsil Gel-10. We create high-fidelity skin textures that move naturally. Our process includes life-casting, digital sculpting patterns, and multi-tone pigment injection for translucent, lifelike depth.',
+    publicId: 'fx_devil_may_cry_1_e2s58p',
+    projects: [
+      { 
+        id: 'got', 
+        title: 'Game of Thrones White Walker', 
+        description: 'Complete character transformation using professional prosthetic appliances and multi-layered translucent skin finishes.',
+        technicalInfo: ['Silicone appliances', 'Alcohol-based pigments', 'Translucent layering'],
+        publicId: 'got_1_otuw4y' 
+      },
+      { 
+        id: 'dmc1', 
+        title: 'Devil May Cry FX Skin', 
+        description: 'Organic mutation study focusing on the transition between human skin and demonic texture using mixed-media prosthetics.',
+        technicalInfo: ['Platsil Gel-10', 'Encapsulated silicone', 'Intrinsically pigmented'],
+        publicId: 'fx_devil_may_cry_1_e2s58p' 
+      }
+    ]
+  },
+  {
+    id: 'lights-work',
+    title: 'Lights work',
+    subtitle: 'Electronics & Arduino',
+    description: 'Integrated circuit design, custom LED arrays, and motorized components for interactive props.',
+    expandedDetails: 'Prop logic powered by Arduino and ESP32. We design custom PCBs and 3D-printed housing for all electronic components. Our systems include remote control via Wi-Fi/Bluetooth, synced RGB lighting paths, and high-torque motorized rigs for mechanical movement.',
+    publicId: 'chainsaw_1_azfqly',
+    projects: [
+      { 
+        id: 'gow', 
+        title: 'God of War Leviathan Axe', 
+        description: 'Advanced electronics integration with custom-programmed rune sequences that pulse with dynamic Nordic logic.',
+        technicalInfo: ['Arduino Micro', 'Adalight Protocol', 'Lithium Polymer Power'],
+        publicId: 'wp_god_of_war_1_rskssx' 
+      },
+      { 
+        id: 'apex_hacha', 
+        title: 'Apex Legends Heirloom', 
+        description: 'High-density LED integration with wireless control paths to simulate the high-tech energy flows of the Outlands.',
+        technicalInfo: ['ESP32 Web Server', 'Custom LED Channels', '3D Printed Optics'],
+        publicId: 'wp_al_hacha_1_citmzg' 
+      },
+      { 
+        id: 'chainsaw_engine', 
+        title: 'Motorized Head Rig', 
+        description: 'Mechanical engineering meets prop design: a high-torque internal skeleton capable of sustained motorized operation.',
+        technicalInfo: ['High-torque DC Motors', 'Planetary Gearboxes', 'Integrated Sound System'],
+        publicId: 'chainsaw_2_qwerzf' 
+      }
+    ]
+  }
+];
+
 export const IMAGES = {
   hero: {
     background: 'elden_ring_2_hhaclm',
@@ -114,35 +270,29 @@ export const IMAGES = {
   contact: {
     background: 'elden_ring_4_y0e6ou',
   },
-  featured: PROJECTS,
+  featured: {
+    eldenRing: {
+      main: 'elden_ring_6_k5z39c',
+      sub1: 'elden_ring_7_mpj69h',
+      sub2: 'elden_ring_6_k5z39c',
+      detail1: 'elden_ring_10_n1jah8',
+      bg: 'alfombra_roja',
+    },
+    diabloIV: {
+      img1: 'diablo_iv_3_yuwkeo',
+      img2: 'diablo_iv_5_k4ddrg',
+      bg: 'diablo_iv_4_hwuzom',
+    },
+    skyrim: {
+      img1: 'skyrim_7_yqhwyx',
+      img2: 'skyrim_8_nabnf5',
+      bg: 'skyrim_6_b9efrf',
+    },
+    chainsawMan: {
+      img1: 'chainsaw_1_azfqly',
+      img2: 'chainsaw_2_qwerzf',
+      bg: 'chainsaw_3_uligns',
+    },
+  },
+  projects: PROJECTS,
 } as const;
-
-export const GALLERIES = {
-  props: [
-    { id: 'god1', title: 'God of War - Blades', publicId: 'wp_god_of_war_1_rskssx' },
-    { id: 'god2', title: 'God of War - Blades', publicId: 'wp_god_of_war_2_degwwu' },
-    { id: 'god3', title: 'God of War - Blades', publicId: 'wp_god_of_war_3_ai7nzt' },
-    { id: 'god4', title: 'God of War - Blades', publicId: 'wp_god_of_war_4_t2ib62' },
-    { id: 'god5', title: 'God of War - Blades', publicId: 'wp_god_of_war_5_shbod3' },
-    { id: 'drag1', title: 'Dragon Sculpture', publicId: 'wp_añ_1_nsin4f' },
-    { id: 'drag2', title: 'Dragon Sculpture', publicId: 'wp_añ_2_yatjho' },
-    { id: 'drag3', title: 'Dragon Sculpture', publicId: 'wp_añ_3_ykcir7' },
-    { id: 'drag4', title: 'Dragon Sculpture', publicId: 'wp_añ_4_so6ypj' },
-    { id: 'apex1', title: 'Apex Legends - Heirloom', publicId: 'wp_al_hacha_1_citmzg' },
-    { id: 'apex2', title: 'Apex Legends - Wraith Kunai', publicId: 'wp_al_kunai_1_m96nky' },
-  ] satisfies GalleryItem[],
-  fx: [
-    { id: 'dmc1', title: 'Devil May Cry FX', publicId: 'fx_devil_may_cry_1_e2s58p' },
-    { id: 'dmc2', title: 'Devil May Cry Arm', publicId: 'fx_devil_may_cry_2_blk2ha' },
-  ] satisfies GalleryItem[],
-  commercial: [
-    { id: 'fate1', title: 'Fate / Mordred', publicId: 'mordred_fate_1_hvpnwf' },
-    { id: 'fate2', title: 'Fate / Mordred', publicId: 'mordred_fate_2_rkpzpt' },
-    { id: 'fate3', title: 'Fate / Mordred', publicId: 'mordred_fate_3_jubhnt' },
-    { id: 'fate4', title: 'Fate / Mordred', publicId: 'mordred_fate_4_m9vvia' },
-    { id: 'fate5', title: 'Fate / Mordred', publicId: 'mordred_fate_5_nyqtza' },
-    { id: 'aion1', title: 'Aion', publicId: 'aion_1_ojmqpf' },
-    { id: 'starwars1', title: 'Star Wars Event', publicId: 'star_wars_1_thmzfu' },
-  ] satisfies GalleryItem[],
-} as const;
-
