@@ -22,7 +22,7 @@ export function cloudinaryPublicId(publicId: string): string {
 }
 
 function encodePublicIdForUrl(publicId: string): string {
-  // Cloudinary expects slashes as path separators; encode each segment for safety (spaces, ñ, etc).
+  // Cloudinary expects slashes as path separators; encode each segment for safety (spaces, Ã±, etc).
   return publicId
     .split('/')
     .map((segment) => encodeURIComponent(segment))

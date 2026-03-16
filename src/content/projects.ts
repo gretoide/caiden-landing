@@ -23,7 +23,7 @@ export type ProjectShowcaseData = {
 export const PROJECTS: Record<string, ProjectShowcaseData> = {
   eldenRing: {
     title: 'Elden Ring',
-    subtitle: 'Shadow of the Erdtree — 2024',
+    subtitle: 'Shadow of the Erdtree â€” 2024',
     subtitleClassName: 'text-brand-400',
     description:
       'Built to match the brutal, gothic world of the Lands Between. High-fidelity craftsmanship with active motorized components.',
@@ -41,7 +41,7 @@ export const PROJECTS: Record<string, ProjectShowcaseData> = {
   },
   diabloIV: {
     title: 'Diablo IV',
-    subtitle: 'Blizzard Ent. — 2023',
+    subtitle: 'Blizzard Ent. â€” 2023',
     subtitleClassName: 'text-[#dc2626]',
     description:
       'Built to match the brutal, gothic world of Sanctuary. The core structure uses reinforced fiberglass for durability.',
@@ -56,7 +56,7 @@ export const PROJECTS: Record<string, ProjectShowcaseData> = {
   },
   skyrim: {
     title: 'Skyrim',
-    subtitle: 'Bethesda — 2011',
+    subtitle: 'Bethesda â€” 2011',
     subtitleClassName: 'text-[#9ca3af]',
     description: "Forging the Dragonborn's legacy. Intricate weathering and Nordic motifs carved into every piece.",
     descBorderClassName: 'border-[#9ca3af]',
@@ -70,7 +70,7 @@ export const PROJECTS: Record<string, ProjectShowcaseData> = {
   },
   chainsawMan: {
     title: 'Chainsaw Man',
-    subtitle: 'MAPPA — 2023',
+    subtitle: 'MAPPA â€” 2023',
     subtitleClassName: 'text-[#f97316]',
     description:
       'A highly complex helmet and weapon rig prioritizing visual accuracy. Incorporates active motorized electronics.',
@@ -79,20 +79,19 @@ export const PROJECTS: Record<string, ProjectShowcaseData> = {
     bg: 'chainsaw_3_uligns',
     gallery: ['chainsaw_2_qwerzf', 'chainsaw_1_azfqly', 'chainsaw_2_qwerzf', 'chainsaw_1_azfqly'],
     zoomDetails: [
-      { id: 1, label: 'Saw Detail', zoom: 1.0, position: '50% 20%' },
       { id: 2, label: 'Engine', zoom: 1.5, position: '40% 10%' },
+      { id: 1, label: 'Saw Detail', zoom: 1.0, position: '50% 20%' },
     ],
   },
   hipo: {
-    title: 'Hipo',
-    subtitle: 'Sculpture — 2022',
-    subtitleClassName: 'text-brand-400',
+    title: 'Hiccup',
+    subtitle: 'How to Train Your Dragon â€” 2022',
+    subtitleClassName: 'text-[#dc2626]',
     description: 'Study of organic surfaces and anatomy through a multi-material sculpture build.',
-    descBorderClassName: 'border-brand-400',
+    descBorderClassName: 'border-[#dc2626]',
     main: 'hipo_1_lsxprc',
     bg: 'hipo_2_j75ppj',
     gallery: ['hipo_1_lsxprc', 'hipo_2_j75ppj', 'hipo_3_d3dn5v'],
     zoomDetails: [{ id: 1, label: 'Detail', zoom: 2.2, position: '50% 45%' }],
   },
 } as const;
-

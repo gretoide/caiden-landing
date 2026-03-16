@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { CRAFTSMANSHIP } from '../content/craftsmanship';
 import { ALL_SKILLS } from '../content/skills';
+import BackgroundCarousel from './BackgroundCarousel';
 import OptimizedImage from './OptimizedImage';
 import ImageModal from './ImageModal';
 
@@ -11,6 +12,26 @@ export default function Skills() {
 
   const activeData = CRAFTSMANSHIP.find((c) => c.id === activeTab) || CRAFTSMANSHIP[0];
   const relatedExpertise = ALL_SKILLS.filter((s) => activeData.expertiseSkillIds.includes(s.id));
+  const [expertiseBgTick, setExpertiseBgTick] = useState(0);
+  const expertiseCarouselIds = useMemo(() => {
+    const ids = new Set<string>();
+    relatedExpertise.forEach((s) => {
+      if (s.publicId) ids.add(s.publicId);
+    });
+    activeData.gallery?.forEach((g) => ids.add(g.id));
+    if (activeData.publicId) ids.add(activeData.publicId);
+    return Array.from(ids);
+  }, [activeData, relatedExpertise]);
+  const expertiseCarouselKey = useMemo(() => expertiseCarouselIds.join('|'), [expertiseCarouselIds]);
+
+  useEffect(() => {
+    if (relatedExpertise.length === 0) return;
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
+    if (prefersReducedMotion) return;
+
+    const timer = window.setInterval(() => setExpertiseBgTick((t) => t + 1), 14000);
+    return () => window.clearInterval(timer);
+  }, [activeTab, relatedExpertise.length, expertiseCarouselKey]);
 
   const scrollToDetails = () => {
     const target = detailsRef.current;
@@ -29,12 +50,20 @@ export default function Skills() {
   return (
     <section id="skills" className="w-full bg-black relative flex flex-col justify-center overflow-hidden py-12 md:py-24">
       <div className="max-w-[1600px] mx-auto w-full px-0 md:px-6 flex flex-col gap-12 lg:gap-16">
-        
-        {/* Top visual section: Images (Left) + Logo (Right) */}
+        {/* Section Header */}
+        <div className="px-6 md:px-0 flex flex-col items-start text-left gap-3">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-[1px] bg-brand-400/80" />
+          </div>
+          <h2 className="text-white font-serif tracking-[0.18em] text-4xl sm:text-5xl md:text-6xl leading-none drop-shadow-2xl">
+            Skills
+          </h2>
+        </div>
+
+        {/* Top visual section: Tabs Banner */}
         <div className="relative w-full h-[50vh] min-h-[400px] md:h-[600px] flex overflow-hidden bg-black border-y border-white/5">
-          
-          {/* Left Side: Edge-to-Edge Diagonal Image Slices & Tabs */}
-          <div className="w-[55%] md:w-[60%] h-full relative flex transform skew-x-12 origin-center -ml-16 overflow-hidden bg-black z-10 border-r border-white/10 shadow-[20px_0_50px_rgba(0,0,0,0.8)]">
+          {/* Edge-to-Edge Diagonal Image Slices & Tabs */}
+          <div className="w-full h-full relative flex transform skew-x-12 origin-center -ml-12 overflow-hidden bg-black z-10">
             {CRAFTSMANSHIP.map((craft) => {
               const isActive = activeTab === craft.id;
               return (
@@ -45,6 +74,7 @@ export default function Skills() {
                   }`}
                   onClick={() => {
                     setActiveTab(craft.id);
+                    setExpertiseBgTick(0);
                     // Scroll to the details area after layout settles (mobile-friendly).
                     requestAnimationFrame(() => requestAnimationFrame(scrollToDetails));
                   }}
@@ -87,28 +117,15 @@ export default function Skills() {
               );
             })}
           </div>
-
-          {/* Right Side: Logo Section */}
-          <div className="flex-1 h-full bg-black relative flex flex-col items-center justify-center -ml-12 z-0">
-            <div className="flex flex-col items-end pr-8 sm:pr-16 md:pr-24">
-              <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[7rem] font-serif text-white tracking-widest leading-[0.85] mb-6 italic">
-                CAIDEN
-              </h2>
-              <div className="w-16 md:w-24 h-[1px] bg-brand-400 mb-6 self-end"></div>
-              <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-sans tracking-[0.5em] text-white uppercase font-light">
-                <span className="font-bold text-brand-400">COSPLAY</span>
-              </h3>
-            </div>
-          </div>
         </div>
 
         {/* Bottom Content Section */}
         <div
           ref={detailsRef}
-          className="w-full max-w-4xl mx-auto flex flex-col px-6 md:px-0 mt-4 md:mt-8 animate-[fade-in-up_0.5s_ease-out_forwards]"
+          className="w-full max-w-[1600px] mx-auto flex flex-col px-6 md:px-6 mt-4 md:mt-8 animate-[fade-in-up_0.5s_ease-out_forwards]"
           key={activeData.id}
         >
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 max-w-4xl mx-auto w-full">
             <h3 className="text-3xl lg:text-4xl font-serif text-white mb-1">{activeData.title}</h3>
             <h4 className="text-brand-400 font-sans tracking-[0.2em] text-xs uppercase mb-4">{activeData.subtitle}</h4>
             <p className="text-white/80 font-sans leading-relaxed text-base md:text-lg lg:text-xl mb-6 max-w-2xl">
@@ -118,10 +135,11 @@ export default function Skills() {
             <p className="text-white/40 font-sans leading-relaxed text-sm max-w-3xl mb-12">
               {activeData.expandedDetails}
             </p>
+          </div>
 
             {/* Dynamic Gallery */}
             {activeData.gallery && activeData.gallery.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto w-full">
                 {activeData.gallery.map((item, idx) => (
                   <div 
                     key={idx} 
@@ -160,61 +178,110 @@ export default function Skills() {
 
             {/* Related Expertise */}
             {relatedExpertise.length > 0 && (
-              <div className="mt-16">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-8 h-[1px] bg-brand-400/80"></div>
-                  <span className="text-brand-400 font-sans text-[10px] tracking-[0.5em] uppercase font-bold">
-                    Related Expertise
-                  </span>
-                </div>
+              <div className="mt-16 relative overflow-hidden">
+                <div className="relative z-10 max-w-4xl mx-auto w-full">
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-8 h-[1px] bg-brand-400/80"></div>
+                    <span className="text-brand-400 font-sans text-[10px] tracking-[0.5em] uppercase font-bold">
+                      Related Expertise
+                    </span>
+                  </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-                  {relatedExpertise.map((skill) => (
-                    <div
-                      key={skill.id}
-                      className="group relative bg-[#020b1a] border border-white/5 overflow-hidden flex flex-col min-h-[260px]"
-                    >
-                      <div className="absolute inset-0 z-0 opacity-40 group-hover:opacity-70 transition-opacity duration-700">
-                        {skill.publicId ? (
-                          <OptimizedImage
-                            publicId={skill.publicId}
-                            alt={skill.title}
-                            variant="thumb"
-                            fill
-                            imgClassName="object-cover transition-transform duration-1000 group-hover:scale-105"
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-white/5 to-transparent" />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
-                      </div>
+                  <div className="flex flex-col gap-4 md:gap-6 w-full">
+                    {relatedExpertise.map((skill, idx) => {
+                      const cardIds = (() => {
+                        const ids = new Set<string>();
+                        if (skill.publicId) ids.add(skill.publicId);
+                        activeData.gallery?.forEach((g) => ids.add(g.id));
+                        if (activeData.publicId) ids.add(activeData.publicId);
+                        return Array.from(ids);
+                      })();
 
-                      <div className="relative z-10 p-6 md:p-8 flex flex-col flex-grow justify-end">
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {skill.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="text-[9px] font-sans tracking-widest uppercase text-brand-400 border border-brand-400/30 px-2 py-1 bg-black/50 backdrop-blur-sm"
-                            >
-                              {tag}
-                            </span>
-                          ))}
+                      return (
+                        <div
+                          key={skill.id}
+                          className="group relative w-full border border-white/5 bg-black/35 backdrop-blur-md overflow-hidden min-h-[320px] md:min-h-[380px] flex"
+                        >
+                          <div className="absolute inset-0 z-0 pointer-events-none">
+                            {cardIds.length > 0 && (
+                              <BackgroundCarousel
+                                publicIds={cardIds}
+                                activeIndex={expertiseBgTick + idx}
+                                imagesPerSlide={3}
+                                intervalMs={14000}
+                                slideMs={2400}
+                                className="absolute inset-0 opacity-50 blur-sm scale-105 saturate-110 contrast-105"
+                              />
+                            )}
+                            <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-black/40" />
+                          </div>
+
+                          <div className="relative p-6 md:p-8">
+                            <div className="flex flex-wrap gap-2 mb-4">
+                              {skill.tags.map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="text-[9px] font-sans tracking-widest uppercase text-brand-400 border border-brand-400/30 px-2 py-1 bg-black/40 backdrop-blur-sm"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+
+                            <h4 className="text-2xl md:text-3xl font-serif text-white mb-3 group-hover:text-brand-400 transition-colors duration-300">
+                              {skill.title}
+                            </h4>
+                            <p className="text-white/65 font-sans text-sm md:text-base leading-relaxed">
+                              {skill.description}
+                            </p>
+                          </div>
                         </div>
-
-                        <h4 className="text-xl md:text-2xl font-serif text-white mb-3 group-hover:text-brand-400 transition-colors duration-300">
-                          {skill.title}
-                        </h4>
-                        <p className="text-white/60 font-sans text-sm md:text-base leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all duration-500">
-                          {skill.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             )}
-          </div>
+
+            {/* Bottom Tabs (quick jump) */}
+            <div className="mt-14 pt-10 border-t border-white/5">
+              <div className="flex items-center justify-between gap-6 mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-8 h-[1px] bg-brand-400/80"></div>
+                  <span className="text-brand-400 font-sans text-[10px] tracking-[0.5em] uppercase font-bold">
+                    Explore All Skills
+                  </span>
+                </div>
+                <span className="hidden md:block text-white/25 font-sans text-[10px] tracking-[0.35em] uppercase">
+                  Jump to section
+                </span>
+              </div>
+
+              <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1">
+                {CRAFTSMANSHIP.map((craft) => {
+                  const isActive = activeTab === craft.id;
+                  return (
+                    <button
+                      key={craft.id}
+                      type="button"
+                      onClick={() => {
+                        setActiveTab(craft.id);
+                        setExpertiseBgTick(0);
+                        requestAnimationFrame(() => requestAnimationFrame(scrollToDetails));
+                      }}
+                      className={[
+                        'shrink-0 px-4 py-3 border font-sans uppercase tracking-[0.25em] text-[10px] transition-colors duration-300',
+                        isActive
+                          ? 'border-brand-400/60 text-white bg-brand-400/10'
+                          : 'border-white/10 text-white/55 bg-black/30 hover:text-white/80 hover:border-white/20',
+                      ].join(' ')}
+                    >
+                      {craft.title}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
         </div>
 
       </div>

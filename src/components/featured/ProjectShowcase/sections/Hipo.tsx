@@ -15,7 +15,7 @@ export default function Hipo({ onOpen }: Props) {
         imageIds={[
           data.gallery[0],
           data.gallery[1],
-          data.main
+          data.main,
         ]}
         details={data.zoomDetails}
         onOpen={onOpen}

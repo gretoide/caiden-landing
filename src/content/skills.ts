@@ -10,7 +10,7 @@ export const TECHNICAL_SKILLS: Record<string, SkillItem[]> = {
     'Silicone rubber molds',
     'Thermoforming materials',
     'Wood',
-    'Impresión 3D',
+    'ImpresiÃ³n 3D',
     'Professional handheld power tools',
   ],
   finishing: ['Painting & airbrushing', 'Weathering', 'SFX', 'Sculpting', 'LED design', 'Electronics'],
@@ -50,6 +50,15 @@ export const ALL_SKILLS: ExpandableSkill[] = [
     description: 'Classic and modern woodworking techniques combining structural integrity with organic, hand-carved finishing touches.',
     tags: ['Wood', 'Handheld Power Tools', 'CNC Preparation'],
     publicId: 'wp_god_of_war_5_shbod3',
+  },
+  {
+    id: 'textiles-sewing',
+    category: 'Fabrication',
+    title: 'Fabrics & Sewing',
+    description:
+      'Patterning and assembly of fabric components for costumes, straps, layered garments, and wearable comfort without sacrificing silhouette.',
+    tags: ['Textiles', 'Patterning', 'Sewing', 'Wearable Builds'],
+    publicId: 'mordred_fate_2_rkpzpt',
   },
   {
     id: 'painting',
@@ -98,4 +107,3 @@ export const ALL_SKILLS: ExpandableSkill[] = [
     tags: ['3D Printing', 'SLA Resin', 'FDM'],
   },
 ];
-

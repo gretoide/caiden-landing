@@ -14,8 +14,8 @@ export default function FeaturedBuilds() {
       <EldenRing onOpen={setExpandedPublicId} />
       <DiabloIV onOpen={setExpandedPublicId} />
       <Skyrim onOpen={setExpandedPublicId} />
-      <ChainsawMan onOpen={setExpandedPublicId} />
       <Hipo onOpen={setExpandedPublicId} />
+      <ChainsawMan onOpen={setExpandedPublicId} />
 
       {expandedPublicId && (
         <ImageModal key={expandedPublicId} publicId={expandedPublicId} onClose={() => setExpandedPublicId(null)} />

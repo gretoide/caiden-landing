@@ -54,7 +54,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <footer className="py-20 bg-black text-center border-t border-white/5">
         <div className="container mx-auto px-6">
           <p className="text-white/20 text-[10px] font-sans tracking-[0.5em] uppercase">
-            © {new Date().getFullYear()} Caiden Mikael Dri // All Rights Reserved
+            Â© {new Date().getFullYear()} Caiden Mikael Dri // All Rights Reserved
           </p>
         </div>
       </footer>

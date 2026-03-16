@@ -63,13 +63,13 @@ export default function OptimizedImage({
 
   const widths = useMemo(() => {
     const baseWidths = widthsFor(variant);
-    // Si hay zoom, pedimos resoluciones mucho más altas.
-    // Ej: Para zoom 2.5x, multiplicamos la resolución base para no perder nitidez.
+    // Si hay zoom, pedimos resoluciones mucho mÃ¡s altas.
+    // Ej: Para zoom 2.5x, multiplicamos la resoluciÃ³n base para no perder nitidez.
     const multiplier = zoom > 1.8 ? 2.5 : zoom > 1.1 ? 1.5 : 1;
     return baseWidths.map((w) => Math.round(w * multiplier));
   }, [variant, zoom]);
 
-  // Si hay zoom, nos saltamos la primera resolución (pequeña) para el src inicial
+  // Si hay zoom, nos saltamos la primera resoluciÃ³n (pequeÃ±a) para el src inicial
   const srcWidth = zoom > 1.2 && widths.length > 1 ? widths[1] : widths[0];
   const src = useMemo(() => cloudinaryUrl(publicId, { variant, width: srcWidth }), [publicId, variant, srcWidth]);
   const srcSet = useMemo(() => variantSrcSet(publicId, variant, widths), [publicId, variant, widths]);

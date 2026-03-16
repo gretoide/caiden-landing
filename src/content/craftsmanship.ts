@@ -31,6 +31,21 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     expertiseSkillIds: ['painting', 'sculpting', 'fiberglass-foam'],
   },
   {
+    id: 'painting',
+    title: 'Painting',
+    subtitle: 'Airbrushing & Weathering',
+    description: 'High-end painting workflows focused on realism, contrast, and cinematic finishes.',
+    expandedDetails:
+      'From primer to final clear coat, we build depth through controlled airbrush gradients, layered washes, and material-accurate surface breakup. The result is believable metal, worn leather, and true-to-life grime that reads on camera and up close.',
+    publicId: 'skyrim_1_llcbuo',
+    gallery: [
+      { id: 'skyrim_1_llcbuo', title: 'Skyrim — Paint Pass' },
+      { id: 'elden_ring_8_gmazch', title: 'Elden Ring — Weathering' },
+      { id: 'diablo_iv_3_yuwkeo', title: 'Diablo IV — Texture' },
+    ],
+    expertiseSkillIds: ['painting'],
+  },
+  {
     id: 'woodworking',
     title: 'Wood working',
     subtitle: 'Classic Craftsmanship',
@@ -60,6 +75,21 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     expertiseSkillIds: ['sfx-prosthetics', 'mold-making', 'sculpting'],
   },
   {
+    id: '3d-design',
+    title: '3D design',
+    subtitle: 'Blender & Prototyping',
+    description: 'Digital planning and prototyping to accelerate complex builds and ensure perfect fit.',
+    expandedDetails:
+      'We use 3D design to test proportions, clearances, and assembly logic before committing to physical materials. This reduces iteration time and enables accurate, repeatable parts for printing, molding, and final fabrication.',
+    publicId: 'diablo_iv_2_thyv5o',
+    gallery: [
+      { id: 'diablo_iv_2_thyv5o', title: 'Diablo IV — Design Study' },
+      { id: 'wp_al_kunai_2_vaqwpg', title: 'Apex — Prototype' },
+      { id: 'chainsaw_1_azfqly', title: 'Chainsaw — Fit Check' },
+    ],
+    expertiseSkillIds: ['3d-design', '3d-printing'],
+  },
+  {
     id: 'lights-work',
     title: 'Lights work',
     subtitle: 'Electronics & Arduino',
@@ -74,5 +104,20 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
       { id: 'wp_añ_2_yatjho', title: 'Dragon — Lighting Study' },
     ],
     expertiseSkillIds: ['led-electronics', '3d-design', '3d-printing'],
+  },
+  {
+    id: 'textiles',
+    title: 'Fabrics',
+    subtitle: 'Fabrics & Patterning',
+    description: 'Fabric work for costumes, straps, and layered garments with clean finishing and fit.',
+    expandedDetails:
+      'From patterning to assembly, we focus on silhouette, mobility, and believable layering. The goal is a wearable build that holds up under motion while keeping an authentic material read in lighting and on camera.',
+    publicId: 'mordred_fate_2_rkpzpt',
+    gallery: [
+      { id: 'mordred_fate_2_rkpzpt', title: 'Fate — Fabric Layer' },
+      { id: 'mordred_fate_3_jubhnt', title: 'Fate — Stitch Detail' },
+      { id: 'mordred_fate_1_hvpnwf', title: 'Fate — Garment Study' },
+    ],
+    expertiseSkillIds: ['textiles-sewing'],
   },
 ] as const;
