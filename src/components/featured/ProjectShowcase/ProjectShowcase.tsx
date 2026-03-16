@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import type { ReactNode } from 'react';
-import type { ProjectShowcaseData } from '../../../content/images';
+import type { ProjectShowcaseData } from '../../../content/projects';
 import DeferredBackground from '../../DeferredBackground';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { ALL_SKILLS } from '../content/images';
+import { ALL_SKILLS } from '../content/skills';
 import OptimizedImage from './OptimizedImage';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';

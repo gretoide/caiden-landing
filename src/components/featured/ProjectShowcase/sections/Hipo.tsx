@@ -1,13 +1,12 @@
 import ProjectShowcase from '../ProjectShowcase';
 import CompactTechnicalGrid from '../CompactTechnicalGrid';
-import { PROJECTS } from '../../../../content/images';
+import { PROJECTS } from '../../../../content/projects';
 
 type Props = {
   onOpen: (publicId: string) => void;
 };
 
 export default function Hipo({ onOpen }: Props) {
-  // Access the correctly named property in images.ts
   const data = PROJECTS.hipo;
 
   return (

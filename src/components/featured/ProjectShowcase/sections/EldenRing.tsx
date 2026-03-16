@@ -2,7 +2,7 @@ import ProjectShowcase from '../ProjectShowcase';
 import MosaicGallery from '../MosaicGallery';
 import ZoomFocusGrid from '../ZoomFocusGrid';
 import ShowcaseBanner from '../ShowcaseBanner';
-import { PROJECTS } from '../../../../content/images';
+import { PROJECTS } from '../../../../content/projects';
 
 type Props = {
   onOpen: (publicId: string) => void;

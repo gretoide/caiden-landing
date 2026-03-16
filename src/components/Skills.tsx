@@ -1,13 +1,30 @@
-import { useState } from 'react';
-import { CRAFTSMANSHIP } from '../content/images';
+import { useRef, useState } from 'react';
+import { CRAFTSMANSHIP } from '../content/craftsmanship';
+import { ALL_SKILLS } from '../content/skills';
 import OptimizedImage from './OptimizedImage';
 import ImageModal from './ImageModal';
 
 export default function Skills() {
+  const detailsRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState(CRAFTSMANSHIP[0].id);
   const [expandedPublicId, setExpandedPublicId] = useState<string | null>(null);
 
   const activeData = CRAFTSMANSHIP.find((c) => c.id === activeTab) || CRAFTSMANSHIP[0];
+  const relatedExpertise = ALL_SKILLS.filter((s) => activeData.expertiseSkillIds.includes(s.id));
+
+  const scrollToDetails = () => {
+    const target = detailsRef.current;
+    if (!target) return;
+
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
+    const NAV_OFFSET_PX = 120;
+    const top = target.getBoundingClientRect().top + window.scrollY - NAV_OFFSET_PX;
+
+    window.scrollTo({
+      top,
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    });
+  };
 
   return (
     <section id="skills" className="w-full bg-black relative flex flex-col justify-center overflow-hidden py-12 md:py-24">
@@ -26,7 +43,11 @@ export default function Skills() {
                   className={`relative flex-1 h-full cursor-pointer transition-all duration-700 ease-out group border-r border-white/5 last:border-r-0 overflow-hidden ${
                     isActive ? 'flex-[2]' : 'hover:flex-[1.2]'
                   }`}
-                  onClick={() => setActiveTab(craft.id)}
+                  onClick={() => {
+                    setActiveTab(craft.id);
+                    // Scroll to the details area after layout settles (mobile-friendly).
+                    requestAnimationFrame(() => requestAnimationFrame(scrollToDetails));
+                  }}
                 >
                   {/* Image container un-skewed */}
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250%] h-full transform -skew-x-12 origin-center">
@@ -82,7 +103,11 @@ export default function Skills() {
         </div>
 
         {/* Bottom Content Section */}
-        <div className="w-full max-w-4xl mx-auto flex flex-col px-6 md:px-0 mt-4 md:mt-8 animate-[fade-in-up_0.5s_ease-out_forwards]" key={activeData.id}>
+        <div
+          ref={detailsRef}
+          className="w-full max-w-4xl mx-auto flex flex-col px-6 md:px-0 mt-4 md:mt-8 animate-[fade-in-up_0.5s_ease-out_forwards]"
+          key={activeData.id}
+        >
           <div className="flex flex-col gap-4">
             <h3 className="text-3xl lg:text-4xl font-serif text-white mb-1">{activeData.title}</h3>
             <h4 className="text-brand-400 font-sans tracking-[0.2em] text-xs uppercase mb-4">{activeData.subtitle}</h4>
@@ -128,8 +153,65 @@ export default function Skills() {
                   Gallery Space Ready
                 </span>
                 <span className="text-white/20 text-[10px] md:text-xs font-sans">
-                  Add Cloudinary public IDs to the `gallery` array in `{activeData.id}` inside `images.ts`
+                  Add Cloudinary public IDs to the `gallery` array in `{activeData.id}` inside `craftsmanship.ts`
                 </span>
+              </div>
+            )}
+
+            {/* Related Expertise */}
+            {relatedExpertise.length > 0 && (
+              <div className="mt-16">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-8 h-[1px] bg-brand-400/80"></div>
+                  <span className="text-brand-400 font-sans text-[10px] tracking-[0.5em] uppercase font-bold">
+                    Related Expertise
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+                  {relatedExpertise.map((skill) => (
+                    <div
+                      key={skill.id}
+                      className="group relative bg-[#020b1a] border border-white/5 overflow-hidden flex flex-col min-h-[260px]"
+                    >
+                      <div className="absolute inset-0 z-0 opacity-40 group-hover:opacity-70 transition-opacity duration-700">
+                        {skill.publicId ? (
+                          <OptimizedImage
+                            publicId={skill.publicId}
+                            alt={skill.title}
+                            variant="thumb"
+                            fill
+                            imgClassName="object-cover transition-transform duration-1000 group-hover:scale-105"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-white/5 to-transparent" />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
+                      </div>
+
+                      <div className="relative z-10 p-6 md:p-8 flex flex-col flex-grow justify-end">
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {skill.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="text-[9px] font-sans tracking-widest uppercase text-brand-400 border border-brand-400/30 px-2 py-1 bg-black/50 backdrop-blur-sm"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        <h4 className="text-xl md:text-2xl font-serif text-white mb-3 group-hover:text-brand-400 transition-colors duration-300">
+                          {skill.title}
+                        </h4>
+                        <p className="text-white/60 font-sans text-sm md:text-base leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all duration-500">
+                          {skill.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
