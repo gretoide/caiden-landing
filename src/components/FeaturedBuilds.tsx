@@ -3,8 +3,6 @@ import ImageModal from './ImageModal';
 import EldenRing from './featured/ProjectShowcase/sections/EldenRing';
 import DiabloIV from './featured/ProjectShowcase/sections/DiabloIV';
 import Skyrim from './featured/ProjectShowcase/sections/Skyrim';
-import ChainsawMan from './featured/ProjectShowcase/sections/ChainsawMan';
-import Hipo from './featured/ProjectShowcase/sections/Hipo';
 
 export default function FeaturedBuilds() {
   const [expandedPublicId, setExpandedPublicId] = useState<string | null>(null);
