@@ -2,7 +2,7 @@
   "note": "Reference manifest for Cloudinary Public IDs used by the app. Keep VITE_CLOUDINARY_FOLDER empty unless your Cloudinary Delivery URLs include that folder in the path.",
   "byUse": {
     "hero": {
-      "background": "elden_ring_9_gccxgg"
+      "background": "horizontal_algún_lado_ta_fachera_ogjucf"
     },
     "contact": {
       "background": "elden_ring_3_xdtfgk"
@@ -13,7 +13,7 @@
         "sub1": "elden_ring_1_e7ast7",
         "sub2": "elden_ring_2_hhaclm",
         "detail1": "elden_ring_4_y0e6ou",
-        "bg": "elden_ring_3_xdtfgk"
+        "bg": "horizontal_algún_lado_ta_fachera_ogjucf"
       },
       "diabloIV": {
         "img1": "diablo_iv_1_nnjl7z",

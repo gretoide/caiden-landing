@@ -33,7 +33,7 @@ export const PROJECTS: Record<string, ProjectShowcaseData> = {
     main: 'elden_ring_6_k5z39c',
     banner: 'elden_ring_1_e7ast7',
     // High-quality Elden Ring background from assets
-    bg: 'elden_ring_9_gccxgg',
+    bg: 'horizontal_algún_lado_ta_fachera_ogjucf',
     bgOverlayClassName: 'bg-red-600/20 mix-blend-overlay',
     blurClassName: 'blur-sm',
     gallery: ['elden_ring_5_nbxteg', 'elden_ring_10_n1jah8', 'elden_ring_8_gmazch', 'elden_ring_7_mpj69h'],
