@@ -50,16 +50,21 @@ export default function EldenRing({ onOpen }: Props) {
 
   return (
     <section ref={containerRef} className="relative w-full min-h-screen bg-black overflow-hidden py-24 md:py-32 border-t border-white/5">
-      <DeferredBackground
-        publicId={data.bg}
-        className={`absolute inset-0 z-0 opacity-20 bg-cover bg-center pointer-events-none ${data.blurClassName || 'blur-md'} scale-105`}
-        style={{ backgroundAttachment: 'fixed' }}
-        width={1024}
-        rootMargin="1200px"
-      />
+      {/* Background Container */}
+      <div className="absolute inset-x-0 top-0 h-[120vh] z-0 pointer-events-none overflow-hidden">
+        <DeferredBackground
+          publicId={data.bg}
+          className={`absolute inset-0 opacity-30 bg-cover bg-[center_20%] ${data.blurClassName || 'blur-sm'}`}
+          style={{ backgroundAttachment: 'fixed' }}
+          width={1400}
+          rootMargin="1200px"
+        />
+        {/* Red Vignette & Bottom Fade */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-red-950/20 to-black z-[1]"></div>
+      </div>
       
       {data.bgOverlayClassName && (
-        <div className={`absolute inset-0 z-[1] pointer-events-none ${data.bgOverlayClassName}`}></div>
+        <div className={`absolute inset-0 z-[1] pointer-events-none opacity-40 ${data.bgOverlayClassName}`}></div>
       )}
       
       {/* Gradient Transitions */}
