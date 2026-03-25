@@ -40,11 +40,15 @@ export default function ProjectShowcase({ data, children }: Props) {
     <section ref={containerRef} className="relative w-full min-h-screen bg-black overflow-hidden py-24 md:py-32 border-t border-white/5">
       <DeferredBackground
         publicId={data.bg}
-        className="absolute inset-0 z-0 opacity-20 bg-cover bg-center pointer-events-none blur-md scale-105"
+        className={`absolute inset-0 z-0 opacity-20 bg-cover bg-center pointer-events-none ${data.blurClassName || 'blur-md'} scale-105`}
         style={{ backgroundAttachment: 'fixed' }}
         width={1024}
         rootMargin="1200px"
       />
+      
+      {data.bgOverlayClassName && (
+        <div className={`absolute inset-0 z-[1] pointer-events-none ${data.bgOverlayClassName}`}></div>
+      )}
       
       {/* Gradient Transitions */}
       <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent z-1"></div>

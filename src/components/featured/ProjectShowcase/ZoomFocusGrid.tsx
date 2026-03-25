@@ -23,9 +23,10 @@ type Props = {
   details: ZoomDetail[];
   onOpen: (publicId: string) => void;
   overlayDetails?: OverlayDetail[];
+  isInteractive?: boolean;
 };
 
-export default function ZoomFocusGrid({ mainImageId, details, onOpen, overlayDetails }: Props) {
+export default function ZoomFocusGrid({ mainImageId, details, onOpen, overlayDetails, isInteractive = true }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
@@ -54,9 +55,9 @@ export default function ZoomFocusGrid({ mainImageId, details, onOpen, overlayDet
           alt="Main Showcase View"
           variant="full"
           className="w-full h-full"
-          imgClassName="grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000 cursor-pointer"
+          imgClassName={`grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000 ${isInteractive ? 'cursor-pointer' : 'cursor-default'}`}
           sizes="(min-width: 1024px) 60vw, 100vw"
-          onClick={() => onOpen(mainImageId)}
+          onClick={isInteractive ? () => onOpen(mainImageId) : undefined}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
         
@@ -89,11 +90,11 @@ export default function ZoomFocusGrid({ mainImageId, details, onOpen, overlayDet
               alt={details[0].label}
               variant="full"
               className="w-full h-full"
-              imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer"
+              imgClassName={`grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 ${isInteractive ? 'cursor-pointer' : 'cursor-default'}`}
               zoom={details[0].zoom}
               objectPosition={details[0].position}
               sizes="(min-width: 1024px) 40vw, 100vw"
-              onClick={() => onOpen(mainImageId)}
+              onClick={isInteractive ? () => onOpen(mainImageId) : undefined}
             />
             <div className="absolute inset-0 border-[0.5px] border-white/10 pointer-events-none"></div>
             <div className="absolute top-4 right-4 text-[10px] text-white/30 tracking-[0.3em] uppercase">Focus 01 // {details[0].label}</div>
@@ -109,10 +110,10 @@ export default function ZoomFocusGrid({ mainImageId, details, onOpen, overlayDet
                 alt={detail.label}
                 variant="full"
                 className="w-full h-full"
-                imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer"
+                imgClassName={`grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 ${isInteractive ? 'cursor-pointer' : 'cursor-default'}`}
                 zoom={detail.zoom}
                 objectPosition={detail.position}
-                onClick={() => onOpen(mainImageId)}
+                onClick={isInteractive ? () => onOpen(mainImageId) : undefined}
               />
               <div className="absolute inset-0 border-[0.5px] border-white/10 pointer-events-none"></div>
               <div className="absolute bottom-3 left-3 text-[8px] text-white/30 tracking-[0.2em] uppercase">Focus 0{idx + 2} // {detail.label}</div>

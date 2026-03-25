@@ -26,6 +26,7 @@ export default function EldenRing({ onOpen }: Props) {
         mainImageId={data.main} 
         details={data.zoomDetails} 
         onOpen={onOpen} 
+        isInteractive={false}
         overlayDetails={[
           {
             title: "The Crucible Knight",

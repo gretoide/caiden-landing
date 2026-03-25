@@ -16,6 +16,8 @@ export type ProjectShowcaseData = {
   main: string;
   banner?: string;
   bg: string;
+  bgOverlayClassName?: string;
+  blurClassName?: string;
   gallery: readonly string[];
   zoomDetails: ZoomDetail[];
 };
@@ -24,14 +26,16 @@ export const PROJECTS: Record<string, ProjectShowcaseData> = {
   eldenRing: {
     title: 'Elden Ring',
     subtitle: 'Shadow of the Erdtree — 2024',
-    subtitleClassName: 'text-brand-400',
+    subtitleClassName: 'text-red-500',
     description:
       'Built to match the brutal, gothic world of the Lands Between. High-fidelity craftsmanship with active motorized components.',
-    descBorderClassName: 'border-brand-400',
+    descBorderClassName: 'border-red-500',
     main: 'elden_ring_6_k5z39c',
     banner: 'elden_ring_1_e7ast7',
-    // Note: this points to an existing Cloudinary asset path. Keep as-is unless you rename it in Cloudinary.
-    bg: 'v1773586265/4d1442bd6c1ab961e1fdb99498c10bfc_x51l89.jpg',
+    // High-quality Elden Ring background from assets
+    bg: 'elden_ring_9_gccxgg',
+    bgOverlayClassName: 'bg-red-600/20 mix-blend-overlay',
+    blurClassName: 'blur-sm',
     gallery: ['elden_ring_5_nbxteg', 'elden_ring_10_n1jah8', 'elden_ring_8_gmazch', 'elden_ring_7_mpj69h'],
     zoomDetails: [
       { id: 1, label: 'Torso', zoom: 1.8, position: '10% 90%' },
