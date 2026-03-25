@@ -49,27 +49,29 @@ export default function EldenRing({ onOpen }: Props) {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative w-full min-h-screen bg-black overflow-hidden py-24 md:py-32 border-t border-white/5">
+    <section ref={containerRef} className="relative w-full min-h-screen bg-[#0a0202] overflow-hidden py-24 md:py-32 border-t border-white/5">
       {/* Background Container */}
       <div className="absolute inset-x-0 top-0 h-[120vh] z-0 pointer-events-none overflow-hidden">
         <DeferredBackground
           publicId={data.bg}
-          className={`absolute inset-0 opacity-30 bg-cover bg-[center_20%] ${data.blurClassName || 'blur-sm'}`}
+          className={`absolute inset-0 opacity-40 bg-cover bg-[center_20%] ${data.blurClassName || 'blur-sm'}`}
           style={{ backgroundAttachment: 'fixed' }}
           width={1400}
           rootMargin="1200px"
         />
-        {/* Red Vignette & Bottom Fade */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-red-950/20 to-black z-[1]"></div>
+        {/* Velvet Texture & Fade */}
+        <div className="absolute inset-x-0 bottom-0 top-[10%] bg-gradient-to-b from-transparent via-[#2d0606]/80 to-[#0a0202] z-[1]"></div>
+        {/* Subtle Dark Red Wash */}
+        <div className="absolute inset-0 bg-[#2d0606]/30 mix-blend-multiply z-[1] pointer-events-none"></div>
       </div>
       
       {data.bgOverlayClassName && (
-        <div className={`absolute inset-0 z-[1] pointer-events-none opacity-40 ${data.bgOverlayClassName}`}></div>
+        <div className={`absolute inset-0 z-[2] pointer-events-none opacity-40 ${data.bgOverlayClassName}`}></div>
       )}
       
       {/* Gradient Transitions */}
-      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent z-1"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-1"></div>
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#0a0202] to-transparent z-1"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0202] to-transparent z-1"></div>
 
       <div className="relative z-10 container mx-auto px-6">
         {/* Header Section */}
@@ -91,7 +93,7 @@ export default function EldenRing({ onOpen }: Props) {
         </div>
 
         {/* Banner */}
-        <div className="elden-item-anim w-full aspect-video mb-12 relative group overflow-hidden border border-white/10 shadow-2xl">
+        <div className="elden-item-anim w-full aspect-video mb-12 relative group overflow-hidden border border-white/10 shadow-2xl bg-[#1a0505]">
           <OptimizedImage
             publicId={data.banner!}
             alt="Elden Ring Featured Banner"
@@ -113,7 +115,7 @@ export default function EldenRing({ onOpen }: Props) {
         {/* Mosaic Gallery */}
         <div className="grid grid-cols-12 auto-rows-[25vh] md:auto-rows-[30vh] gap-3 mb-12">
           {/* Shot 1 */}
-          <div className="elden-item-anim col-span-6 md:col-span-3 row-span-1 relative group overflow-hidden bg-white/5 border border-white/5">
+          <div className="elden-item-anim col-span-6 md:col-span-3 row-span-1 relative group overflow-hidden bg-[#1a0505] border border-white/5">
             <OptimizedImage
               publicId={data.gallery[0]}
               alt="Showcase Shot 1"
@@ -122,9 +124,11 @@ export default function EldenRing({ onOpen }: Props) {
               imgClassName="grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
               onClick={() => onOpen(data.gallery[0])}
             />
+            {/* Velvet Overlay */}
+            <div className="absolute inset-0 bg-red-900/10 mix-blend-overlay pointer-events-none group-hover:opacity-0 transition-opacity duration-700"></div>
           </div>
           {/* Shot 2 */}
-          <div className="elden-item-anim col-span-6 md:col-span-5 row-span-1 relative group overflow-hidden bg-white/5 border border-white/5">
+          <div className="elden-item-anim col-span-6 md:col-span-5 row-span-1 relative group overflow-hidden bg-[#1a0505] border border-white/5">
             <OptimizedImage
               publicId={data.gallery[1]}
               alt="Showcase Shot 2"
@@ -133,9 +137,11 @@ export default function EldenRing({ onOpen }: Props) {
               imgClassName="grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
               onClick={() => onOpen(data.gallery[1])}
             />
+            {/* Velvet Overlay */}
+            <div className="absolute inset-0 bg-red-900/10 mix-blend-overlay pointer-events-none group-hover:opacity-0 transition-opacity duration-700"></div>
           </div>
           {/* Shot 3 */}
-          <div className="elden-item-anim col-span-7 md:col-span-4 row-span-1 md:row-span-2 relative group overflow-hidden bg-white/5 border border-white/10">
+          <div className="elden-item-anim col-span-7 md:col-span-4 row-span-1 md:row-span-2 relative group overflow-hidden bg-[#1a0505] border border-white/10">
             <OptimizedImage
               publicId={data.gallery[2]}
               alt="Showcase Shot 3"
@@ -144,9 +150,11 @@ export default function EldenRing({ onOpen }: Props) {
               imgClassName="grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
               onClick={() => onOpen(data.gallery[2])}
             />
+            {/* Velvet Overlay */}
+            <div className="absolute inset-0 bg-red-900/10 mix-blend-overlay pointer-events-none group-hover:opacity-0 transition-opacity duration-700"></div>
           </div>
           {/* Shot 4 */}
-          <div className="elden-item-anim col-span-5 md:col-span-8 row-span-1 relative group overflow-hidden bg-white/5 border border-white/5">
+          <div className="elden-item-anim col-span-5 md:col-span-8 row-span-1 relative group overflow-hidden bg-[#1a0505] border border-white/5">
             <OptimizedImage
               publicId={data.gallery[3]}
               alt="Showcase Shot 4"
@@ -155,13 +163,16 @@ export default function EldenRing({ onOpen }: Props) {
               imgClassName="grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
               onClick={() => onOpen(data.gallery[3])}
             />
+            {/* Velvet Overlay */}
+            <div className="absolute inset-0 bg-red-900/10 mix-blend-overlay pointer-events-none group-hover:opacity-0 transition-opacity duration-700"></div>
           </div>
         </div>
 
         {/* Zoom Focus Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 h-auto md:h-[120vh]">
           {/* Main View */}
-          <div className="elden-item-anim md:col-span-7 h-[60vh] md:h-full relative group">
+          <div className="elden-item-anim md:col-span-7 h-[60vh] md:h-full relative group shadow-2xl">
+            <div className="absolute inset-0 bg-[#1a0505] z-[-1]"></div>
             <OptimizedImage
               publicId={data.main}
               alt="Main Showcase View"
@@ -195,7 +206,7 @@ export default function EldenRing({ onOpen }: Props) {
           {/* Details Column */}
           <div className="md:col-span-5 grid grid-cols-1 gap-2 md:gap-4 h-auto md:h-full">
             {/* Top Detail */}
-            <div className="elden-item-anim h-[40vh] md:h-full relative group overflow-hidden border border-white/5">
+            <div className="elden-item-anim h-[40vh] md:h-full relative group overflow-hidden border border-white/5 bg-[#1a0505] shadow-xl">
               <OptimizedImage
                 publicId={data.main}
                 alt={data.zoomDetails[0].label}
@@ -206,6 +217,8 @@ export default function EldenRing({ onOpen }: Props) {
                 objectPosition={data.zoomDetails[0].position}
                 sizes="(min-width: 1024px) 40vw, 100vw"
               />
+              {/* Velvet Overlay */}
+              <div className="absolute inset-0 bg-red-900/10 mix-blend-overlay pointer-events-none group-hover:opacity-0 transition-opacity duration-700"></div>
               <div className="absolute inset-0 border-[0.5px] border-white/10 pointer-events-none"></div>
               <div className="absolute top-4 right-4 text-[10px] text-white/30 tracking-[0.3em] uppercase">Focus 01 // {data.zoomDetails[0].label}</div>
             </div>
@@ -213,7 +226,7 @@ export default function EldenRing({ onOpen }: Props) {
             {/* Bottom Grid */}
             <div className="grid grid-cols-2 gap-2 md:gap-4 h-[40vh] md:h-full">
               {data.zoomDetails.slice(1, 3).map((detail, idx) => (
-                <div key={detail.id} className="elden-item-anim relative group overflow-hidden border border-white/5">
+                <div key={detail.id} className="elden-item-anim relative group overflow-hidden border border-white/5 bg-[#1a0505] shadow-lg">
                   <OptimizedImage
                     publicId={data.main}
                     alt={detail.label}
@@ -223,6 +236,8 @@ export default function EldenRing({ onOpen }: Props) {
                     zoom={detail.zoom}
                     objectPosition={detail.position}
                   />
+                  {/* Velvet Overlay */}
+                  <div className="absolute inset-0 bg-red-900/10 mix-blend-overlay pointer-events-none group-hover:opacity-0 transition-opacity duration-700"></div>
                   <div className="absolute inset-0 border-[0.5px] border-white/10 pointer-events-none"></div>
                   <div className="absolute bottom-3 left-3 text-[8px] text-white/30 tracking-[0.2em] uppercase">Focus 0{idx + 2} // {detail.label}</div>
                 </div>
