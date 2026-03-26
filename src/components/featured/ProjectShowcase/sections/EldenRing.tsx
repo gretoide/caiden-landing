@@ -20,7 +20,7 @@ export default function EldenRing({ onOpen }: Props) {
     const headerElements = gsap.utils.toArray('.elden-header-anim', containerRef.current);
     
     gsap.from(headerElements, {
-      y: 60,
+      y: 30,
       opacity: 0,
       duration: 1.2,
       stagger: 0.25,
@@ -35,7 +35,7 @@ export default function EldenRing({ onOpen }: Props) {
     // Sub-components animations
     const items = gsap.utils.toArray('.elden-item-anim', containerRef.current);
     gsap.from(items, {
-      y: 40,
+      y: 20,
       opacity: 0,
       duration: 1,
       stagger: 0.1,
@@ -60,7 +60,7 @@ export default function EldenRing({ onOpen }: Props) {
           rootMargin="1200px"
         />
         {/* Soft Velvet Transition */}
-        <div className="absolute inset-x-0 bottom-0 top-[45%] bg-gradient-to-b from-transparent via-[#3d0808]/95 to-[#0a0202] z-[1]"></div>
+        <div className="absolute inset-x-0 bottom-0 top-[65%] bg-gradient-to-b from-transparent via-[#3d0808]/70 to-[#0a0202] z-[1]"></div>
         {/* Deep Color Wash */}
         <div className="absolute inset-0 bg-[#0a0202]/30 mix-blend-multiply z-[1] pointer-events-none"></div>
       </div>
