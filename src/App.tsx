@@ -12,8 +12,8 @@ function App() {
       <Hero />
       <FeaturedBuilds />
       <Skills />
-      <Brands />
       <EventMap />
+      <Brands />
       <Contact />
     </Layout>
   );

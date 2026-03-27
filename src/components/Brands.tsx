@@ -18,37 +18,42 @@ const BRANDS = [
 ];
 
 export default function Brands() {
-  // Split brands into two halves for the two rows
-  const midPoint = Math.ceil(BRANDS.length / 2);
-  const row1 = BRANDS.slice(0, midPoint);
-  const row2 = BRANDS.slice(midPoint);
+  // Split brands into three rows
+  const perRow = Math.ceil(BRANDS.length / 3);
+  const row1 = BRANDS.slice(0, perRow);
+  const row2 = BRANDS.slice(perRow, perRow * 2);
+  const row3 = BRANDS.slice(perRow * 2);
 
   // Duplicate for seamless loop
   const displayRow1 = [...row1, ...row1, ...row1];
   const displayRow2 = [...row2, ...row2, ...row2];
+  const displayRow3 = [...row3, ...row3, ...row3];
 
   return (
-    <section className="w-full bg-[#050505] py-24 border-y border-white/5 overflow-hidden">
-      <div className="max-w-[1600px] mx-auto px-6 mb-16">
-        <div className="flex items-center gap-4 mb-3">
-          <div className="w-10 h-[1px] bg-brand-400/60"></div>
-          <span className="text-brand-400 font-sans text-[10px] tracking-[0.5em] uppercase font-bold">Trusted Alliances</span>
+    <section className="w-full bg-[#050505] py-24 md:py-32 border-y border-white/5 overflow-hidden">
+      <div className="max-w-[1400px] mx-auto px-10 mb-20 text-center md:text-left">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+            <div>
+                <div className="flex items-center gap-4 mb-3 justify-center md:justify-start">
+                    <div className="w-10 h-[1px] bg-brand-400/60"></div>
+                    <span className="text-brand-400 font-sans text-[10px] tracking-[0.5em] uppercase font-bold">Trusted Alliances</span>
+                </div>
+                <h2 className="text-white font-serif text-4xl md:text-5xl tracking-widest leading-tight">STRATEGIC PARTNERS</h2>
+            </div>
+            <div className="text-white/20 text-[9px] uppercase tracking-[0.3em] font-sans border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-8 max-w-xs">
+                COLLABORATIONS // MARKETING // GLOBAL OUTREACH // CROSS-OVER EVENTS
+            </div>
         </div>
-        <h2 className="text-white font-serif text-4xl md:text-5xl tracking-widest leading-tight">STRATEGIC PARTNERS</h2>
       </div>
 
-      <div className="relative space-y-12 group">
-        {/* Gradients to fade edges */}
-        <div className="absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-[#050505] to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-48 bg-gradient-to-l from-[#050505] to-transparent z-10 pointer-events-none" />
-
-        {/* Row 1: Moving Right to Left */}
+      <div className="max-w-[1400px] mx-auto px-10 relative space-y-12 group">
+        {/* Row 1: Right to Left */}
         <div className="relative flex overflow-hidden">
-          <div className="flex animate-marquee-left whitespace-nowrap gap-32 md:gap-48 py-8 items-center">
+          <div className="flex animate-marquee-left whitespace-nowrap gap-24 md:gap-40 py-4 items-center">
             {displayRow1.map((publicId, idx) => (
               <div 
                 key={`${publicId}-${idx}`} 
-                className="flex items-center justify-center min-w-[220px] md:min-w-[320px] group/item cursor-pointer h-16 md:h-24"
+                className="flex items-center justify-center min-w-[200px] md:min-w-[280px] group/item cursor-pointer h-14 md:h-20"
               >
                 <div className="relative w-full h-full transition-all duration-700">
                     <OptimizedImage
@@ -60,23 +65,19 @@ export default function Brands() {
                         className="w-full h-full"
                         imgClassName="grayscale opacity-30 group-hover/item:grayscale-0 group-hover/item:opacity-100 group-hover/item:brightness-125 transition-all duration-700"
                     />
-                    {/* Subtle ID fallback */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/item:opacity-10 transition-opacity pointer-events-none">
-                        <span className="text-white text-[10px] uppercase tracking-widest">{publicId}</span>
-                    </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Row 2: Moving Left to Right */}
+        {/* Row 2: Left to Right */}
         <div className="relative flex overflow-hidden">
-          <div className="flex animate-marquee-right whitespace-nowrap gap-32 md:gap-48 py-8 items-center">
+          <div className="flex animate-marquee-right whitespace-nowrap gap-24 md:gap-40 py-4 items-center">
             {displayRow2.map((publicId, idx) => (
               <div 
                 key={`${publicId}-${idx}`} 
-                className="flex items-center justify-center min-w-[220px] md:min-w-[320px] group/item cursor-pointer h-16 md:h-24"
+                className="flex items-center justify-center min-w-[200px] md:min-w-[280px] group/item cursor-pointer h-14 md:h-20"
               >
                 <div className="relative w-full h-full transition-all duration-700">
                     <OptimizedImage
@@ -88,9 +89,30 @@ export default function Brands() {
                         className="w-full h-full"
                         imgClassName="grayscale opacity-30 group-hover/item:grayscale-0 group-hover/item:opacity-100 group-hover/item:brightness-125 transition-all duration-700"
                     />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/item:opacity-10 transition-opacity pointer-events-none">
-                        <span className="text-white text-[10px] uppercase tracking-widest">{publicId}</span>
-                    </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Row 3: Right to Left (Faster or Slower) */}
+        <div className="relative flex overflow-hidden">
+          <div className="flex animate-marquee-left whitespace-nowrap gap-24 md:gap-40 py-4 items-center" style={{ animationDuration: '50s' }}>
+            {displayRow3.map((publicId, idx) => (
+              <div 
+                key={`${publicId}-${idx}`} 
+                className="flex items-center justify-center min-w-[200px] md:min-w-[280px] group/item cursor-pointer h-14 md:h-20"
+              >
+                <div className="relative w-full h-full transition-all duration-700">
+                    <OptimizedImage
+                        publicId={publicId}
+                        alt={`Brand Logo ${idx}`}
+                        variant="thumb"
+                        objectFit="contain"
+                        overflowHidden={false}
+                        className="w-full h-full"
+                        imgClassName="grayscale opacity-30 group-hover/item:grayscale-0 group-hover/item:opacity-100 group-hover/item:brightness-125 transition-all duration-700"
+                    />
                 </div>
               </div>
             ))}
