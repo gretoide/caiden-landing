@@ -22,13 +22,16 @@ export default function CustomCursor() {
       if (!isVisible) setIsVisible(true);
 
       const { clientX: x, clientY: y } = e;
+      const target = e.target as HTMLElement;
+      const isPointer = target?.closest('a, button, [role="button"], [data-cursor="pointer"], .cursor-pointer');
 
       // Inner dot follows instantly
       gsap.to(cursorDot, {
         x,
         y,
-        scale: 1,
-        duration: 0.1,
+        scale: isPointer ? 0 : 1,
+        opacity: isPointer ? 0 : 1,
+        duration: 0.15,
         ease: 'power2.out',
       });
 
@@ -36,12 +39,14 @@ export default function CustomCursor() {
       gsap.to(cursorOutline, {
         x,
         y,
-        scale: 1,
-        duration: 0.5,
+        scale: isPointer ? 2.5 : 1,
+        backgroundColor: isPointer ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+        borderColor: isPointer ? 'rgba(255, 255, 255, 0.3)' : 'white',
+        duration: 0.4,
         ease: 'power3.out',
       });
 
-      // Spotlight effect follows with even more lag for a "lazy" atmospheric feel
+      // Spotlight effect follows
       gsap.to(spotlight, {
         x,
         y,
@@ -51,65 +56,21 @@ export default function CustomCursor() {
     };
 
     const handleMouseDown = () => {
-      gsap.to(cursorDot, { scale: 0.8, duration: 0.2 });
       gsap.to(cursorOutline, { scale: 1.5, duration: 0.2 });
     };
 
     const handleMouseUp = () => {
-      gsap.to(cursorDot, { scale: 1, duration: 0.2 });
       gsap.to(cursorOutline, { scale: 1, duration: 0.2 });
-    };
-
-    const handleMouseEnter = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const isPointer = target.closest('a, button, [role="button"], [data-cursor="pointer"]');
-      
-      if (isPointer) {
-        gsap.to(cursorOutline, {
-          scale: 2.5,
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          borderColor: 'rgba(255, 255, 255, 0.3)',
-          duration: 0.3,
-        });
-        gsap.to(cursorDot, {
-          scale: 0,
-          opacity: 0,
-          duration: 0.2,
-        });
-      }
-    };
-
-    const handleMouseLeave = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const isPointer = target.closest('a, button, [role="button"], [data-cursor="pointer"]');
-      
-      if (isPointer) {
-        gsap.to(cursorOutline, {
-          scale: 1,
-          backgroundColor: 'transparent',
-          borderColor: 'white',
-          duration: 0.3,
-        });
-        gsap.to(cursorDot, {
-          scale: 1,
-          opacity: 1,
-          duration: 0.2,
-        });
-      }
     };
 
     window.addEventListener('mousemove', moveCursor);
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
-    window.addEventListener('mouseover', handleMouseEnter);
-    window.addEventListener('mouseout', handleMouseLeave);
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
-      window.removeEventListener('mouseover', handleMouseEnter);
-      window.removeEventListener('mouseout', handleMouseLeave);
     };
   }, [isVisible]);
 
