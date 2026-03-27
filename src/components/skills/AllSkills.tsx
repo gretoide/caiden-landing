@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-import { ALL_SKILLS } from '../content/skills';
-import OptimizedImage from './OptimizedImage';
+import { ALL_SKILLS } from './content/skills';
+import OptimizedImage from '../ui/OptimizedImage';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 
-import CustomCursor from './CustomCursor';
+import CustomCursor from './ui/CustomCursor';
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [scrolled, setScrolled] = useState(false);

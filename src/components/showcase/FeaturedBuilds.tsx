@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import ImageModal from './ImageModal';
-import EldenRing from './featured/ProjectShowcase/sections/EldenRing';
-import DiabloIV from './featured/ProjectShowcase/sections/DiabloIV';
-import Skyrim from './featured/ProjectShowcase/sections/Skyrim';
+import ImageModal from '../ui/ImageModal';
+import EldenRing from './sections/EldenRing';
+import DiabloIV from './sections/DiabloIV';
+import Skyrim from './sections/Skyrim';
 
 export default function FeaturedBuilds() {
   const [expandedPublicId, setExpandedPublicId] = useState<string | null>(null);

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { cloudinaryPlaceholderUrl, cloudinaryUrl } from '../lib/cloudinary';
+import { cloudinaryPlaceholderUrl, cloudinaryUrl } from '../../lib/cloudinary';
 
 type Props = {
   publicId: string;

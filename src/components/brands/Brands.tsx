@@ -1,4 +1,4 @@
-import OptimizedImage from './OptimizedImage';
+import OptimizedImage from '../ui/OptimizedImage';
 
 const BRANDS = [
   'x_-_Attack_on_titan_sn2mkr',

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import type { ReactNode } from 'react';
-import type { ProjectShowcaseData } from '../../../content/projects';
-import DeferredBackground from '../../DeferredBackground';
+import type { ProjectShowcaseData } from './content/projects';
+import DeferredBackground from '../ui/DeferredBackground';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';

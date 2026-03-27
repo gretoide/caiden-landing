@@ -3,10 +3,10 @@ import Layout from './components/Layout';
 import Hero from './components/Hero';
 
 // Critical components stay static for immediate rendering
-const FeaturedBuilds = lazy(() => import('./components/FeaturedBuilds'));
-const Skills = lazy(() => import('./components/Skills'));
-const Brands = lazy(() => import('./components/Brands'));
-const EventMap = lazy(() => import('./components/EventMap'));
+const FeaturedBuilds = lazy(() => import('./components/showcase/FeaturedBuilds'));
+const Skills = lazy(() => import('./components/skills/Skills'));
+const Brands = lazy(() => import('./components/brands/Brands'));
+const EventMap = lazy(() => import('./components/map/EventMap'));
 const Contact = lazy(() => import('./components/Contact'));
 
 // Section Fallback Component

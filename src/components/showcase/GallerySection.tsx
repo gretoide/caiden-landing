@@ -1,11 +1,11 @@
 import { useState, useRef } from 'react';
-import ImageModal from './ImageModal';
+import ImageModal from '../../ImageModal';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import OptimizedImage from './OptimizedImage';
+import OptimizedImage from '../../OptimizedImage';
 import DeferredBackground from './DeferredBackground';
-import { cloudinaryUrl } from '../lib/cloudinary';
+import { cloudinaryUrl } from '../../lib/cloudinary';
 
 gsap.registerPlugin(ScrollTrigger);
 

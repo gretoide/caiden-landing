@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CRAFTSMANSHIP } from '../content/craftsmanship';
-import { ALL_SKILLS } from '../content/skills';
-import BackgroundCarousel from './BackgroundCarousel';
-import OptimizedImage from './OptimizedImage';
-import ImageModal from './ImageModal';
+import { CRAFTSMANSHIP } from './content/craftsmanship';
+import { ALL_SKILLS } from './content/skills';
+import BackgroundCarousel from '../ui/BackgroundCarousel';
+import OptimizedImage from '../ui/OptimizedImage';
+import ImageModal from '../ui/ImageModal';
 
 export default function Skills() {
   const detailsRef = useRef<HTMLDivElement>(null);

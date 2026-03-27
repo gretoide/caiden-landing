@@ -1,5 +1,5 @@
-import DeferredBackground from './DeferredBackground';
-import { IMAGES } from '../content/images';
+import DeferredBackground from './ui/DeferredBackground';
+import { IMAGES } from './showcase/content/images';
 import { Mail, Phone, Instagram } from 'lucide-react';
 
 const CONTACT_BG = IMAGES.contact.background;

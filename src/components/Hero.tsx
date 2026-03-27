@@ -1,5 +1,5 @@
-import OptimizedImage from './OptimizedImage';
-import { IMAGES } from '../content/images';
+import OptimizedImage from './ui/OptimizedImage';
+import { IMAGES } from './showcase/content/images';
 
 const HERO_BG = IMAGES.hero.background;
 

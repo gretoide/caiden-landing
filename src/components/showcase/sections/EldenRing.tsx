@@ -2,9 +2,9 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import DeferredBackground from '../../../DeferredBackground';
-import OptimizedImage from '../../../OptimizedImage';
-import { PROJECTS } from '../../../../content/projects';
+import DeferredBackground from '../../ui/DeferredBackground';
+import OptimizedImage from '../../ui/OptimizedImage';
+import { PROJECTS } from '../content/projects';
 
 gsap.registerPlugin(ScrollTrigger);
 

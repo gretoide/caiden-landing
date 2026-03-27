@@ -4,7 +4,7 @@ import {
   cloudinaryUrl,
   type CloudinaryVariant,
   variantSrcSet,
-} from '../lib/cloudinary';
+} from '../../lib/cloudinary';
 
 type Props = {
   publicId: string;

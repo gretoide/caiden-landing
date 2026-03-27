@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { X, ZoomIn } from 'lucide-react';
-import { cloudinaryUrl } from '../lib/cloudinary';
+import { cloudinaryUrl } from '../../lib/cloudinary';
 
 export default function ImageModal({ publicId, onClose }: { publicId: string; onClose: () => void }) {
   const [scale, setScale] = useState(1);
