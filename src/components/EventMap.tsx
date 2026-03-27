@@ -19,15 +19,15 @@ const LOCATIONS = [
     lng: -60.4956,
     description: 'Central operations hub with a rich history of recurring conventions and thematic festivals in Paraná and Concordia.',
     events: [
-      { city: 'Paraná', name: 'Asia Fest', logoId: 'asia-fest', years: ['2016', '2017', '2018', '2019'], type: 'Festival' },
-      { city: 'Paraná', name: 'Zombie Walk', logoId: 'zombie-walk', years: ['2016', '2017'], type: 'Themed' },
-      { city: 'Concordia', name: 'Frikimania', logoId: 'frikimania', years: ['2017', '2018', '2019', '2020', '2021', '2022', '2024'], type: 'Convention' },
-      { city: 'Paraná', name: 'Neko Fest', logoId: 'neko-fest', years: ['2017', '2018'], type: 'Fan Event' },
-      { city: 'Paraná', name: 'Mirai Fest', logoId: 'mirai-fest', years: ['2022', '2023'], type: 'Festival' },
-      { city: 'Paraná', name: 'Kyubi Fest', logoId: 'kyubi-fest', years: ['2018'], type: 'Festival' },
-      { city: 'Concordia', name: 'Gamer Fest', logoId: 'gamer-fest', years: ['2023'], type: 'Gaming' },
-      { city: 'Paraná', name: 'Paraná Comic Con', logoId: 'parana-comic-con', years: ['2024'], type: 'Comic Con' },
-      { city: 'Paraná', name: 'Neo Freak', logoId: 'neo-freak', years: ['2024'], type: 'Convention' }
+      { city: 'Paraná', name: 'Asia Fest', logoId: '2016_Jul_wddizo', years: ['2016', '2017', '2018', '2019'], type: 'Festival' },
+      { city: 'Paraná', name: 'Zombie Walk', logoId: '2018_Nov_m4b5rz', years: ['2016', '2017'], type: 'Themed' },
+      { city: 'Concordia', name: 'Frikimania', logoId: '2019_Feb_i8ywbx', years: ['2017', '2018', '2019', '2020', '2021', '2022', '2024'], type: 'Convention' },
+      { city: 'Paraná', name: 'Neko Fest', logoId: '2017_May_kcz85v', years: ['2017', '2018'], type: 'Fan Event' },
+      { city: 'Paraná', name: 'Mirai Fest', logoId: '2022_Feb_niodok', years: ['2022', '2023'], type: 'Festival' },
+      { city: 'Paraná', name: 'Kyubi Fest', logoId: '2018_Abril_2_yo6cug', years: ['2018'], type: 'Festival' },
+      { city: 'Concordia', name: 'Gamer Fest', logoId: '2023_May_2_m6mzrr', years: ['2023'], type: 'Gaming' },
+      { city: 'Paraná', name: 'Paraná Comic Con', logoId: '2024_May_2_nnfc8i', years: ['2024'], type: 'Comic Con' },
+      { city: 'Paraná', name: 'Neo Freak', logoId: '2024_Ago_1_m01lci', years: ['2024'], type: 'Convention' }
     ]
   },
   {
@@ -39,8 +39,8 @@ const LOCATIONS = [
     lng: -55.8961,
     description: 'Northeastern operations with focus on long-running series like Ichi Ni San in Posadas.',
     events: [
-      { city: 'Posadas', name: 'Ichi Ni San Fest', logoId: 'ichi-ni-san', years: ['2016', '2023'], type: 'Festival' },
-      { city: 'Posadas', name: 'Cosplay & Games', logoId: 'cosplay-games', years: ['2017'], type: 'Gaming' }
+      { city: 'Posadas', name: 'Ichi Ni San Fest', logoId: '2016_Nov_udjntt', years: ['2016', '2023'], type: 'Festival' },
+      { city: 'Posadas', name: 'Cosplay & Games', logoId: '2017_Ago_2_z4f0xp', years: ['2017'], type: 'Gaming' }
     ]
   },
   {
@@ -52,10 +52,11 @@ const LOCATIONS = [
     lng: -58.3816,
     description: 'National capital operations and major event headquarters, including international Comic Con brand.',
     events: [
-      { city: 'CABA', name: 'Anime Con', logoId: 'anime-con', years: ['2022', '2024'], type: 'Mega' },
-      { city: 'CABA', name: 'Comic Con', logoId: 'comic-con', years: ['2023', '2024'], type: 'International' },
-      { city: 'Bs As', name: 'Kawaii Koto', logoId: 'kawaii-koto', years: ['2023'], type: 'Culture' },
-      { city: 'CABA', name: 'Martin Fierro Digital', logoId: 'martin-fierro-digital', years: ['2024'], type: 'Awards' }
+      { city: 'CABA', name: 'Anime Con', logoId: '2023_Sep_2_npt6jh', years: ['2022', '2024'], type: 'Mega' },
+      { city: 'CABA', name: 'Comic Con', logoId: '2023_Dec_sevrvj', years: ['2023', '2024'], type: 'International' },
+      { city: 'Bs As', name: 'Kawaii Koto', logoId: '2023_Sep_1_ajbiqh', years: ['2023'], type: 'Culture' },
+      { city: 'CABA', name: 'Martin Fierro Digital', logoId: '2024_Ago_3_rlvmal', years: ['2024'], type: 'Awards' },
+      { city: 'CABA', name: 'AGS', logoId: '2023_Oct_kja7mq', years: ['2023'], type: 'Awards' }
     ]
   },
   {
@@ -67,8 +68,8 @@ const LOCATIONS = [
     lng: -69.21,
     description: 'Deep south operational coverage and extreme environment deployments in Gallegos.',
     events: [
-      { city: 'Gallegos', name: 'Kogarashi Fest', logoId: 'kogarashi-fest', years: ['2024'], type: 'Festival' },
-      { city: 'Gallegos', name: 'Feña', logoId: 'fena', years: ['2024'], type: 'Themed' }
+      { city: 'Gallegos', name: 'Kogarashi Fest', logoId: '2024_May_1_tiod5h', years: ['2024'], type: 'Festival' },
+      { city: 'Gallegos', name: 'Feña', logoId: '2024_Nov_2_tn9sgf', years: ['2024'], type: 'Themed' }
     ]
   },
   {
@@ -80,7 +81,7 @@ const LOCATIONS = [
     lng: -65.10,
     description: 'Patagonian presence through strategic event collaborations.',
     events: [
-      { city: 'Trelew', name: 'Banzai', logoId: 'banzai', years: ['2017'], type: 'Fan Event' }
+      { city: 'Trelew', name: 'Banzai', logoId: '2017_Ago_1_ebbazm', years: ['2017'], type: 'Fan Event' }
     ]
   },
   {
@@ -92,7 +93,7 @@ const LOCATIONS = [
     lng: -58.17,
     description: 'Northern frontier brand integrations.',
     events: [
-      { city: 'Formosa', name: 'AVK Natsu Geek', logoId: 'avk-natsu-geek', years: ['2018'], type: 'Geek' }
+      { city: 'Formosa', name: 'AVK Natsu Geek', logoId: '2018_Ene_zfirdd', years: ['2018'], type: 'Geek' }
     ]
   },
   {
@@ -104,7 +105,7 @@ const LOCATIONS = [
     lng: -64.26,
     description: 'North-central regional deployments.',
     events: [
-      { city: 'Santiago', name: 'Anime Town', logoId: 'anime-town', years: ['2018'], type: 'Festival' }
+      { city: 'Santiago', name: 'Anime Town', logoId: '2018_Abril_1_t2twv4', years: ['2018'], type: 'Festival' }
     ]
   },
   {
@@ -116,7 +117,7 @@ const LOCATIONS = [
     lng: -60.70,
     description: 'Major regional coordination and commercial integrations.',
     events: [
-      { city: 'Santa Fe', name: 'D.M.O', logoId: 'dmo', years: ['2019'], type: 'Exhibition' }
+      { city: 'Santa Fe', name: 'D.M.O', logoId: '2019_Mar_a4qoex', years: ['2019'], type: 'Exhibition' }
     ]
   },
   {
@@ -128,7 +129,7 @@ const LOCATIONS = [
     lng: -63.00,
     description: 'Southern operational baseline in Viedma region.',
     events: [
-      { city: 'Viedma', name: 'Comarca Fest', logoId: 'comarca-fest', years: ['2019'], type: 'Festival' }
+      { city: 'Viedma', name: 'Comarca Fest', logoId: '2019_Jul_gwrkyu', years: ['2019'], type: 'Festival' }
     ]
   },
   {
@@ -140,7 +141,7 @@ const LOCATIONS = [
     lng: -64.18,
     description: 'Central logistic and marketing hub for nationwide events.',
     events: [
-      { city: 'Córdoba', name: 'CAF', logoId: 'caf', years: ['2023'], type: 'Convention' }
+      { city: 'Córdoba', name: 'CAF', logoId: '2023_Abr_dssdkl', years: ['2023'], type: 'Convention' }
     ]
   },
   {
@@ -152,7 +153,7 @@ const LOCATIONS = [
     lng: -64.28,
     description: 'Strategic integrations for national gaming expos.',
     events: [
-      { city: 'Sta Rosa', name: 'Fan Expo 4.0 x AGS', logoId: 'fan-expo-ags', years: ['2023'], type: 'Gaming' }
+      { city: 'Sta Rosa', name: 'Fan Expo 4.0 x AGS', logoId: '2023_Sep_3_f6pict', years: ['2023'], type: 'Gaming' }
     ]
   },
   {
@@ -164,7 +165,7 @@ const LOCATIONS = [
     lng: -58.98,
     description: 'Northeastern regional brand reach.',
     events: [
-      { city: 'Resistencia', name: 'Comic World', logoId: 'comic-world', years: ['2023'], type: 'Comic Con' }
+      { city: 'Resistencia', name: 'Comic World', logoId: '2023_Nov_wbqtbx', years: ['2023'], type: 'Comic Con' }
     ]
   },
   {
@@ -176,7 +177,7 @@ const LOCATIONS = [
     lng: -56.16,
     description: 'International expansion and cross-border collaborations.',
     events: [
-      { city: 'Montevideo', name: 'Expo Convention', logoId: 'expo-convention', years: ['2024'], type: 'International' }
+      { city: 'Montevideo', name: 'Expo Convention', logoId: '2024_Abr_sv4yve', years: ['2024'], type: 'International' }
     ]
   },
   {
@@ -188,7 +189,7 @@ const LOCATIONS = [
     lng: -65.30,
     description: 'Northernmost operational sector tracking.',
     events: [
-      { city: 'Jujuy', name: 'FunnAnime', logoId: 'funnanime', years: ['2024'], type: 'Anime' }
+      { city: 'Jujuy', name: 'FunnAnime', logoId: '2024_Sep_2_vyqyqb', years: ['2024'], type: 'Anime' }
     ]
   },
   {
@@ -200,7 +201,7 @@ const LOCATIONS = [
     lng: -66.33,
     description: 'Cuyo region strategic integrations.',
     events: [
-      { city: 'San Luis', name: '3DFest', logoId: '3dfest', years: ['2024'], type: 'Festival' }
+      { city: 'San Luis', name: '3DFest', logoId: '2024_Oct_2_gj9wxq', years: ['2024'], type: 'Festival' }
     ]
   },
   {
@@ -212,13 +213,13 @@ const LOCATIONS = [
     lng: -58.83,
     description: 'Mesopotamian regional coordination and fan engagement.',
     events: [
-      { city: 'Corrientes', name: 'K-Anime', logoId: 'k-anime', years: ['2024'], type: 'Anime' }
+      { city: 'Corrientes', name: 'K-Anime', logoId: '2024_Nov_1_zkt9qu', years: ['2024'], type: 'Anime' }
     ]
   }
 ];
 
 export default function EventMap() {
-  const [selectedLocation, setSelectedLocation] = useState(LOCATIONS[0]);
+  const [selectedLocation, setSelectedLocation] = useState<typeof LOCATIONS[0] | null>(null);
   const [viewState, setViewState] = useState({
     longitude: -63.6167,
     latitude: -38.4161,
@@ -226,6 +227,22 @@ export default function EventMap() {
     pitch: 0,
     bearing: 0
   });
+
+  const allEvents = useMemo(() => {
+    return LOCATIONS.flatMap(loc => 
+      loc.events.map(event => ({
+        ...event,
+        provinceName: loc.name,
+        lat: loc.lat,
+        lng: loc.lng,
+        locId: loc.id
+      }))
+    ).sort((a, b) => {
+        const latestA = Math.max(...a.years.map(Number));
+        const latestB = Math.max(...b.years.map(Number));
+        return latestB - latestA;
+    });
+  }, []);
 
   const onMarkerClick = useCallback((loc: typeof LOCATIONS[0]) => {
     setSelectedLocation(loc);
@@ -238,6 +255,15 @@ export default function EventMap() {
     }));
   }, []);
 
+  const onMapClick = useCallback(() => {
+    setSelectedLocation(null);
+    setViewState(prev => ({
+      ...prev,
+      zoom: 3.5,
+      transitionDuration: 1000
+    }));
+  }, []);
+
   const highlightLayer: FillLayer = useMemo(() => ({
     id: 'province-highlight',
     type: 'fill',
@@ -246,8 +272,8 @@ export default function EventMap() {
       'fill-color': BRAND_400,
       'fill-opacity': 0.05,
     },
-    filter: ['==', ['get', 'nombre'], selectedLocation.provinceName]
-  }), [selectedLocation.provinceName]);
+    filter: ['==', ['get', 'nombre'], selectedLocation?.provinceName || '']
+  }), [selectedLocation]);
 
   const lineLayer: LineLayer = {
     id: 'provinces-outline',
@@ -286,6 +312,7 @@ export default function EventMap() {
             <Map
               {...viewState}
               onMove={evt => setViewState(evt.viewState)}
+              onClick={onMapClick}
               maxBounds={[[-95, -65], [-35, -5]] as any}
               minZoom={3}
               onLoad={(e) => {
@@ -333,10 +360,10 @@ export default function EventMap() {
                   <div className="cursor-pointer transition-all duration-300 hover:scale-110">
                     <div 
                       className={`relative rounded-full rounded-br-none bg-brand-400 rotate-[45deg] flex items-center justify-center border border-white/20 transition-all duration-500 ${
-                        selectedLocation.id === loc.id ? 'w-8 h-8 scale-110 shadow-[0_0_20px_rgba(96,165,250,0.4)]' : 'w-6 h-6 opacity-80'
+                        selectedLocation?.id === loc.id ? 'w-8 h-8 scale-110 shadow-[0_0_20px_rgba(96,165,250,0.4)]' : 'w-6 h-6 opacity-80'
                       }`}
                     >
-                      <div className="w-[30%] h-[30%] bg-[#050505] rounded-full" />
+                      <div className="w-[30%] h-[30%] bg-[#050505] rounded-full rotate-[-45deg]" />
                     </div>
                   </div>
                 </Marker>
@@ -347,26 +374,38 @@ export default function EventMap() {
           <div className="w-full lg:w-2/5 h-full flex flex-col overflow-hidden bg-[#0a0a0a] relative">
              <div className="p-10 border-b border-white/5 bg-[#0a0a0a]">
                 <div className="flex items-center gap-3 text-brand-400 font-sans text-[9px] uppercase tracking-[0.4em] font-bold mb-4">
-                   <div className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse" />
-                   Sector Profile
+                   <div className={`w-1.5 h-1.5 rounded-full bg-brand-400 ${selectedLocation ? 'animate-pulse' : ''}`} />
+                   {selectedLocation ? 'Sector Profile' : 'Mission Overview'}
                 </div>
-                <h3 className="text-white font-serif text-3xl md:text-4xl tracking-[0.1em] uppercase mb-6 leading-tight italic">{selectedLocation.name}</h3>
+                <h3 className="text-white font-serif text-3xl md:text-4xl tracking-[0.1em] uppercase mb-6 leading-tight italic">
+                    {selectedLocation ? selectedLocation.name : 'Global Deployment'}
+                </h3>
                 <p className="text-white/30 font-sans text-xs leading-relaxed mb-0 pl-5 border-l border-brand-400/20 italic">
-                   {selectedLocation.description}
+                   {selectedLocation 
+                    ? selectedLocation.description 
+                    : 'Consolidated tracking of all operational history across the Southern Cone. Click a marker or event to explore.'}
                 </p>
              </div>
 
              <div className="flex-1 overflow-y-auto p-10 space-y-12 custom-scrollbar bg-black/10">
-                {selectedLocation.events.map((event, idx) => (
-                  <div key={idx} className="group flex items-start gap-8 border-b border-white/5 pb-10 last:border-0 transition-all duration-300 -mx-4 px-4 rounded-lg">
-                     <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 bg-white/[0.02] border border-white/10 rounded-lg overflow-hidden flex items-center justify-center relative">
+                {(selectedLocation ? selectedLocation.events : allEvents).map((event: any, idx) => (
+                  <div key={idx} 
+                    className="group flex items-start gap-8 border-b border-white/5 pb-10 last:border-0 transition-all duration-300 -mx-4 px-4 rounded-lg cursor-pointer hover:bg-white/[0.01]"
+                    onClick={() => {
+                        if (!selectedLocation && 'locId' in event) {
+                            const loc = LOCATIONS.find(l => l.id === event.locId);
+                            if (loc) onMarkerClick(loc);
+                        }
+                    }}
+                  >
+                     <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 overflow-hidden flex items-center justify-center relative">
                         <OptimizedImage
                             publicId={event.logoId}
                             alt={event.name}
                             variant="thumb"
                             className="w-full h-full"
                              objectFit="contain"
-                            imgClassName="p-3 group-hover:scale-110 transition-transform duration-700 relative z-20"
+                            imgClassName="p-1 group-hover:scale-110 transition-transform duration-700 relative z-20"
                         />
                         <div className="absolute inset-0 flex items-center justify-center text-[7px] text-white/5 uppercase tracking-widest text-center px-2 z-10 opacity-40">
                            {event.name}
@@ -375,7 +414,9 @@ export default function EventMap() {
 
                      <div className="flex-1">
                         <div className="flex items-center gap-3 mb-3">
-                           <span className="text-brand-400 font-sans text-[10px] uppercase tracking-[0.2em] font-bold">{event.city}</span>
+                           <span className="text-brand-400 font-sans text-[10px] uppercase tracking-[0.2em] font-bold">
+                                {selectedLocation ? event.city : event.provinceName}
+                            </span>
                            <div className="w-[1px] h-3 bg-white/10" />
                            <span className="text-white/20 font-sans text-[9px] uppercase tracking-widest">{event.type}</span>
                         </div>
@@ -384,7 +425,7 @@ export default function EventMap() {
                         </h4>
                         
                         <div className="flex flex-wrap gap-1.5">
-                            {event.years.map((year, yidx) => (
+                            {event.years.map((year: string, yidx: number) => (
                                 <span key={yidx} className="px-2 py-0.5 bg-white/[0.02] border border-white/[0.05] rounded text-[9px] text-white/30 tracking-wider">
                                     {year}
                                 </span>
@@ -401,7 +442,9 @@ export default function EventMap() {
                       <div className="w-1 h-1 rounded-full bg-brand-400" />
                       <div className="w-2 h-1 rounded-full bg-white" />
                    </div>
-                   <span className="text-[8px] text-white uppercase tracking-[0.3em]">LOC_ENTRIES: {selectedLocation.events.length}</span>
+                   <span className="text-[8px] text-white uppercase tracking-[0.3em]">
+                        LOC_ENTRIES: {selectedLocation ? selectedLocation.events.length : allEvents.length}
+                   </span>
                 </div>
                 <div className="font-mono text-[8px] text-brand-400/30 tracking-[0.2em] uppercase">LINK // ACTIVE</div>
           </div>
