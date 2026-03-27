@@ -9,9 +9,11 @@ export default function Skills() {
   const detailsRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState(CRAFTSMANSHIP[0].id);
   const [expandedPublicId, setExpandedPublicId] = useState<string | null>(null);
+  const [selectedSkillId, setSelectedSkillId] = useState<string | null>(null);
 
   const activeData = CRAFTSMANSHIP.find((c) => c.id === activeTab) || CRAFTSMANSHIP[0];
   const relatedExpertise = ALL_SKILLS.filter((s) => activeData.expertiseSkillIds.includes(s.id));
+  const selectedSkill = relatedExpertise.find(s => s.id === selectedSkillId);
   const [expertiseBgTick, setExpertiseBgTick] = useState(0);
   const expertiseCarouselIds = useMemo(() => {
     const ids = new Set<string>();
@@ -75,6 +77,7 @@ export default function Skills() {
                   onClick={() => {
                     setActiveTab(craft.id);
                     setExpertiseBgTick(0);
+                    setSelectedSkillId(null);
                     // Scroll to the details area after layout settles (mobile-friendly).
                     requestAnimationFrame(() => requestAnimationFrame(scrollToDetails));
                   }}
@@ -125,120 +128,138 @@ export default function Skills() {
           className="w-full max-w-[1600px] mx-auto flex flex-col px-6 md:px-6 mt-4 md:mt-8 animate-[fade-in-up_0.5s_ease-out_forwards]"
           key={activeData.id}
         >
-          <div className="flex flex-col gap-4 max-w-4xl mx-auto w-full">
+          {/* Header Section - Only show when no skill is selected or adapt it */}
+          <div className={`flex flex-col gap-4 max-w-4xl mx-auto w-full transition-all duration-700 ${selectedSkillId ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100 mb-8'}`}>
             <h3 className="text-3xl lg:text-4xl font-serif text-white mb-1">{activeData.title}</h3>
             <h4 className="text-brand-400 font-sans tracking-[0.2em] text-xs uppercase mb-4">{activeData.subtitle}</h4>
             <p className="text-white/80 font-sans leading-relaxed text-base md:text-lg lg:text-xl mb-6 max-w-2xl">
               {activeData.description}
             </p>
             <div className="w-12 h-[1px] bg-white/20 mb-6"></div>
-            <p className="text-white/40 font-sans leading-relaxed text-sm max-w-3xl mb-12">
-              {activeData.expandedDetails}
-            </p>
           </div>
 
-            {/* Dynamic Gallery */}
-            {activeData.gallery && activeData.gallery.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto w-full">
-                {activeData.gallery.map((item, idx) => (
-                  <div 
-                    key={idx} 
-                    className="relative aspect-square overflow-hidden bg-[#020b1a] border border-white/5 group cursor-pointer"
-                    onClick={() => setExpandedPublicId(item.id)}
+            {!selectedSkillId ? (
+              /* --- VIEW A: SKILL GRID (Image 1) --- */
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full animate-in fade-in slide-in-from-bottom-4 duration-700">
+                {relatedExpertise.map((skill) => (
+                  <div
+                    key={skill.id}
+                    onClick={() => setSelectedSkillId(skill.id)}
+                    className="group relative aspect-[4/5] overflow-hidden bg-[#020b1a] border border-white/5 cursor-pointer hover:border-brand-400/30 transition-colors duration-500"
                   >
-                    <OptimizedImage
-                      publicId={item.id}
-                      alt={item.title || `${activeData.title} gallery image ${idx + 1}`}
-                      variant="thumb"
-                      fill
-                      imgClassName="object-cover opacity-80 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100"
-                      sizes="(max-width: 768px) 50vw, 33vw"
-                    />
-                    {/* Hover Title Overlay */}
-                    {item.title && (
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none flex flex-col justify-end p-4">
-                        <span className="text-white font-sans text-xs md:text-sm tracking-widest font-medium translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                          {item.title}
-                        </span>
-                      </div>
+                    {skill.publicId && (
+                      <OptimizedImage
+                        publicId={skill.publicId}
+                        alt={skill.title}
+                        variant="thumb"
+                        fill
+                        imgClassName="object-cover opacity-60 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-110"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
                     )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none" />
+                    
+                    <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {skill.tags.slice(0, 2).map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-[9px] font-sans tracking-widest uppercase text-brand-400 border border-brand-400/30 px-2 py-1 bg-black/40 backdrop-blur-sm"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <h4 className="text-2xl font-serif text-white mb-2 group-hover:text-brand-400 transition-colors duration-300">
+                        {skill.title}
+                      </h4>
+                      <p className="text-white/50 font-sans text-xs leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        {skill.description}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="w-full border border-dashed border-white/10 p-12 flex flex-col items-center justify-center text-center bg-white/5 rounded-lg group transition-colors hover:border-white/20">
-                <span className="text-white/30 text-xs md:text-sm font-sans tracking-[0.2em] uppercase mb-2 group-hover:text-white/50 transition-colors">
-                  Gallery Space Ready
-                </span>
-                <span className="text-white/20 text-[10px] md:text-xs font-sans">
-                  Add Cloudinary public IDs to the `gallery` array in `{activeData.id}` inside `craftsmanship.ts`
-                </span>
-              </div>
-            )}
-
-            {/* Related Expertise */}
-            {relatedExpertise.length > 0 && (
-              <div className="mt-16 relative overflow-hidden">
-                <div className="relative z-10 max-w-4xl mx-auto w-full">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-8 h-[1px] bg-brand-400/80"></div>
-                    <span className="text-brand-400 font-sans text-[10px] tracking-[0.5em] uppercase font-bold">
-                      Related Expertise
-                    </span>
+              /* --- VIEW B: SKILL SPLIT (Image 2) --- */
+              <div className="flex flex-col lg:flex-row gap-12 w-full animate-in fade-in slide-in-from-right-4 duration-700">
+                {/* Left Side: Content */}
+                <div className="lg:w-[45%] flex flex-col pt-4">
+                  <div className="flex flex-col gap-2 mb-12">
+                     <h3 className="text-white/30 font-serif text-xl lg:text-2xl">{activeData.title}</h3>
+                     <h4 className="text-brand-400 font-sans tracking-[0.2em] text-[10px] uppercase">{activeData.subtitle}</h4>
                   </div>
 
-                  <div className="flex flex-col gap-4 md:gap-6 w-full">
-                    {relatedExpertise.map((skill, idx) => {
-                      const cardIds = (() => {
-                        const ids = new Set<string>();
-                        if (skill.publicId) ids.add(skill.publicId);
-                        activeData.gallery?.forEach((g) => ids.add(g.id));
-                        if (activeData.publicId) ids.add(activeData.publicId);
-                        return Array.from(ids);
-                      })();
+                  <p className="text-white/80 font-sans leading-relaxed text-sm md:text-base mb-8 max-w-md">
+                    {activeData.description}
+                  </p>
 
-                      return (
-                        <div
-                          key={skill.id}
-                          className="group relative w-full border border-white/5 bg-black/35 backdrop-blur-md overflow-hidden min-h-[320px] md:min-h-[380px] flex"
-                        >
-                          <div className="absolute inset-0 z-0 pointer-events-none">
-                            {cardIds.length > 0 && (
-                              <BackgroundCarousel
-                                publicIds={cardIds}
-                                activeIndex={expertiseBgTick + idx}
-                                imagesPerSlide={3}
-                                intervalMs={14000}
-                                slideMs={2400}
-                                className="absolute inset-0 opacity-50 blur-sm scale-105 saturate-110 contrast-105"
-                              />
-                            )}
-                            <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-black/40" />
-                          </div>
+                  <div className="w-8 h-[1px] bg-white/20 mb-12" />
 
-                          <div className="relative p-6 md:p-8">
-                            <div className="flex flex-wrap gap-2 mb-4">
-                              {skill.tags.map((tag) => (
-                                <span
-                                  key={tag}
-                                  className="text-[9px] font-sans tracking-widest uppercase text-brand-400 border border-brand-400/30 px-2 py-1 bg-black/40 backdrop-blur-sm"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
+                  <p className="text-white/50 font-sans leading-relaxed text-xs max-w-md mb-12 border-l border-white/10 pl-4 py-2">
+                    {activeData.expandedDetails}
+                  </p>
 
-                            <h4 className="text-2xl md:text-3xl font-serif text-white mb-3 group-hover:text-brand-400 transition-colors duration-300">
-                              {skill.title}
-                            </h4>
-                            <p className="text-white/65 font-sans text-sm md:text-base leading-relaxed">
-                              {skill.description}
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    })}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {selectedSkill?.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[9px] font-sans tracking-widest uppercase text-brand-400 border border-brand-400/30 px-2 py-1 bg-black/40 backdrop-blur-sm"
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
+
+                  <h3 className="text-3xl lg:text-5xl font-serif text-white mb-6 uppercase tracking-tight">
+                    {selectedSkill?.title}
+                  </h3>
+                  
+                  <p className="text-white/70 font-sans leading-relaxed text-base md:text-lg mb-12 italic border-l-2 border-brand-400/40 pl-6">
+                    {selectedSkill?.description}
+                  </p>
+
+                  <button 
+                    onClick={() => setSelectedSkillId(null)}
+                    className="mt-auto flex items-center gap-3 text-white/30 font-sans text-[10px] tracking-[0.4em] uppercase hover:text-brand-400 transition-colors group py-4 border-t border-white/5 w-fit"
+                  >
+                    <span className="group-hover:-translate-x-1 transition-transform">←</span> Return to Gallery
+                  </button>
+                </div>
+
+                {/* Right Side: Visuals */}
+                <div className="lg:w-[55%] aspect-square lg:aspect-auto min-h-[600px] relative group overflow-hidden border border-white/5 bg-[#020b1a] shadow-2xl">
+                   {/* Background Carousel of skill images or active category gallery */}
+                   <BackgroundCarousel
+                      publicIds={expertiseCarouselIds}
+                      activeIndex={expertiseBgTick}
+                      imagesPerSlide={1}
+                      intervalMs={8000}
+                      slideMs={1800}
+                      className="absolute inset-0 opacity-80"
+                   />
+                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                   
+                   {/* Play Button Visual Overlay (as seen in Image 2) */}
+                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="w-24 h-24 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700">
+                         <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-white border-b-[12px] border-b-transparent ml-2" />
+                      </div>
+                   </div>
+
+                   <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
+                      <div className="text-white/40 font-sans text-[10px] tracking-[0.4em] uppercase">
+                         Showcase // 0{expertiseBgTick % expertiseCarouselIds.length + 1}
+                      </div>
+                      <div className="flex gap-2">
+                         {expertiseCarouselIds.map((_, i) => (
+                           <div 
+                             key={i} 
+                             className={`w-8 h-[2px] transition-all duration-500 ${i === (expertiseBgTick % expertiseCarouselIds.length) ? 'bg-brand-400' : 'bg-white/10'}`} 
+                           />
+                         ))}
+                      </div>
+                   </div>
                 </div>
               </div>
             )}
@@ -267,6 +288,7 @@ export default function Skills() {
                       onClick={() => {
                         setActiveTab(craft.id);
                         setExpertiseBgTick(0);
+                        setSelectedSkillId(null);
                         requestAnimationFrame(() => requestAnimationFrame(scrollToDetails));
                       }}
                       className={[
