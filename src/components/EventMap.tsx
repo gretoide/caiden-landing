@@ -74,9 +74,9 @@ const LOCATIONS = [
 export default function EventMap() {
   const [selectedLocation, setSelectedLocation] = useState(LOCATIONS[0]);
   const [viewState, setViewState] = useState({
-    longitude: -60.4956,
-    latitude: -31.7747,
-    zoom: 5.5,
+    longitude: -63.6167,
+    latitude: -38.4161,
+    zoom: 4.2,
     pitch: 0,
     bearing: 0
   });
@@ -125,6 +125,8 @@ export default function EventMap() {
             <Map
               {...viewState}
               onMove={evt => setViewState(evt.viewState)}
+              maxBounds={[[-73.5, -55.2], [-53.6, -21.8]] as any}
+              minZoom={3.5}
               onLoad={(e) => {
                 const map = e.target;
                 
