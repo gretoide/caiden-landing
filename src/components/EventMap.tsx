@@ -1,6 +1,8 @@
-import { useState, useCallback } from 'react';
-import Map, { Marker, NavigationControl, FullscreenControl } from 'react-map-gl';
+import { useState, useCallback, useMemo } from 'react';
+import Map, { Marker, NavigationControl, FullscreenControl, Source, Layer } from 'react-map-gl';
 import { MapPin, Globe } from 'lucide-react';
+import type { FillLayer } from 'react-map-gl';
+import OptimizedImage from './OptimizedImage';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
@@ -8,50 +10,58 @@ const LOCATIONS = [
   {
     id: 'entre-rios',
     name: 'Entre Ríos',
+    provinceName: 'Entre Ríos', // Matches GeoJSON property
     country: 'Argentina',
     lat: -31.7747,
     lng: -60.4956,
-    description: 'Developed in collaboration with leading brands throughout the country across renowned events. Specialized in strategic marketing and brand publicity through diverse media channels.',
+    description: 'Developed in collaboration with leading brands throughout the country across renowned events. Specialized in strategic marketing and brand publicity.',
     events: [
       {
         city: 'Concordia',
         name: 'Asia Fest',
+        logoId: 'asia-fest',
         years: ['2015 July', '2016 July', '2017 August', '2018 July', '2019 August'],
         type: 'Festival'
       },
       {
         city: 'Paraná',
         name: 'Ani Chan',
+        logoId: 'ani-chan',
         years: ['2015 August'],
         type: 'Convention'
       },
       {
         city: 'Concordia',
         name: 'Friki Mania',
+        logoId: 'friki-mania',
         years: ['2017 January', '2018 February', '2019 February', '2020 October', '2021 February', '2022 May', '2022 November', '2023 August', '2024 July'],
         type: 'Theme Event'
       },
       {
         city: 'Paraná',
         name: 'Tin & B-Bop',
+        logoId: 'tin-bbop',
         years: ['2023 May'],
         type: 'Exhibition'
       },
       {
         city: 'Concordia',
         name: 'Gamer Fest',
+        logoId: 'gamer-fest',
         years: ['2023 May'],
         type: 'Gaming'
       },
       {
         city: 'Gualeguaychú',
         name: 'Neo Freak',
+        logoId: 'neo-freak',
         years: ['2024 August'],
         type: 'Convention'
       },
       {
         city: 'Paraná',
         name: 'Paraná Con',
+        logoId: 'parana-con',
         years: ['2024 May'],
         type: 'Comic Con'
       }
@@ -60,13 +70,14 @@ const LOCATIONS = [
   {
     id: 'buenos-aires',
     name: 'Buenos Aires',
+    provinceName: 'Buenos Aires',
     country: 'Argentina',
     lat: -34.6037,
     lng: -58.3816,
     description: 'Capital city operations and major commercial center implementations.',
     events: [
-        { city: 'Buenos Aires', name: 'Argentina Comic Con', years: ['2023 December'], type: 'Mega Event' },
-        { city: 'Buenos Aires', name: 'Gamescom (Global Outreach)', years: ['2024'], type: 'International' }
+        { city: 'Buenos Aires', name: 'Argentina Comic Con', logoId: 'arg-comic-con', years: ['2023 December'], type: 'Mega Event' },
+        { city: 'Buenos Aires', name: 'Gamescom', logoId: 'gamescom', years: ['2024'], type: 'International' }
     ]
   }
 ];
@@ -87,10 +98,35 @@ export default function EventMap() {
       ...prev,
       longitude: loc.lng,
       latitude: loc.lat,
-      zoom: 6.5,
+      zoom: 6,
       transitionDuration: 1000
     }));
   }, []);
+
+  // Highlight Layer Style
+  const highlightLayer: FillLayer = useMemo(() => ({
+    id: 'province-highlight',
+    type: 'fill',
+    source: 'provinces',
+    paint: {
+      'fill-color': '#00d0ff',
+      'fill-opacity': 0.15,
+      'fill-outline-color': '#00d0ff'
+    },
+    filter: ['==', ['get', 'nombre'], selectedLocation.provinceName]
+  }), [selectedLocation.provinceName]);
+
+  // Base Provinces Layer
+  const baseLayer: FillLayer = {
+    id: 'provinces-base',
+    type: 'fill',
+    source: 'provinces',
+    paint: {
+      'fill-color': '#ffffff',
+      'fill-opacity': 0.03,
+      'fill-outline-color': 'rgba(255,255,255,0.05)'
+    }
+  };
 
   return (
     <section className="w-full bg-[#050505] py-24 md:py-32 relative overflow-hidden border-t border-white/5">
@@ -113,15 +149,15 @@ export default function EventMap() {
                 <Globe size={14} />
                 Tracking // Active
              </div>
-             <div className="text-white/20 text-[9px] uppercase tracking-widest">MAPBOX ENGINE • .ENV SECURE • 4K RENDER</div>
+             <div className="text-white/20 text-[9px] uppercase tracking-widest">MAPBOX ENGINE • PROVINCE GLOW • 4K RENDER</div>
           </div>
         </div>
 
         {/* Master-Detail Layout */}
-        <div className="flex flex-col lg:flex-row w-full h-[700px] bg-[#080808] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+        <div className="flex flex-col lg:flex-row w-full h-[850px] bg-[#080808] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
           
           {/* Map Section (Master) */}
-          <div className="w-full lg:w-3/5 h-[350px] lg:h-full relative border-b lg:border-b-0 lg:border-r border-white/10">
+          <div className="w-full lg:w-3/5 h-[400px] lg:h-full relative border-b lg:border-b-0 lg:border-r border-white/10">
             <Map
               {...viewState}
               onMove={evt => setViewState(evt.viewState)}
@@ -130,7 +166,7 @@ export default function EventMap() {
               onLoad={(e) => {
                 const map = e.target;
                 
-                // Force English labels for country and place layers
+                // Force English labels
                 const layers = map.getStyle().layers;
                 if (layers) {
                   layers.forEach((layer: any) => {
@@ -144,13 +180,13 @@ export default function EventMap() {
 
                 // Tactical colors
                 if (map.getLayer('water')) {
-                  map.setPaintProperty('water', 'fill-color', '#050505'); // Sea: Dark
+                  map.setPaintProperty('water', 'fill-color', '#050505');
                 }
                 if (map.getLayer('background')) {
-                  map.setPaintProperty('background', 'background-color', '#0a1b2e'); // Background: Deep Blue
+                  map.setPaintProperty('background', 'background-color', '#0a1b2e');
                 }
                 if (map.getLayer('land')) {
-                  map.setPaintProperty('land', 'fill-color', '#0e243d'); // Land: Blueish
+                  map.setPaintProperty('land', 'fill-color', '#0e243d');
                 }
               }}
               style={{ width: '100%', height: '100%' }}
@@ -158,6 +194,11 @@ export default function EventMap() {
               mapboxAccessToken={MAPBOX_TOKEN}
               attributionControl={false}
             >
+              <Source id="provinces" type="geojson" data="https://raw.githubusercontent.com/mgubels/argentina-geojson/master/provincias.json">
+                 <Layer {...baseLayer} />
+                 <Layer {...highlightLayer} />
+              </Source>
+
               <NavigationControl position="top-left" />
               <FullscreenControl position="top-left" />
 
@@ -190,54 +231,68 @@ export default function EventMap() {
           {/* Details Panel (Detail) */}
           <div className="w-full lg:w-2/5 h-full flex flex-col overflow-hidden bg-black/40 relative">
              {/* Dashboard Header */}
-             <div className="p-8 border-b border-white/10 bg-[#0a0a0a]">
-                <div className="flex items-center gap-2 text-brand-400 font-sans text-[9px] uppercase tracking-widest font-bold mb-2">
+             <div className="p-10 border-b border-white/10 bg-[#0a0a0a]">
+                <div className="flex items-center gap-2 text-brand-400 font-sans text-[9px] uppercase tracking-widest font-bold mb-3">
                    <div className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse" />
                    Sector Detail
                 </div>
-                <h3 className="text-white font-serif text-3xl md:text-4xl tracking-widest uppercase mb-4">{selectedLocation.name}</h3>
-                <p className="text-white/40 font-sans text-sm leading-relaxed mb-0 italic border-l border-brand-400/30 pl-4 py-1">
+                <h3 className="text-white font-serif text-4xl md:text-5xl tracking-widest uppercase mb-6">{selectedLocation.name}</h3>
+                <p className="text-white/40 font-sans text-sm leading-relaxed mb-0 italic border-l border-brand-400/30 pl-5 py-2">
                    {selectedLocation.description}
                 </p>
              </div>
 
              {/* Events List (Scrollable) */}
-             <div className="flex-1 overflow-y-auto p-8 space-y-12 custom-scrollbar">
+             <div className="flex-1 overflow-y-auto p-10 space-y-16 custom-scrollbar">
                 {selectedLocation.events.map((event, idx) => (
-                  <div key={idx} className="group flex justify-between gap-6 border-b border-white/5 pb-8 last:border-0 hover:bg-white/[0.02] transition-all duration-300 -mx-4 px-4 rounded-lg">
+                  <div key={idx} className="group flex items-start gap-8 border-b border-white/5 pb-12 last:border-0 hover:bg-white/[0.02] transition-all duration-300 -mx-6 px-6 rounded-xl">
+                     {/* Event Logo (Optimized) */}
+                     <div className="w-24 h-24 md:w-32 md:h-32 shrink-0 bg-white/[0.02] border border-white/10 rounded-lg overflow-hidden flex items-center justify-center group-hover:border-brand-400/30 transition-colors relative">
+                        <OptimizedImage
+                            publicId={event.logoId}
+                            alt={event.name}
+                            variant="thumb"
+                            className="w-full h-full"
+                            imgClassName="p-4 group-hover:scale-110 transition-transform duration-500 relative z-20 object-contain"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center text-[10px] text-white/5 uppercase tracking-widest text-center px-2 z-10">
+                           {event.name}
+                        </div>
+                     </div>
+
                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-4">
+                        <div className="flex items-center gap-3 mb-5">
                            <span className="text-brand-400 font-sans text-[10px] uppercase tracking-[0.3em] font-bold">{event.city}</span>
                            <div className="w-[1px] h-3 bg-white/20" />
                            <span className="text-white/30 font-sans text-[10px] uppercase tracking-widest">{event.type}</span>
                         </div>
-                        <h4 className="text-white font-serif text-2xl tracking-wide uppercase mb-4 group-hover:text-brand-400 transition-colors">
+                        <h4 className="text-white font-serif text-2xl md:text-3xl tracking-wide uppercase mb-6 group-hover:text-brand-400 transition-colors">
                            {event.name}
                         </h4>
-                        <div className="w-12 h-[1px] bg-white/10 group-hover:w-full group-hover:bg-brand-400/40 transition-all duration-500" />
-                     </div>
-                     
-                     <div className="text-right shrink-0">
-                        {event.years.map((year, yidx) => (
-                          <div key={yidx} className="text-white/60 font-sans text-xs mb-1 tracking-widest group-hover:text-white transition-colors">
-                             {year}
-                          </div>
-                        ))}
+                        
+                        <div className="flex flex-wrap gap-2">
+                            {event.years.map((year, yidx) => (
+                                <span key={yidx} className="px-3 py-1 bg-white/[0.03] border border-white/5 rounded font-sans text-[10px] text-white/50 tracking-wider">
+                                    {year}
+                                </span>
+                            ))}
+                        </div>
                      </div>
                   </div>
                 ))}
              </div>
 
              {/* Footer Stats Decor */}
-             <div className="p-4 bg-[#050505] border-t border-white/5 flex items-center justify-between">
+             <div className="p-5 bg-[#050505] border-t border-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                   <div className="flex gap-1">
-                      <div className="w-1 h-1 rounded-full bg-brand-400" />
-                      <div className="w-1 h-1 rounded-full bg-brand-400/30" />
-                      <div className="w-1 h-1 rounded-full bg-brand-400/30" />
+                   <div className="flex gap-1.5">
+                      <div className="w-1.5 h-1.5 rounded-full bg-brand-400" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-brand-400/30" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-brand-400/30" />
                    </div>
-                   <span className="text-[8px] text-white/20 uppercase tracking-[0.4em]">MISSION ARCHIVE // 0{selectedLocation.events.length} RECORDS</span>
+                   <span className="text-[9px] text-white/20 uppercase tracking-[0.4em]">MISSION ARCHIVE // 0{selectedLocation.events.length} RECORDS</span>
                 </div>
+                <div className="font-sans text-[9px] text-white/10 tracking-[0.2em] uppercase">Status // Verified</div>
              </div>
           </div>
 

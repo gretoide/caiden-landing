@@ -23,6 +23,8 @@ type Props = {
   onTouchStart?: () => void;
   fill?: boolean;
   objectPosition?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  overflowHidden?: boolean;
   zoom?: number;
 };
 
@@ -57,6 +59,8 @@ export default function OptimizedImage({
   onTouchStart,
   fill = false,
   objectPosition,
+  objectFit = 'cover',
+  overflowHidden = true,
   zoom = 1,
 }: Props) {
   const [loaded, setLoaded] = useState(false);
@@ -77,7 +81,8 @@ export default function OptimizedImage({
 
   const wrapperClass = [
     className,
-    'bg-center bg-cover overflow-hidden',
+    'bg-center bg-cover',
+    overflowHidden ? 'overflow-hidden' : undefined,
     fill ? 'absolute inset-0' : undefined,
   ]
     .filter(Boolean)
@@ -103,7 +108,7 @@ export default function OptimizedImage({
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'cover',
+          objectFit: objectFit,
           objectPosition: objectPosition ?? 'center',
           transform: zoom !== 1 ? `scale(${zoom})` : 'scale(1)',
           transformOrigin: objectPosition ?? 'center',
