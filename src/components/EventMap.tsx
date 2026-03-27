@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import Map, { Marker, NavigationControl, FullscreenControl } from 'react-map-gl';
-import { MapPin, Globe, ChevronRight } from 'lucide-react';
+import { MapPin, Globe } from 'lucide-react';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
@@ -11,7 +11,7 @@ const LOCATIONS = [
     country: 'Argentina',
     lat: -31.7747,
     lng: -60.4956,
-    description: 'Trabajado en colaboración con reconocidas marcas a lo largo y ancho del país en reconocidos eventos. A modo de marketing y publicidad de las marcas asociadas.',
+    description: 'Developed in collaboration with leading brands throughout the country across renowned events. Specialized in strategic marketing and brand publicity through diverse media channels.',
     events: [
       {
         city: 'Concordia',
@@ -63,10 +63,10 @@ const LOCATIONS = [
     country: 'Argentina',
     lat: -34.6037,
     lng: -58.3816,
-    description: 'Capital city missions and major convention centers setup.',
+    description: 'Capital city operations and major commercial center implementations.',
     events: [
-        { city: 'CABA', name: 'Argentina Comic Con', years: ['2023 December'], type: 'Mega Event' },
-        { city: 'CABA', name: 'Gamescom (Global Outreach)', years: ['2024'], type: 'International' }
+        { city: 'Buenos Aires', name: 'Argentina Comic Con', years: ['2023 December'], type: 'Mega Event' },
+        { city: 'Buenos Aires', name: 'Gamescom (Global Outreach)', years: ['2024'], type: 'International' }
     ]
   }
 ];
@@ -113,7 +113,7 @@ export default function EventMap() {
                 <Globe size={14} />
                 Tracking // Active
              </div>
-             <div className="text-white/20 text-[9px] uppercase tracking-widest">MAPBOX ENGINE • .ENV SECURE • DARK 2D</div>
+             <div className="text-white/20 text-[9px] uppercase tracking-widest">MAPBOX ENGINE • .ENV SECURE • 4K RENDER</div>
           </div>
         </div>
 
@@ -127,15 +127,28 @@ export default function EventMap() {
               onMove={evt => setViewState(evt.viewState)}
               onLoad={(e) => {
                 const map = e.target;
-                // Ajuste de colores táctico (Tierra Azul / Mar Negro)
+                
+                // Force English labels for country and place layers
+                const layers = map.getStyle().layers;
+                if (layers) {
+                  layers.forEach((layer: any) => {
+                    if (layer.id.includes('label')) {
+                      try {
+                        map.setLayoutProperty(layer.id, 'text-field', ['get', 'name_en']);
+                      } catch (err) { /* ignore */ }
+                    }
+                  });
+                }
+
+                // Tactical colors
                 if (map.getLayer('water')) {
-                  map.setPaintProperty('water', 'fill-color', '#050505'); // MAR NEGRO
+                  map.setPaintProperty('water', 'fill-color', '#050505'); // Sea: Dark
                 }
                 if (map.getLayer('background')) {
-                  map.setPaintProperty('background', 'background-color', '#0a1b2e'); // FONDO AZUL PROFUNDO
+                  map.setPaintProperty('background', 'background-color', '#0a1b2e'); // Background: Deep Blue
                 }
                 if (map.getLayer('land')) {
-                  map.setPaintProperty('land', 'fill-color', '#0e243d'); // TIERRA AZULADA
+                  map.setPaintProperty('land', 'fill-color', '#0e243d'); // Land: Blueish
                 }
               }}
               style={{ width: '100%', height: '100%' }}
@@ -173,7 +186,7 @@ export default function EventMap() {
           </div>
 
           {/* Details Panel (Detail) */}
-          <div className="w-full lg:w-2/5 h-full flex flex-col overflow-hidden bg-black/40">
+          <div className="w-full lg:w-2/5 h-full flex flex-col overflow-hidden bg-black/40 relative">
              {/* Dashboard Header */}
              <div className="p-8 border-b border-white/10 bg-[#0a0a0a]">
                 <div className="flex items-center gap-2 text-brand-400 font-sans text-[9px] uppercase tracking-widest font-bold mb-2">
@@ -199,7 +212,6 @@ export default function EventMap() {
                         <h4 className="text-white font-serif text-2xl tracking-wide uppercase mb-4 group-hover:text-brand-400 transition-colors">
                            {event.name}
                         </h4>
-                        {/* Status bar decor */}
                         <div className="w-12 h-[1px] bg-white/10 group-hover:w-full group-hover:bg-brand-400/40 transition-all duration-500" />
                      </div>
                      
@@ -224,11 +236,6 @@ export default function EventMap() {
                    </div>
                    <span className="text-[8px] text-white/20 uppercase tracking-[0.4em]">MISSION ARCHIVE // 0{selectedLocation.events.length} RECORDS</span>
                 </div>
-                <button 
-                  className="text-brand-400/60 hover:text-brand-400 font-sans text-[10px] uppercase tracking-widest flex items-center gap-2 transition-colors group"
-                >
-                   Full Report <ChevronRight size={10} className="group-hover:translate-x-1 transition-transform" />
-                </button>
              </div>
           </div>
 
@@ -282,7 +289,6 @@ export default function EventMap() {
         .mapboxgl-ctrl-group button:hover .mapboxgl-ctrl-icon {
           opacity: 1;
         }
-
       `}} />
     </section>
   );
