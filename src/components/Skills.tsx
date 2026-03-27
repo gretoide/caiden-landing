@@ -145,7 +145,7 @@ export default function Skills() {
                   <div
                     key={skill.id}
                     onClick={() => setSelectedSkillId(skill.id)}
-                    className="group relative aspect-[4/5] overflow-hidden bg-[#020b1a] border border-white/5 cursor-pointer hover:border-brand-400/30 transition-colors duration-500"
+                    className="group relative aspect-[4/5] overflow-hidden bg-[#020b1a] border border-white/5 cursor-pointer hover:border-brand-400/30 active:scale-[0.98] transition-all duration-500"
                   >
                     {skill.publicId && (
                       <OptimizedImage
@@ -157,9 +157,21 @@ export default function Skills() {
                         sizes="(max-width: 768px) 100vw, 33vw"
                       />
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none" />
+                    {/* Glassmorphism Shine Effect */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10">
+                      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+                    </div>
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
                     
-                    <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                    <div className="absolute inset-0 p-6 flex flex-col justify-end z-20">
+                      {/* View Details CTA - Appears on Hover */}
+                      <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-500">
+                        <div className="flex items-center gap-2 text-brand-400 font-sans text-[10px] tracking-[0.2em] uppercase bg-black/40 backdrop-blur-md border border-brand-400/30 px-3 py-2 rounded-sm">
+                          Explore <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                        </div>
+                      </div>
+
                       <div className="flex flex-wrap gap-2 mb-4">
                         {skill.tags.slice(0, 2).map((tag) => (
                           <span
@@ -173,7 +185,7 @@ export default function Skills() {
                       <h4 className="text-2xl font-serif text-white mb-2 group-hover:text-brand-400 transition-colors duration-300">
                         {skill.title}
                       </h4>
-                      <p className="text-white/50 font-sans text-xs leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <p className="text-white/50 font-sans text-xs leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
                         {skill.description}
                       </p>
                     </div>

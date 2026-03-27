@@ -80,7 +80,7 @@ export default function AllSkills() {
                 {groupedSkills[category]?.map((skill) => (
                   <div 
                     key={skill.id} 
-                    className="skill-card-anim group relative bg-[#020b1a] border border-white/5 overflow-hidden flex flex-col h-full min-h-[300px]"
+                    className="skill-card-anim group relative bg-[#020b1a] border border-white/5 overflow-hidden flex flex-col h-full min-h-[300px] cursor-pointer hover:border-brand-400/30 active:scale-[0.98] transition-all duration-500"
                   >
                     {/* Background Image/Placeholder */}
                     <div className="absolute inset-0 z-0 opacity-40 group-hover:opacity-70 transition-opacity duration-700">
@@ -90,7 +90,7 @@ export default function AllSkills() {
                             alt={skill.title}
                             variant="thumb"
                             fill
-                            imgClassName="object-cover transition-transform duration-1000 group-hover:scale-105"
+                            imgClassName="object-cover transition-transform duration-1000 group-hover:scale-110"
                             sizes="(max-width: 768px) 100vw, 33vw"
                          />
                       ) : (
@@ -99,8 +99,20 @@ export default function AllSkills() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
                     </div>
 
+                    {/* Glassmorphism Shine Effect */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10">
+                      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+                    </div>
+
                     {/* Content */}
-                    <div className="relative z-10 p-6 md:p-8 flex flex-col flex-grow justify-end">
+                    <div className="relative z-20 p-6 md:p-8 flex flex-col flex-grow justify-end">
+                      {/* View Details CTA - Consistency */}
+                      <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-500">
+                        <div className="flex items-center gap-2 text-brand-400 font-sans text-[10px] tracking-[0.2em] uppercase bg-black/40 backdrop-blur-md border border-brand-400/30 px-3 py-2 rounded-sm">
+                          Explore <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                        </div>
+                      </div>
+
                       {/* Tags */}
                       <div className="flex flex-wrap gap-2 mb-4 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                         {skill.tags.map(tag => (
