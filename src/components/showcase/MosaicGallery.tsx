@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import OptimizedImage from '../../OptimizedImage';
+import OptimizedImage from '../ui/OptimizedImage';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';

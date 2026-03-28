@@ -8,6 +8,7 @@ type Props = {
   imagesPerSlide?: number;
   activeIndex?: number;
   className?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 };
 
 export default function BackgroundCarousel({
@@ -17,6 +18,7 @@ export default function BackgroundCarousel({
   imagesPerSlide = 1,
   activeIndex,
   className,
+  objectFit = 'cover',
 }: Props) {
   const ids = useMemo(() => publicIds.filter(Boolean), [publicIds]);
   const safeImagesPerSlide = Math.max(1, Math.min(6, Math.floor(imagesPerSlide)));
@@ -114,7 +116,7 @@ export default function BackgroundCarousel({
                       variant="bg"
                       fill
                       sizes="100vw"
-                      imgClassName="object-cover"
+                      objectFit={objectFit}
                       className="absolute inset-0"
                     />
                     <div className="absolute inset-y-0 right-0 w-px bg-white/5" />

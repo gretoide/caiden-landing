@@ -1,39 +1,37 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CRAFTSMANSHIP } from './content/craftsmanship';
-import { ALL_SKILLS } from './content/skills';
-import BackgroundCarousel from '../ui/BackgroundCarousel';
+import { SKILLS_CONTENT } from './content';
+import SubSkillCarousel from './SubSkillCarousel';
 import OptimizedImage from '../ui/OptimizedImage';
 import ImageModal from '../ui/ImageModal';
 
 export default function Skills() {
   const detailsRef = useRef<HTMLDivElement>(null);
-  const [activeTab, setActiveTab] = useState(CRAFTSMANSHIP[0].id);
+  const [activeTab, setActiveTab] = useState(SKILLS_CONTENT.categories[0].id);
   const [expandedPublicId, setExpandedPublicId] = useState<string | null>(null);
   const [selectedSkillId, setSelectedSkillId] = useState<string | null>(null);
 
-  const activeData = CRAFTSMANSHIP.find((c) => c.id === activeTab) || CRAFTSMANSHIP[0];
-  const relatedExpertise = ALL_SKILLS.filter((s) => activeData.expertiseSkillIds.includes(s.id));
-  const selectedSkill = relatedExpertise.find(s => s.id === selectedSkillId);
+  const activeData = SKILLS_CONTENT.categories.find((c) => c.id === activeTab) || SKILLS_CONTENT.categories[0];
   const [expertiseBgTick, setExpertiseBgTick] = useState(0);
+  
   const expertiseCarouselIds = useMemo(() => {
-    const ids = new Set<string>();
-    relatedExpertise.forEach((s) => {
-      if (s.publicId) ids.add(s.publicId);
-    });
-    activeData.gallery?.forEach((g) => ids.add(g.id));
-    if (activeData.publicId) ids.add(activeData.publicId);
-    return Array.from(ids);
-  }, [activeData, relatedExpertise]);
+    const selectedSubSkill = activeData.subSkills.find(s => s.id === selectedSkillId);
+    if (selectedSubSkill && selectedSubSkill.gallery && selectedSubSkill.gallery.length > 0) {
+      return selectedSubSkill.gallery;
+    }
+    return activeData.gallery && activeData.gallery.length > 0 
+      ? activeData.gallery 
+      : [activeData.publicId];
+  }, [activeData, selectedSkillId]);
+
   const expertiseCarouselKey = useMemo(() => expertiseCarouselIds.join('|'), [expertiseCarouselIds]);
 
   useEffect(() => {
-    if (relatedExpertise.length === 0) return;
     const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
     if (prefersReducedMotion) return;
 
-    const timer = window.setInterval(() => setExpertiseBgTick((t) => t + 1), 14000);
+    const timer = window.setInterval(() => setExpertiseBgTick((t) => t + 1), 6000);
     return () => window.clearInterval(timer);
-  }, [activeTab, relatedExpertise.length, expertiseCarouselKey]);
+  }, [activeTab, expertiseCarouselKey]);
 
   const scrollToDetails = () => {
     const target = detailsRef.current;
@@ -58,7 +56,7 @@ export default function Skills() {
             <div className="w-10 h-[1px] bg-brand-400/80" />
           </div>
           <h2 className="text-white font-serif tracking-[0.18em] text-4xl sm:text-5xl md:text-6xl leading-none drop-shadow-2xl">
-            Skills
+            {SKILLS_CONTENT.mainHeader.title}
           </h2>
         </div>
 
@@ -66,7 +64,7 @@ export default function Skills() {
         <div className="relative w-full h-[50vh] min-h-[400px] md:h-[600px] flex overflow-hidden bg-black border-y border-white/5">
           {/* Edge-to-Edge Diagonal Image Slices & Tabs */}
           <div className="w-full h-full relative flex transform skew-x-12 origin-center -ml-12 overflow-hidden bg-black z-10">
-            {CRAFTSMANSHIP.map((craft) => {
+        {SKILLS_CONTENT.categories.map((craft) => {
               const isActive = activeTab === craft.id;
               return (
                 <div
@@ -141,7 +139,7 @@ export default function Skills() {
             {!selectedSkillId ? (
               /* --- VIEW A: SKILL GRID (Image 1) --- */
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full animate-in fade-in slide-in-from-bottom-4 duration-700">
-                {relatedExpertise.map((skill) => (
+                {activeData.subSkills.map((skill) => (
                   <div
                     key={skill.id}
                     onClick={() => setSelectedSkillId(skill.id)}
@@ -168,12 +166,12 @@ export default function Skills() {
                       {/* View Details CTA - Appears on Hover */}
                       <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-500">
                         <div className="flex items-center gap-2 text-brand-400 font-sans text-[10px] tracking-[0.2em] uppercase bg-black/40 backdrop-blur-md border border-brand-400/30 px-3 py-2 rounded-sm">
-                          Explore <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                          {SKILLS_CONTENT.uiLabels.ctaExplore} <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
                         </div>
                       </div>
 
                       <div className="flex flex-wrap gap-2 mb-4">
-                        {skill.tags.slice(0, 2).map((tag) => (
+                        {skill.tags.map((tag) => (
                           <span
                             key={tag}
                             className="text-[9px] font-sans tracking-widest uppercase text-brand-400 border border-brand-400/30 px-2 py-1 bg-black/40 backdrop-blur-sm"
@@ -213,7 +211,7 @@ export default function Skills() {
                   </p>
 
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {selectedSkill?.tags.map((tag) => (
+                    {activeData.subSkills.find(s => s.id === selectedSkillId)?.tags.map((tag) => (
                       <span
                         key={tag}
                         className="text-[9px] font-sans tracking-widest uppercase text-brand-400 border border-brand-400/30 px-2 py-1 bg-black/40 backdrop-blur-sm"
@@ -224,42 +222,32 @@ export default function Skills() {
                   </div>
 
                   <h3 className="text-3xl lg:text-5xl font-serif text-white mb-6 uppercase tracking-tight">
-                    {selectedSkill?.title}
+                    {activeData.subSkills.find(s => s.id === selectedSkillId)?.title}
                   </h3>
                   
                   <p className="text-white/70 font-sans leading-relaxed text-base md:text-lg mb-12 italic border-l-2 border-brand-400/40 pl-6">
-                    {selectedSkill?.description}
+                    {activeData.subSkills.find(s => s.id === selectedSkillId)?.description}
                   </p>
 
                   <button 
                     onClick={() => setSelectedSkillId(null)}
                     className="mt-auto flex items-center gap-3 text-white/30 font-sans text-[10px] tracking-[0.4em] uppercase hover:text-brand-400 transition-colors group py-4 border-t border-white/5 w-fit"
                   >
-                    <span className="group-hover:-translate-x-1 transition-transform">←</span> Return to Gallery
+                    <span className="group-hover:-translate-x-1 transition-transform">←</span> {SKILLS_CONTENT.uiLabels.back}
                   </button>
                 </div>
 
                 {/* Right Side: Visuals */}
-                <div className="lg:w-[55%] aspect-square lg:aspect-auto min-h-[600px] relative group overflow-hidden border border-white/5 bg-[#020b1a] shadow-2xl">
-                   {/* Background Carousel of skill images or active category gallery */}
-                   <BackgroundCarousel
+                <div className="lg:w-[55%] aspect-square lg:aspect-auto min-h-[600px] relative group overflow-hidden bg-[#020b1a] shadow-2xl">
+                   {/* Dedicated clean carousel for subskill gallery */}
+                   <SubSkillCarousel
                       publicIds={expertiseCarouselIds}
                       activeIndex={expertiseBgTick}
-                      imagesPerSlide={1}
-                      intervalMs={8000}
-                      slideMs={1800}
-                      className="absolute inset-0 opacity-80"
                    />
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                    
-                   {/* Play Button Visual Overlay (as seen in Image 2) */}
-                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <div className="w-24 h-24 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700">
-                         <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-white border-b-[12px] border-b-transparent ml-2" />
-                      </div>
-                   </div>
-
-                   <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
+                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                   
+                   <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end z-20 pointer-events-none">
                       <div className="text-white/40 font-sans text-[10px] tracking-[0.4em] uppercase">
                          Showcase // 0{expertiseBgTick % expertiseCarouselIds.length + 1}
                       </div>
@@ -282,16 +270,16 @@ export default function Skills() {
                 <div className="flex items-center gap-4">
                   <div className="w-8 h-[1px] bg-brand-400/80"></div>
                   <span className="text-brand-400 font-sans text-[10px] tracking-[0.5em] uppercase font-bold">
-                    Explore All Skills
+                    {SKILLS_CONTENT.uiLabels.explore}
                   </span>
                 </div>
                 <span className="hidden md:block text-white/25 font-sans text-[10px] tracking-[0.35em] uppercase">
-                  Jump to section
+                  {SKILLS_CONTENT.uiLabels.jump}
                 </span>
               </div>
 
               <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1">
-                {CRAFTSMANSHIP.map((craft) => {
+                {SKILLS_CONTENT.categories.map((craft) => {
                   const isActive = activeTab === craft.id;
                   return (
                     <button

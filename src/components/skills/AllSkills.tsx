@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { ALL_SKILLS } from './content/skills';
+import { SKILLS_CONTENT } from './content';
 import OptimizedImage from '../ui/OptimizedImage';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -10,14 +10,8 @@ gsap.registerPlugin(ScrollTrigger);
 export default function AllSkills() {
   const containerRef = useRef<HTMLElement>(null);
 
-  // Group skills by category
-  const groupedSkills = ALL_SKILLS.reduce((acc, skill) => {
-    if (!acc[skill.category]) acc[skill.category] = [];
-    acc[skill.category].push(skill);
-    return acc;
-  }, {} as Record<string, typeof ALL_SKILLS>);
-
-  const categories = ['Fabrication', 'Finishing & FX', 'Digital'];
+  // Group skills by category - now based on the Craftsmanship categories
+  const categories = SKILLS_CONTENT.categories;
 
   useGSAP(() => {
     const cards = gsap.utils.toArray('.skill-card-anim', containerRef.current);
@@ -57,27 +51,26 @@ export default function AllSkills() {
         {/* Section Header */}
         <div className="max-w-4xl skill-header-anim">
           <h2 className="text-4xl md:text-6xl lg:text-[5rem] font-serif text-white tracking-widest leading-none mb-6">
-            TECHNICAL EXPERTISE
+            {SKILLS_CONTENT.allExpertiseHeader.title}
           </h2>
           <div className="w-24 h-[1px] bg-brand-400 mb-6"></div>
           <p className="text-white/50 font-sans tracking-wide leading-relaxed text-lg max-w-2xl">
-            A comprehensive spectrum of specialized disciplines mastered over a decade of continuous iteration. From raw structural fabrication to hyper-realistic digital detailing.
+            {SKILLS_CONTENT.allExpertiseHeader.description}
           </p>
         </div>
 
-        {/* Categories Grid */}
         <div className="flex flex-col gap-20">
-          {categories.map((category) => (
-            <div key={category} className="flex flex-col md:flex-row gap-8 lg:gap-16 items-start">
-              {/* Category Title - Sticky on larger screens */}
+          {categories.map((craft) => (
+            <div key={craft.id} className="flex flex-col md:flex-row gap-8 lg:gap-16 items-start">
+              {/* Craft Title - Sticky on larger screens */}
               <div className="w-full md:w-1/4 md:sticky md:top-32 skill-header-anim">
-                <h3 className="text-2xl md:text-3xl font-sans text-brand-400 uppercase tracking-[0.2em] mb-2">{category}</h3>
+                <h3 className="text-2xl md:text-3xl font-sans text-brand-400 uppercase tracking-[0.2em] mb-2">{craft.title}</h3>
                 <div className="w-8 h-[2px] bg-white/20"></div>
               </div>
 
               {/* Skills Cards Grid */}
-              <div className="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
-                {groupedSkills[category]?.map((skill) => (
+              <div className="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                {craft.subSkills.map((skill) => (
                   <div 
                     key={skill.id} 
                     className="skill-card-anim group relative bg-[#020b1a] border border-white/5 overflow-hidden flex flex-col h-full min-h-[300px] cursor-pointer hover:border-brand-400/30 active:scale-[0.98] transition-all duration-500"
@@ -109,7 +102,7 @@ export default function AllSkills() {
                       {/* View Details CTA - Consistency */}
                       <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-500">
                         <div className="flex items-center gap-2 text-brand-400 font-sans text-[10px] tracking-[0.2em] uppercase bg-black/40 backdrop-blur-md border border-brand-400/30 px-3 py-2 rounded-sm">
-                          Explore <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                          {SKILLS_CONTENT.uiLabels.ctaExplore} <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
                         </div>
                       </div>
 
