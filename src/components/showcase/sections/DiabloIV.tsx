@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import DeferredBackground from '../../ui/DeferredBackground';
 import OptimizedImage from '../../ui/OptimizedImage';
-import { PROJECTS } from '../content/projects';
+import { diabloIVData as data } from '../content/diabloIV';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,7 +13,6 @@ type Props = {
 };
 
 export default function DiabloIV({ onOpen }: Props) {
-  const data = PROJECTS.diabloIV;
   const containerRef = useRef<HTMLElement>(null);
 
   useGSAP(() => {
@@ -61,12 +60,10 @@ export default function DiabloIV({ onOpen }: Props) {
         <div className={`absolute inset-0 z-[1] pointer-events-none ${data.bgOverlayClassName}`}></div>
       )}
       
-      {/* Gradient Transitions */}
       <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent z-1"></div>
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-1"></div>
 
       <div className="relative z-10 container mx-auto px-6">
-        {/* Header Section */}
         <div className="mb-16 md:mb-24 max-w-4xl">
            <h2 className="diablo-header-anim text-6xl md:text-[10rem] font-serif text-white leading-none drop-shadow-2xl">
              {data.title}
@@ -75,43 +72,42 @@ export default function DiabloIV({ onOpen }: Props) {
              <p className={`text-xl md:text-3xl font-sans tracking-widest font-bold uppercase drop-shadow-md ${data.subtitleClassName || 'text-[#dc2626]'}`}>
                {data.subtitle}
              </p>
-             <div className={`h-[1px] flex-grow bg-gradient-to-r from-[#dc2626] to-transparent mb-4 opacity-30 hidden md:block`}></div>
+             <div className="h-[1px] flex-grow bg-gradient-to-r from-[#dc2626] to-transparent mb-4 opacity-30 hidden md:block"></div>
            </div>
            {data.description && (
-             <p className={`diablo-header-anim text-white/50 font-sans mt-8 max-w-sm tracking-wide leading-relaxed pl-4 border-l-2 border-[#dc2626]`}>
+             <p className="diablo-header-anim text-white/50 font-sans mt-8 max-w-sm tracking-wide leading-relaxed pl-4 border-l-2 border-[#dc2626]">
                {data.description}
              </p>
            )}
         </div>
 
-        {/* Custom Layout: 1 Large Left, 2 Small Right (Stacked) */}
+        {/* 4-Image Layout */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 h-auto md:h-[100vh]">
-          {/* Context View - Small Left */}
+          {/* Shot 1 - Large Left */}
           <div className="diablo-item-anim md:col-span-3 h-[40vh] md:h-full relative group overflow-hidden border border-white/5 shadow-xl">
             <OptimizedImage
               publicId={data.gallery[0]}
-              alt="Diablo IV Context 1"
+              alt="Diablo IV View 01"
               variant="full"
               className="w-full h-full"
               imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 cursor-pointer object-cover"
               onClick={() => onOpen(data.gallery[0])}
             />
-            <div className="absolute inset-0 border-[0.5px] border-white/10 pointer-events-none"></div>
             <div className="absolute top-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm">
               Context // 01
             </div>
           </div>
 
-          {/* Main View - Center */}
+          {/* Shot 2 - Main View Center */}
           <div className="diablo-item-anim md:col-span-6 h-[60vh] md:h-full relative group overflow-hidden border border-white/5 shadow-2xl">
             <OptimizedImage
-              publicId={data.main}
-              alt="Diablo IV Main View"
+              publicId={data.gallery[1]}
+              alt="Diablo IV View 02"
               variant="full"
               className="w-full h-full"
               imgClassName="grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000 cursor-pointer object-cover"
               sizes="(min-width: 1024px) 50vw, 100vw"
-              onClick={() => onOpen(data.main)}
+              onClick={() => onOpen(data.gallery[1])}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
             <div className="absolute bottom-6 left-6">
@@ -119,25 +115,34 @@ export default function DiabloIV({ onOpen }: Props) {
             </div>
           </div>
 
-          {/* Zooms Column - Right */}
+          {/* Right Column - Shots 3 & 4 */}
           <div className="md:col-span-3 grid grid-cols-1 gap-2 md:gap-4 h-auto md:h-full">
-            {data.zoomDetails.slice(0, 2).map((detail, idx) => (
-              <div key={detail.id} className="diablo-item-anim relative group overflow-hidden border border-white/5 aspect-square md:aspect-auto md:h-full">
-                <OptimizedImage
-                  publicId={data.main}
-                  alt={detail.label}
-                  variant="full"
-                  className="w-full h-full"
-                  imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-default"
-                  zoom={detail.zoom}
-                  objectPosition={detail.position}
-                />
-                <div className="absolute inset-0 border-[0.5px] border-white/10 pointer-events-none"></div>
-                <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm">
-                  Study 0{idx + 1}
-                </div>
+            <div className="diablo-item-anim relative group overflow-hidden border border-white/5 aspect-square md:aspect-auto md:h-full">
+              <OptimizedImage
+                publicId={data.gallery[2]}
+                alt="Diablo IV View 03"
+                variant="full"
+                className="w-full h-full"
+                imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
+                onClick={() => onOpen(data.gallery[2])}
+              />
+              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm">
+                Study 01
               </div>
-            ))}
+            </div>
+            <div className="diablo-item-anim relative group overflow-hidden border border-white/5 aspect-square md:aspect-auto md:h-full">
+              <OptimizedImage
+                publicId={data.gallery[3]}
+                alt="Diablo IV View 04"
+                variant="full"
+                className="w-full h-full"
+                imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
+                onClick={() => onOpen(data.gallery[3])}
+              />
+              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm">
+                Study 02
+              </div>
+            </div>
           </div>
         </div>
       </div>

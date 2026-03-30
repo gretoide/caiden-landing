@@ -1,0 +1,17 @@
+export const diabloIVData = {
+  title: 'Diablo IV',
+  subtitle: 'Blizzard Ent. — 2023',
+  subtitleClassName: 'text-[#dc2626]',
+  description: 'Built to match the brutal, gothic world of Sanctuary. The core structure uses reinforced fiberglass for durability.',
+  descBorderClassName: 'border-[#dc2626]',
+  bg: 'diablo_iv_4_hwuzom',
+  bgOverlayClassName: 'bg-red-600/20 mix-blend-overlay',
+  blurClassName: 'blur-md',
+  // Consolidated 4 images as requested
+  gallery: [
+    'diablo_iv_3_yuwkeo', // Large Left
+    'diablo_iv_5_k4ddrg', // Center
+    'diablo_iv_3_yuwkeo', // Right Small Top
+    'diablo_iv_5_k4ddrg', // Right Small Bottom
+  ]
+} as const;

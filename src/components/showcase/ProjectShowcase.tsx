@@ -1,12 +1,23 @@
 import { useRef } from 'react';
 import type { ReactNode } from 'react';
-import type { ProjectShowcaseData } from './content/projects';
 import DeferredBackground from '../ui/DeferredBackground';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+
+export type ProjectShowcaseData = {
+  title: ReactNode;
+  subtitle: string;
+  subtitleClassName?: string;
+  description: string;
+  descBorderClassName?: string;
+  bg: string;
+  bgOverlayClassName?: string;
+  blurClassName?: string;
+  gallery: readonly string[];
+};
 
 export type ShowcaseData = ProjectShowcaseData;
 
