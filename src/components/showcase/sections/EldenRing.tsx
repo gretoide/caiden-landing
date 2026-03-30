@@ -96,7 +96,7 @@ export default function EldenRing({ onOpen }: Props) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           <div className="absolute top-4 left-4 flex gap-2 overflow-hidden pointer-events-none">
-            <span className="bg-red-500 px-3 py-1 text-[10px] text-black font-bold uppercase tracking-tighter">Cinematic View</span>
+            <span className="bg-red-600/40 backdrop-blur-sm px-3 py-1 text-[10px] text-white/80 font-bold uppercase tracking-tighter border border-white/5">Cinematic View</span>
           </div>
           <div className="absolute bottom-6 left-6 opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0">
             <p className="text-white/40 font-sans text-xs tracking-widest uppercase">Elden Ring // Full Field Showcase</p>
@@ -146,15 +146,16 @@ export default function EldenRing({ onOpen }: Props) {
               variant="thumb"
               className="w-full h-full"
               imgClassName="grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
+              objectPosition="center 20%"
               onClick={() => onOpen(data.gallery[4])}
             />
           </div>
         </div>
 
         {/* Focus Grid - Gallery[5-8] */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 h-auto md:h-[120vh]">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 h-auto">
           {/* Main View */}
-          <div className="elden-item-anim md:col-span-7 h-[60vh] md:h-full relative group shadow-2xl overflow-hidden border border-[#4a0a0a]/40">
+          <div className="elden-item-anim md:col-span-7 aspect-[4/5] md:aspect-auto md:h-full relative group shadow-2xl overflow-hidden border border-[#4a0a0a]/40">
             <OptimizedImage
               publicId={data.gallery[5]}
               alt="Main Showcase View"
@@ -171,9 +172,9 @@ export default function EldenRing({ onOpen }: Props) {
           </div>
 
           {/* Details Column */}
-          <div className="md:col-span-5 grid grid-cols-1 gap-2 md:gap-4 h-auto md:h-full">
+          <div className="md:col-span-5 grid grid-cols-1 gap-2 md:gap-4 h-auto">
             {/* Top Detail */}
-            <div className="elden-item-anim h-[40vh] md:h-full relative group overflow-hidden border border-[#4a0a0a]/30 bg-[#250707] shadow-xl">
+            <div className="elden-item-anim aspect-square relative group overflow-hidden border border-[#4a0a0a]/30 bg-[#250707] shadow-xl">
               <OptimizedImage
                 publicId={data.gallery[6]}
                 alt="Focus Detail 1"
@@ -187,7 +188,7 @@ export default function EldenRing({ onOpen }: Props) {
             </div>
 
             {/* Bottom Grid */}
-            <div className="grid grid-cols-2 gap-2 md:gap-4 h-[40vh] md:h-full">
+            <div className="grid grid-cols-2 gap-2 md:gap-4 aspect-[2/1]">
               <div className="elden-item-anim relative group overflow-hidden border border-[#4a0a0a]/30 bg-[#250707] shadow-lg">
                 <OptimizedImage
                   publicId={data.gallery[7]}

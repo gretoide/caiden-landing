@@ -12,12 +12,12 @@ export const eldenRingData = {
   gallery: [
     'elden_ring_1_e7ast7',  // Banner
     'elden_ring_5_nbxteg',  // Mosaic 1
-    'elden_ring_10_n1jah8', // Mosaic 2
-    'elden_ring_8_gmazch',  // Mosaic 3
-    'elden_ring_7_mpj69h',  // Mosaic 4
+    'H1_kmvlfp', // Mosaic 2
+    'H3_tntpjf',  // Mosaic 3
+    'H2_farxom',  // Mosaic 4
     'elden_ring_6_k5z39c',  // Focus Main
-    'elden_ring_5_nbxteg',  // Focus Detail 1 (placeholder/repeat if no more unique)
-    'elden_ring_10_n1jah8', // Focus Detail 2
-    'elden_ring_8_gmazch',  // Focus Detail 3
+    'H4_ptxoik',  // Focus Detail 1 (placeholder/repeat if no more unique)
+    'H5_jmpkrm', // Focus Detail 2
+    'H7_yzdgsy',  // Focus Detail 3
   ]
 } as const;

@@ -11,7 +11,7 @@ export const diabloIVData = {
   gallery: [
     'diablo_iv_3_yuwkeo', // Large Left
     'diablo_iv_5_k4ddrg', // Center
-    'diablo_iv_3_yuwkeo', // Right Small Top
-    'diablo_iv_5_k4ddrg', // Right Small Bottom
+    'D1_ocz8io', // Right Small Top
+    'D2_anudld', // Right Small Bottom
   ]
 } as const;
