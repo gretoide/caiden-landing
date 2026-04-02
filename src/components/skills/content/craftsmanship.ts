@@ -92,9 +92,9 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     expandedDetails: 'Focus on silhouette, mobility, and believable layering.',
     publicId: '0_-_Fabrics_Sewing_xt7zay',
     subSkills: [
-      { id: 'tex-1', title: 'Patterning', description: 'Precise drafting for complex wearable silhouettes.', publicId: 'mordred_fate_2_rkpzpt', tags: ['Patterning', 'Wearable'], gallery: ['mordred_fate_2_rkpzpt'] },
-      { id: 'tex-2', title: 'Detail Stitching', description: 'High-end garment finishing and functional straps.', publicId: 'mordred_fate_3_jubhnt', tags: ['Sewing', 'Detail'], gallery: ['mordred_fate_3_jubhnt'] },
-      { id: 'tex-3', title: 'Material Choice', description: 'Selection of specific textiles for durability and screen accuracy.', publicId: 'mordred_fate_1_hvpnwf', tags: ['Textiles', 'Fabric'], gallery: ['mordred_fate_1_hvpnwf'] }
+      { id: 'tex-1', title: 'Fabrics Sewing', description: 'Precise drafting for complex wearable silhouettes.', publicId: '1.1_-_Fabrics_Sewing_pzg0dj', tags: ['Patterning', 'Wearable'], gallery: ['mordred_fate_2_rkpzpt'] },
+      { id: 'tex-2', title: 'Design', description: 'High-end garment finishing and functional straps.', publicId: '1.2_-_Design_utu8dg', tags: ['Sewing', 'Detail'], gallery: ['mordred_fate_3_jubhnt'] },
+      { id: 'tex-3', title: 'Embroidery', description: 'Selection of specific textiles for durability and screen accuracy.', publicId: '1.3_-_Embroidery_btgnap', tags: ['Textiles', 'Fabric'], gallery: ['mordred_fate_1_hvpnwf'] }
     ],
     gallery: ['mordred_fate_2_rkpzpt', 'mordred_fate_3_jubhnt', 'mordred_fate_1_hvpnwf'],
   },
@@ -106,11 +106,25 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     expandedDetails: 'Prop logic powered by Arduino and ESP32 with custom PCB housing.',
     publicId: '0_-_Lightning_lblfpq',
     subSkills: [
-      { id: 'elec-1', title: 'Arduino Logic', description: 'Programmed interactive responses and lighting paths.', publicId: 'wp_al_hacha_1_citmzg', tags: ['Arduino', 'Logic'], gallery: ['wp_al_hacha_1_citmzg'] },
-      { id: 'elec-2', title: 'LED Arrays', description: 'Custom wired RGB strips for high-intensity glow.', publicId: 'wp_al_kunai_1_m96nky', tags: ['LED', 'Electronics'], gallery: ['wp_al_kunai_1_m96nky'] },
-      { id: 'elec-3', title: 'Power MGMT', description: 'Integrated battery solutions for portable props.', publicId: 'chainsaw_2_qwerzf', tags: ['Power', 'Motors'], gallery: ['chainsaw_2_qwerzf'] }
+      { id: 'elec-1', title: 'LEDs', description: 'Programmed interactive responses and lighting paths.', publicId: '1_-_LEDs_civgrw', tags: ['Arduino', 'Logic'], gallery: ['wp_al_hacha_1_citmzg'] },
+      { id: 'elec-2', title: 'Arduino', description: 'Custom wired RGB strips for high-intensity glow.', publicId: '1.3_-_Arduino_u3bgqb', tags: ['LED', 'Electronics'], gallery: ['wp_al_kunai_1_m96nky'] },
+      { id: 'elec-3', title: 'Circuits', description: 'Integrated battery solutions for portable props.', publicId: '2.1_-_Circuits_-_0_w7evsy', tags: ['Power', 'Motors'], gallery: ['chainsaw_2_qwerzf'] }
     ],
     gallery: ['wp_al_hacha_1_citmzg', 'wp_al_kunai_1_m96nky', 'chainsaw_2_qwerzf', 'wp_añ_2_yatjho'],
+  },
+  {
+    id: 'skilled-materials',
+    title: 'Skilled Materials',
+    subtitle: 'Resins & Synthetics',
+    description: 'Expert handling of advanced composites, casting resins, and synthetic material manipulation.',
+    expandedDetails: 'We work with clear casting, urethane rubbers, and high-impact polymers to achieve unique physical properties and hyper-realistic finishes.',
+    publicId: '0_-_Skilled_Materials_aancuw',
+    subSkills: [
+      { id: 'mat-1', title: 'Resins', description: 'Bubble-free casting of complex organic and geometric shapes.', publicId: '1.1_-_Resins_bzvqg3', tags: ['Resin', 'Casting'], gallery: ['2.2_-_Resin_Casting_Mold_Making_-_1_cwu6qz'] },
+      { id: 'mat-2', title: 'Fiberglass & Putties', description: 'Simulating non-organic textures through chemical treatment.', publicId: '1.2_-_Fiberglass_Putties_vv8rv0', tags: ['Chemical', 'Texture'], gallery: ['fx_devil_may_cry_1_e2s58p'] },
+      { id: 'mat-3', title: 'Rubber & Molderie', description: 'Structural reinforcing with high-strength synthetic layers.', publicId: '1.3_-_Rubber_Molderie_lf2drd', tags: ['Composite', 'Strength'], gallery: ['H1_kmvlfp'] }
+    ],
+    gallery: ['2.2_-_Resin_Casting_Mold_Making_-_1_cwu6qz', 'fx_devil_may_cry_1_e2s58p', 'H1_kmvlfp'],
   },
   {
     id: 'painting',
@@ -120,9 +134,9 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     expandedDetails: 'Believable metal, worn leather, and true-to-life grime.',
     publicId: '0_-_Painting_nisxnq',
     subSkills: [
-      { id: 'paint-1', title: 'Airbrushing', description: 'Smooth gradients and high-contrast color transitions.', publicId: 'skyrim_1_llcbuo', tags: ['Airbrushing', 'Gradients'], gallery: ['skyrim_1_llcbuo'] },
-      { id: 'paint-2', title: 'Weathering', description: 'Simulated wear, grit, and battle damage.', publicId: 'elden_ring_8_gmazch', tags: ['Weathering', 'Realism'], gallery: ['elden_ring_8_gmazch'] },
-      { id: 'paint-3', title: 'Finishes', description: 'Professional clear coats for material-specific sheen.', publicId: 'diablo_iv_3_yuwkeo', tags: ['Finish', 'Metallic'], gallery: ['diablo_iv_3_yuwkeo'] }
+      { id: 'paint-1', title: 'Traditional & Digital drawing', description: 'Smooth gradients and high-contrast color transitions.', publicId: '1.1_-_Traditional_Digital_drawing_xwppb7', tags: ['Airbrushing', 'Gradients'], gallery: ['skyrim_1_llcbuo'] },
+      { id: 'paint-2', title: 'Painting', description: 'Simulated wear, grit, and battle damage.', publicId: '1.2_-_Painting_bbkiac', tags: ['Weathering', 'Realism'], gallery: ['elden_ring_8_gmazch'] },
+      { id: 'paint-3', title: 'Photomanipulation', description: 'Professional clear coats for material-specific sheen.', publicId: '1.3_-_Photomanipulation_pjfox0', tags: ['Finish', 'Metallic'], gallery: ['diablo_iv_3_yuwkeo'] }
     ],
     gallery: ['skyrim_1_llcbuo', 'elden_ring_8_gmazch', 'diablo_iv_3_yuwkeo'],
   },
@@ -134,9 +148,9 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     expandedDetails: 'Multi-layering techniques to simulate stone and metal.',
     publicId: '0_-_Sculping_Modeling_xlweee',
     subSkills: [
-      { id: 'scul-1', title: 'Clay Masters', description: 'Traditional sculpting for highly detailed textures.', publicId: 'elden_ring_8_gmazch', tags: ['Sculpting', 'Clay'], gallery: ['elden_ring_8_gmazch'] },
-      { id: 'scul-2', title: 'Material Breakup', description: 'Creating organic surface irregularities.', publicId: 'diablo_iv_3_yuwkeo', tags: ['Texture', 'Synthetic'], gallery: ['diablo_iv_3_yuwkeo'] },
-      { id: 'scul-3', title: 'Metal FX', description: 'Advanced techniques for realistic oxidized surfaces.', publicId: 'skyrim_3_m46jso', tags: ['Metal', 'Oxidized'], gallery: ['skyrim_3_m46jso'] }
+      { id: 'scul-1', title: 'Patterns & Modeling', description: 'Traditional sculpting for highly detailed textures.', publicId: '1.1_-_Patterns_Modeling_igkhws', tags: ['Sculpting', 'Clay'], gallery: ['elden_ring_8_gmazch'] },
+      { id: 'scul-2', title: 'Sculpting', description: 'Creating organic surface irregularities.', publicId: '1.2_-_Sculpting_lanu6k', tags: ['Texture', 'Synthetic'], gallery: ['diablo_iv_3_yuwkeo'] },
+      { id: 'scul-3', title: 'Textures', description: 'Advanced techniques for realistic oxidized surfaces.', publicId: '1.3_-_Textures_bqtcht', tags: ['Metal', 'Oxidized'], gallery: ['skyrim_3_m46jso'] }
     ],
     gallery: ['elden_ring_8_gmazch', 'diablo_iv_3_yuwkeo', 'skyrim_3_m46jso'],
   },
