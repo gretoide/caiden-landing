@@ -61,6 +61,12 @@ export function cloudinaryUrl(publicId: string, options: CloudinaryUrlOptions): 
   return `${baseUrl()}/${transformsFor(options)}/${pid}`;
 }
 
+export function cloudinaryVideoUrl(publicId: string): string {
+  if (!isCloudinaryConfigured()) return '';
+  const pid = encodePublicIdForUrl(cloudinaryPublicId(publicId));
+  return `https://res.cloudinary.com/${cloudName}/video/upload/${pid}.mp4`;
+}
+
 export function cloudinaryPlaceholderUrl(publicId: string): string {
   if (!isCloudinaryConfigured()) {
     if (import.meta.env.PROD) {

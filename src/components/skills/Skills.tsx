@@ -13,25 +13,27 @@ export default function Skills() {
   const activeData = SKILLS_CONTENT.categories.find((c) => c.id === activeTab) || SKILLS_CONTENT.categories[0];
   const [expertiseBgTick, setExpertiseBgTick] = useState(0);
   
-  const expertiseCarouselIds = useMemo(() => {
+  const expertiseCarouselItems = useMemo(() => {
     const selectedSubSkill = activeData.subSkills.find(s => s.id === selectedSkillId);
     if (selectedSubSkill && selectedSubSkill.gallery && selectedSubSkill.gallery.length > 0) {
       return selectedSubSkill.gallery;
     }
     return activeData.gallery && activeData.gallery.length > 0 
       ? activeData.gallery 
-      : [activeData.publicId];
+      : [{ type: 'image', publicId: activeData.publicId } as const];
   }, [activeData, selectedSkillId]);
 
-  const expertiseCarouselKey = useMemo(() => expertiseCarouselIds.join('|'), [expertiseCarouselIds]);
+  const expertiseCarouselKey = useMemo(() => 
+    expertiseCarouselItems.map(item => item.publicId).join('|'), 
+  [expertiseCarouselItems]);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
-    if (prefersReducedMotion) return;
+    // Timer removed as per user request for manual-only control
+    return () => {};
+  }, [activeTab, expertiseCarouselKey, selectedSkillId]);
 
-    const timer = window.setInterval(() => setExpertiseBgTick((t) => t + 1), 4000);
-    return () => window.clearInterval(timer);
-  }, [activeTab, expertiseCarouselKey]);
+  const handleNext = () => setExpertiseBgTick(t => t + 1);
+  const handlePrev = () => setExpertiseBgTick(t => t - 1);
 
   useEffect(() => {
     const handleHash = () => {
@@ -108,7 +110,7 @@ export default function Skills() {
                       alt={craft.title}
                       variant="hero"
                       fill
-                      imgClassName="object-cover transition-transform duration-1000 group-hover:scale-110"
+                      imgClassName="transition-transform duration-700 ease-out"
                       sizes="33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
@@ -330,27 +332,12 @@ export default function Skills() {
 
                 {/* Right Side: Visuals */}
                 <div className="lg:w-[55%] aspect-square lg:aspect-auto min-h-[400px] md:min-h-[600px] relative group overflow-hidden bg-[#020b1a] shadow-2xl">
-                   {/* Dedicated clean carousel for subskill gallery */}
                    <SubSkillCarousel
-                      publicIds={expertiseCarouselIds}
+                      items={expertiseCarouselItems}
                       activeIndex={expertiseBgTick}
+                      onNext={handleNext}
+                      onPrev={handlePrev}
                    />
-                   
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-                   
-                   <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end z-20 pointer-events-none">
-                      <div className="text-white/40 font-sans text-[10px] tracking-[0.4em] uppercase">
-                         Showcase // 0{expertiseBgTick % expertiseCarouselIds.length + 1}
-                      </div>
-                      <div className="flex gap-2">
-                         {expertiseCarouselIds.map((_, i) => (
-                           <div 
-                             key={i} 
-                             className={`w-8 h-[2px] transition-all duration-500 ${i === (expertiseBgTick % expertiseCarouselIds.length) ? 'bg-brand-400' : 'bg-white/10'}`} 
-                           />
-                         ))}
-                      </div>
-                   </div>
                 </div>
               </div>
             )}
