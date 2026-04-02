@@ -62,11 +62,11 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     description: 'Traditional and modern woodworking techniques for structural prop integrity and organic finishes.',
     expandedDetails:
       'Combining CNC precision with hand-carved finishing. We specialize in choosing the right timber for weight, durability, and grain aesthetics.',
-    publicId: 'wp_god_of_war_5_shbod3',
+    publicId: '0_-_Wood_Working_qttihy',
     subSkills: [
-      { id: 'wood-1', title: 'Lumber Selection', description: 'Choosing the right grain and density for each build.', publicId: 'wp_god_of_war_5_shbod3', tags: ['Wood', 'Structure'], gallery: ['wp_god_of_war_5_shbod3'] },
-      { id: 'wood-2', title: 'CNC Precision', description: 'Digital cutting for complex internal geometries.', publicId: 'wp_god_of_war_1_rskssx', tags: ['CNC', 'Digital'], gallery: ['wp_god_of_war_1_rskssx'] },
-      { id: 'wood-3', title: 'Hand Carving', description: 'Artisanal finishing for organic and decorative elements.', publicId: 'skyrim_7_yqhwyx', tags: ['Handheld', 'Carving'], gallery: ['skyrim_7_yqhwyx'] }
+      { id: 'wood-1', title: 'Wood Works', description: 'Choosing the right grain and density for each build.', publicId: 'wp_god_of_war_5_shbod3', tags: ['Wood', 'Structure'], gallery: ['wp_god_of_war_5_shbod3'] },
+      { id: 'wood-2', title: 'Handpower Tools', description: 'Digital cutting for complex internal geometries.', publicId: 'wp_god_of_war_1_rskssx', tags: ['CNC', 'Digital'], gallery: ['wp_god_of_war_1_rskssx'] },
+      { id: 'wood-3', title: 'Laser Cutting', description: 'Artisanal finishing for organic and decorative elements.', publicId: 'skyrim_7_yqhwyx', tags: ['Handheld', 'Carving'], gallery: ['skyrim_7_yqhwyx'] }
     ],
     gallery: ['wp_god_of_war_1_rskssx', 'wp_god_of_war_5_shbod3', 'skyrim_7_yqhwyx'],
   },
@@ -76,7 +76,7 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     subtitle: 'Blender & Prototyping',
     description: 'Digital planning and prototyping to accelerate complex builds and ensure perfect fit.',
     expandedDetails: 'We use 3D design to test proportions and logic before physical fabrication.',
-    publicId: 'diablo_iv_2_thyv5o',
+    publicId: '0_-_3D_Digital_qcfqhs',
     subSkills: [
       { id: 'dig-1', title: '3D Modeling', description: 'High-poly sculpting and architectural drafting in Blender.', publicId: 'diablo_iv_2_thyv5o', tags: ['Blender', '3D'], gallery: ['diablo_iv_2_thyv5o'] },
       { id: 'dig-2', title: 'Prep for Print', description: 'Optimizing meshes and supports for SLA/FDM printing.', publicId: 'wp_al_kunai_2_vaqwpg', tags: ['3D Printing', 'SLA'], gallery: ['wp_al_kunai_2_vaqwpg'] },
@@ -90,7 +90,7 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     subtitle: 'Fabrics & Patterning',
     description: 'Fabric work for costumes, straps, and layered garments with clean finishing and fit.',
     expandedDetails: 'Focus on silhouette, mobility, and believable layering.',
-    publicId: 'mordred_fate_2_rkpzpt',
+    publicId: '0_-_Fabrics_Sewing_xt7zay',
     subSkills: [
       { id: 'tex-1', title: 'Patterning', description: 'Precise drafting for complex wearable silhouettes.', publicId: 'mordred_fate_2_rkpzpt', tags: ['Patterning', 'Wearable'], gallery: ['mordred_fate_2_rkpzpt'] },
       { id: 'tex-2', title: 'Detail Stitching', description: 'High-end garment finishing and functional straps.', publicId: 'mordred_fate_3_jubhnt', tags: ['Sewing', 'Detail'], gallery: ['mordred_fate_3_jubhnt'] },
@@ -104,7 +104,7 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     subtitle: 'Electronics & Arduino',
     description: 'Integrated circuit design, custom LED arrays, and motorized components.',
     expandedDetails: 'Prop logic powered by Arduino and ESP32 with custom PCB housing.',
-    publicId: 'wp_al_kunai_1_m96nky',
+    publicId: '0_-_Lightning_lblfpq',
     subSkills: [
       { id: 'elec-1', title: 'Arduino Logic', description: 'Programmed interactive responses and lighting paths.', publicId: 'wp_al_hacha_1_citmzg', tags: ['Arduino', 'Logic'], gallery: ['wp_al_hacha_1_citmzg'] },
       { id: 'elec-2', title: 'LED Arrays', description: 'Custom wired RGB strips for high-intensity glow.', publicId: 'wp_al_kunai_1_m96nky', tags: ['LED', 'Electronics'], gallery: ['wp_al_kunai_1_m96nky'] },
@@ -118,7 +118,7 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     subtitle: 'Airbrushing & Weathering',
     description: 'High-end painting workflows focused on realism and contrast.',
     expandedDetails: 'Believable metal, worn leather, and true-to-life grime.',
-    publicId: 'skyrim_1_llcbuo',
+    publicId: '0_-_Painting_nisxnq',
     subSkills: [
       { id: 'paint-1', title: 'Airbrushing', description: 'Smooth gradients and high-contrast color transitions.', publicId: 'skyrim_1_llcbuo', tags: ['Airbrushing', 'Gradients'], gallery: ['skyrim_1_llcbuo'] },
       { id: 'paint-2', title: 'Weathering', description: 'Simulated wear, grit, and battle damage.', publicId: 'elden_ring_8_gmazch', tags: ['Weathering', 'Realism'], gallery: ['elden_ring_8_gmazch'] },
@@ -132,7 +132,7 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     subtitle: 'Metal, Stone & Synthetic',
     description: 'Mastery of non-organic surfaces through advanced painting and material manipulation.',
     expandedDetails: 'Multi-layering techniques to simulate stone and metal.',
-    publicId: 'elden_ring_8_gmazch',
+    publicId: '0_-_Sculping_Modeling_xlweee',
     subSkills: [
       { id: 'scul-1', title: 'Clay Masters', description: 'Traditional sculpting for highly detailed textures.', publicId: 'elden_ring_8_gmazch', tags: ['Sculpting', 'Clay'], gallery: ['elden_ring_8_gmazch'] },
       { id: 'scul-2', title: 'Material Breakup', description: 'Creating organic surface irregularities.', publicId: 'diablo_iv_3_yuwkeo', tags: ['Texture', 'Synthetic'], gallery: ['diablo_iv_3_yuwkeo'] },

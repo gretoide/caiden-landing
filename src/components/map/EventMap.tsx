@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import Map, { Marker, Source, Layer } from 'react-map-gl';
-import { Globe, Trophy } from 'lucide-react';
+import { Globe, Trophy, ChevronDown } from 'lucide-react';
 import type { FillLayer, LineLayer } from 'react-map-gl';
 import OptimizedImage from '../ui/OptimizedImage';
 
@@ -71,8 +71,8 @@ const LOCATIONS = [
     lng: -58.3816,
     description: 'National capital operations and major event headquarters, including international Comic Con brand.',
     events: [
-      { city: 'CABA', name: 'Anime Con', logoId: '2023_Sep_2_npt6jh', years: ['2022', '2024'], type: 'Mega', rank: '2º Puesto' },
-      { city: 'CABA', name: 'Comic Con', logoId: '2023_Dec_sevrvj', years: ['2023', '2024'], type: 'International', rank: '2º Puesto' },
+      { city: 'CABA', name: 'Anime Con', logoId: '2023_Sep_2_npt6jh', years: ['2022', '2024'], type: 'Mega' },
+      { city: 'CABA', name: 'Comic Con', logoId: '2023_Dec_sevrvj', years: ['2023', '2024'], type: 'International' },
       { city: 'Bs As', name: 'Kawaii Koto', logoId: '2023_Sep_1_ajbiqh', years: ['2023'], type: 'Culture' },
       { city: 'CABA', name: 'Martin Fierro Digital', logoId: '2024_Ago_3_rlvmal', years: ['2024'], type: 'Awards' },
       { city: 'CABA', name: 'AGS', logoId: '2023_Oct_kja7mq', years: ['2023'], type: 'Awards', rank: '1º Puesto' }
@@ -88,7 +88,7 @@ const LOCATIONS = [
     description: 'Deep south operational coverage and extreme environment deployments in Gallegos.',
     events: [
       { city: 'Gallegos', name: 'Kogarashi Fest', logoId: '2024_May_1_tiod5h', years: ['2024'], type: 'Festival' },
-      { city: 'Gallegos', name: 'Feña', logoId: '2024_Nov_2_tn9sgf', years: ['2024'], type: 'Themed', rank: '2º Puesto' }
+      { city: 'Gallegos', name: 'Feña', logoId: '2024_Nov_2_tn9sgf', years: ['2024'], type: 'Themed' }
     ]
   },
   {
@@ -309,7 +309,7 @@ export default function EventMap() {
       <div className="max-w-[1600px] mx-auto px-6 relative z-10">
         
         {/* Header Container */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16 px-4">
+        <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-8 md:mb-16 px-4">
           <div className="max-w-2xl">
               <div className="flex items-center gap-4 mb-4">
                  <div className="w-10 h-[1px] bg-brand-400/60" />
@@ -327,10 +327,18 @@ export default function EventMap() {
         </div>
 
         {/* Main Dashboard UI */}
-        <div className="flex flex-col lg:flex-row w-full h-[850px] bg-[#050505] border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+        <div className="flex flex-col lg:flex-row w-full h-[600px] md:h-[850px] bg-[#050505] border border-white/5 rounded-2xl overflow-hidden shadow-2xl relative">
           
           {/* Left Panel: Map */}
-          <div className="w-full lg:w-3/5 h-[400px] lg:h-full relative border-b lg:border-b-0 lg:border-r border-white/5">
+          <div className="w-full lg:w-3/5 h-full relative border-b lg:border-b-0 lg:border-r border-white/5 z-0">
+            {/* Mobile Tooltip (New) */}
+            {!selectedLocation && (
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 flex lg:hidden flex-col items-center gap-1 z-20 pointer-events-none animate-bounce">
+                 <div className="px-3 py-1.5 bg-brand-400 text-black text-[9px] font-bold uppercase tracking-[0.2em] rounded-sm shadow-xl">
+                   SELECT MARKER
+                 </div>
+              </div>
+            )}
             <Map
               {...viewState}
               onMove={evt => setViewState(evt.viewState)}
@@ -392,25 +400,40 @@ export default function EventMap() {
             </Map>
           </div>
 
-          {/* Right Panel: Event List */}
-          <div className="w-full lg:w-2/5 h-full flex flex-col overflow-hidden bg-[#0a0a0a] relative">
+          {/* Right Panel: Event List (Dynamic Drawer for Mobile) */}
+          <div className={`w-full lg:w-2/5 h-full flex flex-col overflow-hidden bg-[#0a0a0a]/95 lg:bg-[#0a0a0a] backdrop-blur-md lg:backdrop-blur-none transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]
+            ${selectedLocation 
+              ? 'translate-y-0 opacity-100 visible z-30' 
+              : 'translate-y-full opacity-0 invisible lg:visible lg:translate-y-0 lg:opacity-100 lg:z-10'} 
+            max-lg:absolute max-lg:inset-0 max-lg:pt-12`}>
              
-             {/* List Header */}
-             <div className="p-10 border-b border-white/5 bg-[#0a0a0a]">
-                <div className="flex items-center justify-between mb-8">
+              {/* Mobile Close Handle (Downward Arrow as requested) */}
+              <div className="lg:hidden flex justify-center pt-2 pb-0">
+                 <button 
+                   onClick={onMapClick}
+                   className="w-12 h-8 flex items-center justify-center text-white/20 hover:text-brand-400 transition-colors"
+                 >
+                    <ChevronDown size={32} strokeWidth={1.5} />
+                 </button>
+              </div>
+
+              {/* List Header */}
+              <div className="p-8 lg:p-10 border-b border-white/5 bg-[#0a0a0a]">
+                <div className="flex items-center justify-between mb-6">
                   <div className="flex flex-col gap-1.5">
                     <div className="flex items-center gap-3 text-brand-400 font-sans text-[9px] uppercase tracking-[0.4em] font-bold">
                         <div className={`w-1.5 h-1.5 rounded-full bg-brand-400 ${selectedLocation ? 'animate-pulse' : ''}`} />
                         {selectedLocation ? 'SECTOR PROFILE' : 'ALL EVENTS'}
                     </div>
-                    <h3 className="text-white font-serif text-3xl md:text-4xl tracking-[0.1em] uppercase leading-tight italic">
+                    <h3 className="text-white font-serif text-xl md:text-3xl tracking-[0.1em] uppercase leading-tight italic">
                         {selectedLocation ? selectedLocation.name : 'ALL EVENTS'}
                     </h3>
                   </div>
+                  {/* Desktop Return Button */}
                   {selectedLocation && (
                     <button 
                       onClick={onMapClick}
-                      className="text-[11px] text-white/40 hover:text-brand-400 font-sans uppercase tracking-[0.2em] flex items-center gap-2 transition-all group/back border border-white/10 hover:border-brand-400/30 px-4 py-2 rounded-full bg-white/[0.04] shadow-lg self-start mt-1"
+                      className="hidden lg:flex text-[11px] text-white/40 hover:text-brand-400 font-sans uppercase tracking-[0.2em] items-center gap-2 transition-all group/back border border-white/10 hover:border-brand-400/30 px-4 py-2 rounded-full bg-white/[0.04] shadow-lg self-start mt-1"
                     >
                       <span className="opacity-40 group-hover/back:opacity-100 transition-opacity translate-x-1 group-hover/back:translate-x-0 transition-transform text-lg">«</span>
                       Return to All
@@ -422,7 +445,7 @@ export default function EventMap() {
                     ? selectedLocation.description 
                     : 'Consolidated tracking of all operational history across the Southern Cone. Click a marker or event to explore.'}
                 </p>
-             </div>
+              </div>
 
              {/* Scrollable list */}
              <div className="flex-1 overflow-y-auto p-8 pt-10 space-y-4 custom-scrollbar bg-black/10">

@@ -29,9 +29,28 @@ export default function Skills() {
     const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
     if (prefersReducedMotion) return;
 
-    const timer = window.setInterval(() => setExpertiseBgTick((t) => t + 1), 6000);
+    const timer = window.setInterval(() => setExpertiseBgTick((t) => t + 1), 4000);
     return () => window.clearInterval(timer);
   }, [activeTab, expertiseCarouselKey]);
+
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith('#skills-')) {
+        const id = hash.replace('#skills-', '');
+        const exists = SKILLS_CONTENT.categories.find(c => c.id === id);
+        if (exists) {
+          setActiveTab(id);
+          setSelectedSkillId(null);
+          // Small delay to ensure the DOM is ready for calculations
+          setTimeout(scrollToDetails, 100);
+        }
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    handleHash();
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
 
   const scrollToDetails = () => {
     const target = detailsRef.current;
@@ -60,13 +79,13 @@ export default function Skills() {
           </h2>
         </div>
 
-        {/* Top visual section: Tabs Banner */}
-        <div className="relative w-[100vw] ml-[calc(50%-50vw)] h-[50vh] min-h-[400px] md:h-[600px] overflow-hidden bg-black border-y border-white/5">
-          {/* Edge-to-Edge Diagonal Image Slices & Tabs */}
-          <div className="absolute top-0 bottom-0 -left-8 -right-8 md:-left-[64px] md:-right-[64px] flex transform skew-x-12 origin-center overflow-hidden bg-black z-10">
-        {SKILLS_CONTENT.categories.map((craft, index) => {
+        {/* Top visual section: Tabs Banner (Responsive) */}
+        <div className="relative w-[100vw] ml-[calc(50%-50vw)] overflow-hidden bg-black border-y border-white/5">
+          
+          {/* DESKTOP: Edge-to-Edge Horizontal Diagonal Image Slices */}
+          <div className="hidden md:flex absolute top-0 bottom-0 -left-[64px] -right-[64px] transform skew-x-12 origin-center overflow-hidden bg-black z-10 h-[600px]">
+             {SKILLS_CONTENT.categories.map((craft, index) => {
               const isActive = activeTab === craft.id;
-              // Compensate for the hidden off-screen skewed areas on first and last blades
               const isEdge = index === 0 || index === SKILLS_CONTENT.categories.length - 1;
               const flexClass = isActive 
                 ? (isEdge ? 'flex-[2.2]' : 'flex-[2]') 
@@ -80,11 +99,9 @@ export default function Skills() {
                     setActiveTab(craft.id);
                     setExpertiseBgTick(0);
                     setSelectedSkillId(null);
-                    // Scroll to the details area after layout settles (mobile-friendly).
                     requestAnimationFrame(() => requestAnimationFrame(scrollToDetails));
                   }}
                 >
-                  {/* Image container un-skewed */}
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250%] h-full transform -skew-x-12 origin-center">
                     <OptimizedImage
                       publicId={craft.publicId}
@@ -92,18 +109,16 @@ export default function Skills() {
                       variant="hero"
                       fill
                       imgClassName="object-cover transition-transform duration-1000 group-hover:scale-110"
-                      sizes="(max-width: 768px) 100vw, 33vw"
+                      sizes="33vw"
                     />
-                    {/* Shadow overlay for text readability and inactive state */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
                     <div
                       className={`absolute inset-0 bg-black transition-opacity duration-500 ${
-                        isActive ? 'opacity-0' : 'opacity-70 group-hover:opacity-40'
+                        isActive ? 'opacity-0' : 'opacity-40 group-hover:opacity-10'
                       }`}
                     />
                   </div>
                   
-                  {/* Tab Title Integrated inside the slice */}
                   <div 
                     className="absolute bottom-8 z-20 w-max pointer-events-none transition-all duration-500"
                     style={{
@@ -113,42 +128,87 @@ export default function Skills() {
                     }}
                   >
                     <div className="flex flex-col items-center text-center">
-                      <div className={`flex flex-col items-center justify-center font-sans leading-relaxed tracking-[0.2em] uppercase transition-all duration-500 ${
-                        isActive ? 'text-white text-xs md:text-sm font-semibold' : 'text-white/50 text-[10px] md:text-xs group-hover:text-white/80'
+                      <div className={`flex flex-col items-center justify-center font-sans font-medium leading-relaxed tracking-[0.25em] uppercase transition-all duration-500 ${
+                        isActive ? 'text-white text-sm' : 'text-white/40 text-xs group-hover:text-white/70'
                       }`}>
-                        {(() => {
-                          if (craft.title.includes(' & ')) {
-                            const [first, ...rest] = craft.title.split(' & ');
-                            return (
-                              <>
-                                <span className="pl-[0.2em]">{first} &</span>
-                                <span className="pl-[0.2em]">{rest.join(' & ')}</span>
-                              </>
-                            );
-                          }
-                          if (craft.title.includes(' ')) {
-                            const [first, ...rest] = craft.title.split(' ');
-                            return (
-                              <>
-                                <span className="pl-[0.2em]">{first}</span>
-                                <span className="pl-[0.2em]">{rest.join(' ')}</span>
-                              </>
-                            );
-                          }
-                          return <span className="pl-[0.2em]">{craft.title}</span>;
-                        })()}
+                         {craft.title.replace(' & ', '\n&\n').split('\n').map((line, i) => (
+                           <span key={i} className={line === '&' ? 'text-[0.8em] opacity-60' : ''}>{line}</span>
+                         ))}
                        </div>
-                      {/* Active Indicator Underline */}
-                      <div className={`mt-2 h-[2px] bg-brand-400 transition-all duration-500 ${
-                        isActive ? 'w-full opacity-100' : 'w-0 opacity-0'
-                      }`} />
+                      <div className={`mt-3 h-[2px] bg-brand-400 transition-all duration-500 ${isActive ? 'w-full opacity-100' : 'w-0 opacity-0'}`} />
                     </div>
                   </div>
-
                 </div>
               );
             })}
           </div>
+
+          {/* MOBILE: Vertical Diagonal Blade Stack */}
+          <div className="flex md:hidden flex-col w-full bg-black">
+            {SKILLS_CONTENT.categories.map((craft, index) => {
+              const isActive = activeTab === craft.id;
+              
+              return (
+                <div
+                  key={craft.id}
+                  className={`relative w-full cursor-pointer transition-all duration-500 ease-in-out group overflow-hidden border-b border-white/5 last:border-b-0 ${
+                    isActive ? 'h-[160px]' : 'h-[60px] hover:h-[70px]'
+                  }`}
+                  onClick={() => {
+                    setActiveTab(craft.id);
+                    setExpertiseBgTick(0);
+                    setSelectedSkillId(null);
+                    requestAnimationFrame(() => requestAnimationFrame(scrollToDetails));
+                  }}
+                >
+                  {/* Background Image with diagonal clip/skew look */}
+                  <div className="absolute inset-0 scale-110">
+                    <OptimizedImage
+                      publicId={craft.publicId}
+                      alt={craft.title}
+                      variant="hero"
+                      fill
+                      imgClassName={`object-cover transition-all duration-1000 ${isActive ? 'scale-100 opacity-100' : 'scale-110 opacity-40 grayscale-[0.5]'}`}
+                      sizes="100vw"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-r from-black via-black/30 to-transparent transition-opacity duration-500 ${isActive ? 'opacity-30' : 'opacity-50'}`} />
+                  </div>
+
+                  {/* Content for the mobile blade */}
+                  <div className="absolute inset-0 flex items-center px-8 z-20">
+                     <div className="flex flex-col items-start gap-0.5">
+                        <span className={`font-sans tracking-[0.3em] uppercase transition-all duration-500 ${
+                          isActive ? 'text-brand-400 text-[10px] font-bold' : 'text-white/20 text-[9px]'
+                        }`}>
+                          {`0${index + 1} // ${craft.subtitle.split(' & ')[0]}`}
+                        </span>
+                        <h3 className={`font-serif uppercase tracking-widest transition-all duration-500 ${
+                          isActive ? 'text-white text-2xl' : 'text-white/40 text-sm'
+                        }`}>
+                          {craft.title}
+                        </h3>
+                        <div className={`h-[1px] bg-brand-400 transition-all duration-700 ${isActive ? 'w-12 opacity-100' : 'w-0 opacity-0'}`} />
+                     </div>
+                     
+                     {/* Indicator for the active blade */}
+                     {isActive && (
+                       <div className="ml-auto animate-pulse">
+                          <div className="w-1.5 h-1.5 rounded-full bg-brand-400 shadow-[0_0_10px_rgba(96,165,250,0.8)]" />
+                       </div>
+                     )}
+                  </div>
+                  
+                  {/* Diagonal Overlay Effect */}
+                  <div 
+                    className="absolute bottom-0 right-0 w-[40%] h-full bg-brand-400/5 transform skew-x-[-25deg] translate-x-[20%] pointer-events-none" 
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Spacer for desktop as the flex container above is absolute */}
+          <div className="hidden md:block h-[600px]" />
         </div>
 
         {/* Bottom Content Section */}
@@ -269,7 +329,7 @@ export default function Skills() {
                 </div>
 
                 {/* Right Side: Visuals */}
-                <div className="lg:w-[55%] aspect-square lg:aspect-auto min-h-[600px] relative group overflow-hidden bg-[#020b1a] shadow-2xl">
+                <div className="lg:w-[55%] aspect-square lg:aspect-auto min-h-[400px] md:min-h-[600px] relative group overflow-hidden bg-[#020b1a] shadow-2xl">
                    {/* Dedicated clean carousel for subskill gallery */}
                    <SubSkillCarousel
                       publicIds={expertiseCarouselIds}

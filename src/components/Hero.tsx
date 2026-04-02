@@ -34,11 +34,11 @@ export default function Hero() {
           <div className="w-12 h-[1px] bg-brand-400"></div>
         </div>
 
-        <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-serif text-white tracking-widest leading-[0.85] mb-8 italic translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.2s_forwards]">
-          CAIDEN <span className="text-white/20">DRI</span>
+        <h1 className="text-4xl sm:text-5xl md:text-8xl lg:text-[10rem] font-serif text-white tracking-widest leading-[0.85] mb-4 md:mb-8 italic translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.2s_forwards]">
+          CAIDEN <span className="text-white/20 block md:inline">DRI</span>
         </h1>
 
-        <div className="flex flex-col md:flex-row items-center gap-4 md:gap-12 mb-12 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.4s_forwards]">
+        <div className="flex flex-col md:flex-row items-center gap-4 md:gap-12 mb-8 md:mb-12 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.4s_forwards]">
           <h2 className="text-sm md:text-xl font-sans tracking-[0.5em] text-white uppercase font-light">
             TECHNICAL <span className="font-bold text-brand-400">ARTISTRY</span>
           </h2>

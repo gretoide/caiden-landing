@@ -48,7 +48,7 @@ export default function ProjectShowcase({ data, children }: Props) {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative w-full min-h-screen bg-black overflow-hidden py-24 md:py-32 border-t border-white/5">
+    <section ref={containerRef} className="relative w-full min-h-screen bg-black overflow-hidden py-16 md:py-32 border-t border-white/5">
       <DeferredBackground
         publicId={data.bg}
         className={`absolute inset-0 z-0 opacity-20 bg-cover bg-center pointer-events-none ${data.blurClassName || 'blur-md'} scale-105`}
@@ -67,7 +67,7 @@ export default function ProjectShowcase({ data, children }: Props) {
 
       <div className="relative z-10 container mx-auto px-6">
         {/* Header Section */}
-        <div className="mb-16 md:mb-24 max-w-4xl">
+        <div className="mb-12 md:mb-24 max-w-4xl">
            <h2 className="showcase-header-anim text-6xl md:text-[10rem] font-serif text-white leading-none drop-shadow-2xl">
              {data.title}
            </h2>
