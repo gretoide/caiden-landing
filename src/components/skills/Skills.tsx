@@ -61,17 +61,21 @@ export default function Skills() {
         </div>
 
         {/* Top visual section: Tabs Banner */}
-        <div className="relative w-full h-[50vh] min-h-[400px] md:h-[600px] flex overflow-hidden bg-black border-y border-white/5">
+        <div className="relative w-[100vw] ml-[calc(50%-50vw)] h-[50vh] min-h-[400px] md:h-[600px] overflow-hidden bg-black border-y border-white/5">
           {/* Edge-to-Edge Diagonal Image Slices & Tabs */}
-          <div className="w-full h-full relative flex transform skew-x-12 origin-center -ml-12 overflow-hidden bg-black z-10">
-        {SKILLS_CONTENT.categories.map((craft) => {
+          <div className="absolute top-0 bottom-0 -left-8 -right-8 md:-left-[64px] md:-right-[64px] flex transform skew-x-12 origin-center overflow-hidden bg-black z-10">
+        {SKILLS_CONTENT.categories.map((craft, index) => {
               const isActive = activeTab === craft.id;
+              // Compensate for the hidden off-screen skewed areas on first and last blades
+              const isEdge = index === 0 || index === SKILLS_CONTENT.categories.length - 1;
+              const flexClass = isActive 
+                ? (isEdge ? 'flex-[2.2]' : 'flex-[2]') 
+                : (isEdge ? 'flex-[1.6] hover:flex-[1.8]' : 'flex-1 hover:flex-[1.2]');
+
               return (
                 <div
                   key={craft.id}
-                  className={`relative flex-1 h-full cursor-pointer transition-all duration-700 ease-out group border-r border-white/5 last:border-r-0 overflow-hidden ${
-                    isActive ? 'flex-[2]' : 'hover:flex-[1.2]'
-                  }`}
+                  className={`relative h-full cursor-pointer transition-all duration-700 ease-out group border-r border-white/5 last:border-r-0 overflow-hidden ${flexClass}`}
                   onClick={() => {
                     setActiveTab(craft.id);
                     setExpertiseBgTick(0);
@@ -100,13 +104,40 @@ export default function Skills() {
                   </div>
                   
                   {/* Tab Title Integrated inside the slice */}
-                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 -skew-x-12 z-20 w-max pointer-events-none transition-all duration-500">
-                    <div className="flex flex-col items-center">
-                      <span className={`font-sans tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-500 ${
+                  <div 
+                    className="absolute bottom-8 z-20 w-max pointer-events-none transition-all duration-500"
+                    style={{
+                      left: craft.id === SKILLS_CONTENT.categories[0].id ? 'calc(50% + 24px)' : 
+                            craft.id === SKILLS_CONTENT.categories[SKILLS_CONTENT.categories.length - 1].id ? 'calc(50% - 24px)' : '50%',
+                      transform: 'translateX(-50%) skewX(-12deg)'
+                    }}
+                  >
+                    <div className="flex flex-col items-center text-center">
+                      <div className={`flex flex-col items-center justify-center font-sans leading-relaxed tracking-[0.2em] uppercase transition-all duration-500 ${
                         isActive ? 'text-white text-xs md:text-sm font-semibold' : 'text-white/50 text-[10px] md:text-xs group-hover:text-white/80'
                       }`}>
-                        {craft.title}
-                       </span>
+                        {(() => {
+                          if (craft.title.includes(' & ')) {
+                            const [first, ...rest] = craft.title.split(' & ');
+                            return (
+                              <>
+                                <span className="pl-[0.2em]">{first} &</span>
+                                <span className="pl-[0.2em]">{rest.join(' & ')}</span>
+                              </>
+                            );
+                          }
+                          if (craft.title.includes(' ')) {
+                            const [first, ...rest] = craft.title.split(' ');
+                            return (
+                              <>
+                                <span className="pl-[0.2em]">{first}</span>
+                                <span className="pl-[0.2em]">{rest.join(' ')}</span>
+                              </>
+                            );
+                          }
+                          return <span className="pl-[0.2em]">{craft.title}</span>;
+                        })()}
+                       </div>
                       {/* Active Indicator Underline */}
                       <div className={`mt-2 h-[2px] bg-brand-400 transition-all duration-500 ${
                         isActive ? 'w-full opacity-100' : 'w-0 opacity-0'
