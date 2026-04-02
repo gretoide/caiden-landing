@@ -64,9 +64,9 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
       'Combining CNC precision with hand-carved finishing. We specialize in choosing the right timber for weight, durability, and grain aesthetics.',
     publicId: '0_-_Wood_Working_qttihy',
     subSkills: [
-      { id: 'wood-1', title: 'Wood Works', description: 'Choosing the right grain and density for each build.', publicId: 'wp_god_of_war_5_shbod3', tags: ['Wood', 'Structure'], gallery: ['wp_god_of_war_5_shbod3'] },
-      { id: 'wood-2', title: 'Handpower Tools', description: 'Digital cutting for complex internal geometries.', publicId: 'wp_god_of_war_1_rskssx', tags: ['CNC', 'Digital'], gallery: ['wp_god_of_war_1_rskssx'] },
-      { id: 'wood-3', title: 'Laser Cutting', description: 'Artisanal finishing for organic and decorative elements.', publicId: 'skyrim_7_yqhwyx', tags: ['Handheld', 'Carving'], gallery: ['skyrim_7_yqhwyx'] }
+      { id: 'wood-1', title: 'Wood Works', description: 'Choosing the right grain and density for each build.', publicId: '1.1_-_Wood_works_woq1um', tags: ['Wood', 'Structure'], gallery: ['wp_god_of_war_5_shbod3'] },
+      { id: 'wood-2', title: 'Handpower Tools', description: 'Digital cutting for complex internal geometries.', publicId: '1.2_-_Handpower_tools_dhfkes', tags: ['CNC', 'Digital'], gallery: ['wp_god_of_war_1_rskssx'] },
+      { id: 'wood-3', title: 'Laser Cutting', description: 'Artisanal finishing for organic and decorative elements.', publicId: '1.3_-_Laser_Cutting_uznupv', tags: ['Handheld', 'Carving'], gallery: ['skyrim_7_yqhwyx'] }
     ],
     gallery: ['wp_god_of_war_1_rskssx', 'wp_god_of_war_5_shbod3', 'skyrim_7_yqhwyx'],
   },
@@ -78,9 +78,9 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     expandedDetails: 'We use 3D design to test proportions and logic before physical fabrication.',
     publicId: '0_-_3D_Digital_qcfqhs',
     subSkills: [
-      { id: 'dig-1', title: '3D Modeling', description: 'High-poly sculpting and architectural drafting in Blender.', publicId: 'diablo_iv_2_thyv5o', tags: ['Blender', '3D'], gallery: ['diablo_iv_2_thyv5o'] },
-      { id: 'dig-2', title: 'Prep for Print', description: 'Optimizing meshes and supports for SLA/FDM printing.', publicId: 'wp_al_kunai_2_vaqwpg', tags: ['3D Printing', 'SLA'], gallery: ['wp_al_kunai_2_vaqwpg'] },
-      { id: 'dig-3', title: 'Assembly Logic', description: 'Planning internal housing for electronics and lights.', publicId: 'chainsaw_1_azfqly', tags: ['CAD', 'Proto'], gallery: ['chainsaw_1_azfqly'] }
+      { id: 'dig-1', title: '3D Design', description: 'High-poly sculpting and architectural drafting in Blender.', publicId: '1.1_-_3D_Design_azycbq', tags: ['Blender', '3D'], gallery: ['diablo_iv_2_thyv5o'] },
+      { id: 'dig-2', title: 'Digital Programs', description: 'Optimizing meshes and supports for SLA/FDM printing.', publicId: '1.2_-_Digital_Programs_gju26u', tags: ['3D Printing', 'SLA'], gallery: ['wp_al_kunai_2_vaqwpg'] },
+      { id: 'dig-3', title: '3D Print', description: 'Planning internal housing for electronics and lights.', publicId: '1.3_-_3D_Print_n9ixal', tags: ['CAD', 'Proto'], gallery: ['chainsaw_1_azfqly'] }
     ],
     gallery: ['diablo_iv_2_thyv5o', 'wp_al_kunai_2_vaqwpg', 'chainsaw_1_azfqly'],
   },
