@@ -124,7 +124,7 @@ export default function EldenRing({ onOpen }: Props) {
               variant="thumb"
               className="w-full h-full"
               imgClassName="grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
-              objectPosition="top 30%"
+              objectPosition="center 50%"
               onClick={() => onOpen(data.gallery[2])}
             />
           </div>

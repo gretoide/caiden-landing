@@ -12,8 +12,8 @@ export const eldenRingData = {
   gallery: [
     'elden_ring_1_e7ast7',  // Banner
     'elden_ring_5_nbxteg',  // Mosaic 1
-    'H1_kmvlfp', // Mosaic 2
-    'H3_tntpjf',  // Mosaic 3
+    'H1_l72pkt', // Mosaic 2
+    'copy_of_h3_tntpjf_6d8eb5',  // Mosaic 3
     'H2_farxom',  // Mosaic 4
     'elden_ring_6_k5z39c',  // Focus Main
     'H4_ptxoik',  // Focus Detail 1 (placeholder/repeat if no more unique)

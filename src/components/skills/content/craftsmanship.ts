@@ -263,7 +263,7 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     subtitle: 'Resins & Synthetics',
     description: 'Expertise in advanced chemical solutions, specialized casting, and composite manipulation for unique prop characteristics.',
     expandedDetails: 'We push the limits of traditional materials, developing custom mixes of urethanes, clears, and flexible foams to match exact production needs.',
-    publicId: '0_-_Resin_Casting_Mold_Making_eyv00v',
+    publicId: '2.1_-_Resins_-_0_el9as6',
     subSkills: [
       { id: 'mat-1', title: 'Resins', description: 'Pressure-pot casting of crystal-clear resins and high-impact polymers with zero-bubble integrity.', publicId: '1.1_-_Resins_bzvqg3', tags: ['ClearCast', 'Polymer'], gallery: SKILL_GALLERIES['mat-1'] || [] },
       { id: 'mat-2', title: 'Fiberglass & Putties', description: 'Manipulation of thermoplastic and synthetic foams to simulate varied organic and industrial surfaces.', publicId: '1.2_-_Fiberglass_Putties_vv8rv0', tags: ['EVA', 'Synthetic'], gallery: SKILL_GALLERIES['mat-2'] || [] },
