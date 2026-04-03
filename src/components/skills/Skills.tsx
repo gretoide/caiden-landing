@@ -9,6 +9,7 @@ export default function Skills() {
   const [activeTab, setActiveTab] = useState(SKILLS_CONTENT.categories[0].id);
   const [expandedPublicId, setExpandedPublicId] = useState<string | null>(null);
   const [selectedSkillId, setSelectedSkillId] = useState<string | null>(null);
+  const [isAutoPlayDisabled, setIsAutoPlayDisabled] = useState(false);
 
   const activeData = SKILLS_CONTENT.categories.find((c) => c.id === activeTab) || SKILLS_CONTENT.categories[0];
   const [expertiseBgTick, setExpertiseBgTick] = useState(0);
@@ -28,12 +29,21 @@ export default function Skills() {
   [expertiseCarouselItems]);
 
   useEffect(() => {
-    // Timer removed as per user request for manual-only control
-    return () => {};
-  }, [activeTab, expertiseCarouselKey, selectedSkillId]);
+    if (isAutoPlayDisabled || !selectedSkillId) return;
+    const interval = setInterval(() => {
+      setExpertiseBgTick(t => t + 1);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isAutoPlayDisabled, expertiseCarouselKey, selectedSkillId]);
 
-  const handleNext = () => setExpertiseBgTick(t => t + 1);
-  const handlePrev = () => setExpertiseBgTick(t => t - 1);
+  const handleNext = () => {
+    setExpertiseBgTick(t => t + 1);
+    setIsAutoPlayDisabled(true);
+  };
+  const handlePrev = () => {
+    setExpertiseBgTick(t => t - 1);
+    setIsAutoPlayDisabled(true);
+  };
 
   useEffect(() => {
     const handleHash = () => {
@@ -129,16 +139,17 @@ export default function Skills() {
                       transform: 'translateX(-50%) skewX(-12deg)'
                     }}
                   >
-                    <div className="flex flex-col items-center text-center">
-                      <div className={`flex flex-col items-center justify-center font-sans font-medium leading-relaxed tracking-[0.25em] uppercase transition-all duration-500 ${
-                        isActive ? 'text-white text-sm' : 'text-white/40 text-xs group-hover:text-white/70'
-                      }`}>
-                         {craft.title.replace(' & ', '\n&\n').split('\n').map((line, i) => (
-                           <span key={i} className={line === '&' ? 'text-[0.8em] opacity-60' : ''}>{line}</span>
-                         ))}
-                       </div>
-                      <div className={`mt-3 h-[2px] bg-brand-400 transition-all duration-500 ${isActive ? 'w-full opacity-100' : 'w-0 opacity-0'}`} />
-                    </div>
+                        <div className={`flex flex-col items-center justify-center font-sans font-medium leading-tight tracking-[0.25em] uppercase transition-all duration-500 ${
+                         isActive ? 'text-white text-sm' : 'text-white/40 text-xs group-hover:text-white/70'
+                       }`}>
+                          {/* Split by ' & ' or by space if it's 'Skilled Materials' to ensure two lines as requested */}
+                          {(craft.title === 'Skilled Materials' 
+                            ? craft.title.split(' ') 
+                            : craft.title.replace(' & ', '\n&\n').split('\n')
+                          ).map((line, i) => (
+                            <span key={i} className={line === '&' ? 'text-[0.8em] opacity-60' : ''}>{line}</span>
+                          ))}
+                        </div>
                   </div>
                 </div>
               );
@@ -216,7 +227,8 @@ export default function Skills() {
         {/* Bottom Content Section */}
         <div
           ref={detailsRef}
-          className="w-full max-w-[1600px] mx-auto flex flex-col px-6 md:px-6 mt-4 md:mt-8 animate-[fade-in-up_0.5s_ease-out_forwards]"
+          className="w-full max-w-[1600px] mx-auto flex flex-col px-6 md:px-6 mt-4 md:mt-8"
+          style={{ animation: 'fade-in-up 0.5s ease-out forwards' }}
           key={activeData.id}
         >
           {/* Header Section - Only show when no skill is selected or adapt it */}
@@ -256,9 +268,9 @@ export default function Skills() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
                     
                     <div className="absolute inset-0 p-6 flex flex-col justify-end z-20">
-                      {/* View Details CTA - Appears on Hover */}
-                      <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-500">
-                        <div className="flex items-center gap-2 text-brand-400 font-sans text-[10px] tracking-[0.2em] uppercase bg-black/40 backdrop-blur-md border border-brand-400/30 px-3 py-2 rounded-sm">
+                      {/* View Details CTA - Always Visible */}
+                      <div className="absolute top-6 right-6 transition-all duration-500">
+                        <div className="flex items-center gap-2 text-brand-400 font-sans text-[10px] tracking-[0.2em] uppercase bg-black/40 backdrop-blur-md border border-brand-400/30 px-3 py-2 rounded-sm group-hover:bg-brand-400 group-hover:text-black transition-colors duration-300">
                           {SKILLS_CONTENT.uiLabels.ctaExplore} <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
                         </div>
                       </div>
@@ -285,7 +297,45 @@ export default function Skills() {
               </div>
             ) : (
               /* --- VIEW B: SKILL SPLIT (Image 2) --- */
-              <div className="flex flex-col lg:flex-row gap-12 w-full animate-in fade-in slide-in-from-right-4 duration-700">
+              <div className="flex flex-col gap-8 w-full animate-in fade-in slide-in-from-right-4 duration-700">
+                {/* Quick Navigation Cards */}
+                <div className="flex justify-center gap-4 overflow-x-auto pb-4 -mx-2 px-2 custom-scrollbar">
+                  {activeData.subSkills.map((skill) => {
+                    const isActive = skill.id === selectedSkillId;
+                    return (
+                      <button
+                        key={skill.id}
+                        onClick={() => {
+                          setSelectedSkillId(skill.id);
+                          setExpertiseBgTick(0);
+                          setIsAutoPlayDisabled(false); // Reset auto-play for new subskill
+                        }}
+                        className={`group relative shrink-0 w-32 md:w-40 aspect-video overflow-hidden border transition-all duration-500 ${
+                          isActive ? 'border-brand-400 ring-1 ring-brand-400/50' : 'border-white/10 hover:border-brand-400/50'
+                        }`}
+                      >
+                        {skill.publicId && (
+                          <OptimizedImage
+                            publicId={skill.publicId}
+                            alt={skill.title}
+                            variant="thumb"
+                            fill
+                            imgClassName={`object-cover transition-transform duration-700 ${isActive ? 'opacity-100' : 'opacity-100'}`}
+                            sizes="160px"
+                          />
+                        )}
+                        <div className={`absolute inset-0 bg-black/20 ${isActive ? 'bg-transparent' : ''}`} />
+                        <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black to-transparent">
+                          <span className={`text-[8px] font-sans uppercase tracking-[0.2em] font-bold block truncate ${isActive ? 'text-brand-400' : 'text-white/60'}`}>
+                            {skill.title}
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="flex flex-col lg:flex-row gap-12">
                 {/* Left Side: Content */}
                 <div className="lg:w-[45%] flex flex-col pt-4">
                   <div className="flex flex-col gap-2 mb-12">
@@ -324,9 +374,9 @@ export default function Skills() {
 
                   <button 
                     onClick={() => setSelectedSkillId(null)}
-                    className="mt-auto flex items-center gap-3 text-white/30 font-sans text-[10px] tracking-[0.4em] uppercase hover:text-brand-400 transition-colors group py-4 border-t border-white/5 w-fit"
+                    className="mt-auto flex items-center gap-3 text-white/30 font-sans text-[10px] tracking-[0.4em] uppercase hover:text-brand-400 transition-all group py-4 border-t border-white/5 w-fit hover:scale-105 origin-left"
                   >
-                    <span className="group-hover:-translate-x-1 transition-transform">←</span> {SKILLS_CONTENT.uiLabels.back}
+                    {SKILLS_CONTENT.uiLabels.back}
                   </button>
                 </div>
 
@@ -340,7 +390,8 @@ export default function Skills() {
                    />
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
             {/* Bottom Tabs (quick jump) */}
             <div className="mt-14 pt-10 border-t border-white/5">

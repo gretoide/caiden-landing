@@ -30,7 +30,7 @@ export default function Hero() {
       <div className="relative z-10 text-center px-6 max-w-6xl mx-auto flex flex-col items-center">
         <div className="flex items-center gap-4 mb-8 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_forwards]">
           <div className="w-12 h-[1px] bg-brand-400"></div>
-          <span className="text-brand-400 font-sans text-[10px] md:text-xs tracking-[0.6em] uppercase font-bold">EST. 2014 // ARTIFACT DESIGN</span>
+          <span className="text-brand-400 font-sans text-[10px] md:text-xs tracking-[0.6em] uppercase font-bold">SINCE 2014 // MASTER PROPMAKER</span>
           <div className="w-12 h-[1px] bg-brand-400"></div>
         </div>
 
@@ -40,16 +40,16 @@ export default function Hero() {
 
         <div className="flex flex-col md:flex-row items-center gap-4 md:gap-12 mb-8 md:mb-12 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.4s_forwards]">
           <h2 className="text-sm md:text-xl font-sans tracking-[0.5em] text-white uppercase font-light">
-            TECHNICAL <span className="font-bold text-brand-400">ARTISTRY</span>
+            REALITY <span className="font-bold text-brand-400">SCULPTOR</span>
           </h2>
           <div className="hidden md:block w-px h-6 bg-white/20"></div>
           <h2 className="text-sm md:text-xl font-sans tracking-[0.5em] text-white uppercase font-light">
-            MATERIAL <span className="font-bold text-brand-400">PRECISION</span>
+            ASSET <span className="font-bold text-brand-400">CRAFTER</span>
           </h2>
         </div>
         
         <p className="max-w-xl text-xs md:text-sm font-sans text-white/40 leading-loose tracking-[0.2em] uppercase text-center translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.6s_forwards]">
-          Bridging the gap between digital vision and physical reality through a decade of mastery in cross-disciplinary fabrication.
+          Bridging the gap between design vision and physical reality through a decade of mastery in cross-disciplinary fabrication.
         </p>
 
         {/* Scroll indicator - fixed position and bridging the transition */}

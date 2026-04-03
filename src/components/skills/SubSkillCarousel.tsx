@@ -61,18 +61,18 @@ export default function SubSkillCarousel({ items, activeIndex, onNext, onPrev }:
               e.stopPropagation();
               onPrev?.();
             }}
-            className="absolute left-4 z-30 p-2 rounded-full bg-black/10 backdrop-blur-md border border-white/5 text-white/30 hover:text-white hover:bg-black/40 transition-all opacity-40 group-hover/carousel:opacity-100 translate-x-1 group-hover/carousel:translate-x-0"
+            className="absolute left-6 z-30 p-3 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-white/70 hover:text-white hover:bg-brand-400 hover:text-black hover:border-brand-400 transition-all opacity-80 group-hover/carousel:opacity-100 translate-x-0 group-hover/carousel:-translate-x-2"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={24} />
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
               onNext?.();
             }}
-            className="absolute right-4 z-30 p-2 rounded-full bg-black/10 backdrop-blur-md border border-white/5 text-white/30 hover:text-white hover:bg-black/40 transition-all opacity-40 group-hover/carousel:opacity-100 -translate-x-1 group-hover/carousel:translate-x-0"
+            className="absolute right-6 z-30 p-3 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-white/70 hover:text-white hover:bg-brand-400 hover:text-black hover:border-brand-400 transition-all opacity-80 group-hover/carousel:opacity-100 translate-x-0 group-hover/carousel:translate-x-2"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={24} />
           </button>
 
           {/* Indicators */}

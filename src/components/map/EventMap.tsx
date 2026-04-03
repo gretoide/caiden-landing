@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import Map, { Marker, Source, Layer } from 'react-map-gl';
-import { Globe, Trophy, ChevronDown } from 'lucide-react';
+import { Globe, Trophy, ChevronDown, Plus, Minus } from 'lucide-react';
 import type { FillLayer, LineLayer } from 'react-map-gl';
 import OptimizedImage from '../ui/OptimizedImage';
 
@@ -246,6 +246,7 @@ export default function EventMap() {
     pitch: 0,
     bearing: 0
   });
+  const [isInteracting, setIsInteracting] = useState(false);
 
   const allEvents = useMemo(() => {
     return LOCATIONS.flatMap(loc => 
@@ -264,6 +265,7 @@ export default function EventMap() {
   }, []);
 
   const onMarkerClick = useCallback((loc: typeof LOCATIONS[0]) => {
+    setIsInteracting(true);
     setSelectedLocation(loc);
     setViewState(prev => ({
       ...prev,
@@ -280,6 +282,14 @@ export default function EventMap() {
       ...prev,
       zoom: 3.5,
       transitionDuration: 1000
+    }));
+  }, []);
+
+  const handleZoom = useCallback((delta: number) => {
+    setViewState(prev => ({
+      ...prev,
+      zoom: Math.min(Math.max(prev.zoom + delta, 3), 12),
+      transitionDuration: 300
     }));
   }, []);
 
@@ -331,6 +341,38 @@ export default function EventMap() {
           
           {/* Left Panel: Map */}
           <div className="w-full lg:w-3/5 h-full relative border-b lg:border-b-0 lg:border-r border-white/5 z-0">
+            {/* Interaction Lock Overlay */}
+            {!isInteracting && (
+              <div 
+                className="absolute inset-0 z-30 flex items-center justify-center bg-black/20 backdrop-blur-[2px] cursor-pointer group/overlay transition-all duration-500 hover:bg-black/10"
+                onClick={() => setIsInteracting(true)}
+              >
+                <div className="px-6 py-3 bg-brand-400 text-black text-[10px] font-bold uppercase tracking-[0.3em] rounded-sm shadow-2xl transform transition-transform group-hover/overlay:scale-110">
+                  Click to Interact with Map
+                </div>
+              </div>
+            )}
+
+            {/* Custom Zoom Controls */}
+            {isInteracting && (
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-2">
+                <button 
+                  onClick={() => handleZoom(1)}
+                  className="w-10 h-10 bg-black/60 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white/50 hover:text-brand-400 hover:border-brand-400/50 transition-all shadow-xl"
+                  title="Zoom In"
+                >
+                  <Plus size={18} />
+                </button>
+                <button 
+                  onClick={() => handleZoom(-1)}
+                  className="w-10 h-10 bg-black/60 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white/50 hover:text-brand-400 hover:border-brand-400/50 transition-all shadow-xl"
+                  title="Zoom Out"
+                >
+                  <Minus size={18} />
+                </button>
+              </div>
+            )}
+
             {/* Mobile Tooltip (New) */}
             {!selectedLocation && (
               <div className="absolute top-2 left-1/2 -translate-x-1/2 flex lg:hidden flex-col items-center gap-1 z-20 pointer-events-none animate-bounce">
@@ -341,8 +383,12 @@ export default function EventMap() {
             )}
             <Map
               {...viewState}
-              onMove={evt => setViewState(evt.viewState)}
+              onMove={evt => isInteracting && setViewState(evt.viewState)}
               onClick={onMapClick}
+              scrollZoom={isInteracting}
+              dragPan={isInteracting}
+              dragRotate={isInteracting}
+              touchZoomRotate={isInteracting}
               maxBounds={[[-95, -65], [-35, -5]] as any}
               minZoom={3}
               onLoad={(e) => {
@@ -448,7 +494,7 @@ export default function EventMap() {
               </div>
 
              {/* Scrollable list */}
-             <div className="flex-1 overflow-y-auto p-8 pt-10 space-y-4 custom-scrollbar bg-black/10">
+             <div className={`flex-1 overflow-y-auto p-8 pt-10 space-y-4 custom-scrollbar bg-black/10 transition-opacity duration-500 ${!isInteracting ? 'pointer-events-none opacity-50' : 'opacity-100'}`}>
                 {(selectedLocation ? selectedLocation.events : allEvents).map((event: any, idx) => {
                   const isGold = (event.rank || '').includes('1º');
                   
