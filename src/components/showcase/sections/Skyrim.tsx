@@ -95,7 +95,7 @@ export default function Skyrim({ onOpen }: Props) {
               onClick={() => onOpen(data.gallery[0])}
             />
             <div className="absolute top-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm">
-              Context // 01
+              Dragonborn // Daedric armor // 01
             </div>
           </div>
 
@@ -112,7 +112,7 @@ export default function Skyrim({ onOpen }: Props) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
             <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm">
-              Study // Full Form
+              Dragonborn // Daedric armor // 02
             </div>
           </div>
 
@@ -128,7 +128,7 @@ export default function Skyrim({ onOpen }: Props) {
               onClick={() => onOpen(data.gallery[2])}
             />
             <div className="absolute top-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm">
-              Context // 02
+              Dragonborn // Daedric armor // 03
             </div>
           </div>
         </div>

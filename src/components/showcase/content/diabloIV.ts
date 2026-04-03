@@ -1,6 +1,6 @@
 export const diabloIVData = {
-  title: 'Diablo IV',
-  subtitle: 'Blizzard Ent. — 2023',
+  title: 'Blizzard Ent.',
+  subtitle: 'Diablo IV // 2023',
   subtitleClassName: 'text-[#dc2626]',
   description: 'Built to match the brutal, gothic world of Sanctuary. The core structure uses reinforced fiberglass for durability.',
   descBorderClassName: 'border-[#dc2626]',

@@ -94,7 +94,7 @@ export default function DiabloIV({ onOpen }: Props) {
               onClick={() => onOpen(data.gallery[0])}
             />
             <div className="absolute top-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm">
-              Context // 01
+              FULL SET
             </div>
           </div>
 
@@ -111,7 +111,7 @@ export default function DiabloIV({ onOpen }: Props) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
             <div className="absolute bottom-6 left-6">
-              <span className="text-white/40 font-sans text-xs tracking-widest uppercase italic">Sanctuary Artifact</span>
+              <span className="text-white/40 font-sans text-xs tracking-widest uppercase italic">NECROMANCER FROM SACTUARY</span>
             </div>
           </div>
 

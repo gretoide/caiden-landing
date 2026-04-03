@@ -1,8 +1,8 @@
 export const eldenRingData = {
-  title: 'Elden Ring',
-  subtitle: 'Shadow of the Erdtree — 2024',
+  title: 'Bandai Namco',
+  subtitle: 'ELDEN RING – FROM SOFTWARE // 2024',
   subtitleClassName: 'text-red-500',
-  description: 'Built to match the brutal, gothic world of the Lands Between. High-fidelity craftsmanship with active motorized components.',
+  description: 'Built to match the brutal, gothic world of the Lands Between. High-fidelity craftsmanship for marketing campaign.',
   descBorderClassName: 'border-red-500',
   bg: 'horizontal_algún_lado_ta_fachera_ogjucf',
   bgOverlayClassName: 'bg-red-600/20 mix-blend-overlay',

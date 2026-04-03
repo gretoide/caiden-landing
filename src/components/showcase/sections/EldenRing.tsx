@@ -96,10 +96,10 @@ export default function EldenRing({ onOpen }: Props) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           <div className="absolute top-4 left-4 flex gap-2 overflow-hidden pointer-events-none">
-            <span className="bg-red-600/40 backdrop-blur-sm px-3 py-1 text-[10px] text-white/80 font-bold uppercase tracking-tighter border border-white/5">Cinematic View</span>
+            <span className="bg-red-600/40 backdrop-blur-sm px-3 py-1 text-[10px] text-white/80 font-bold uppercase tracking-tighter border border-white/5">Warrior of the lands</span>
           </div>
           <div className="absolute bottom-6 left-6 opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0">
-            <p className="text-white/40 font-sans text-xs tracking-widest uppercase">Elden Ring // Full Field Showcase</p>
+            <p className="text-white/40 font-sans text-xs tracking-widest uppercase">Crossed build sets</p>
           </div>
         </div>
 
@@ -168,7 +168,7 @@ export default function EldenRing({ onOpen }: Props) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
             <div className="absolute bottom-6 left-6">
-              <span className="text-white/40 font-sans text-xs tracking-widest uppercase italic">Master Composition</span>
+              <span className="text-white/40 font-sans text-xs tracking-widest uppercase italic">Drama design</span>
             </div>
           </div>
 
@@ -185,7 +185,7 @@ export default function EldenRing({ onOpen }: Props) {
                 sizes="(min-width: 1024px) 40vw, 100vw"
                 onClick={() => onOpen(data.gallery[6])}
               />
-              <div className="absolute top-4 right-4 text-[10px] text-white/30 tracking-[0.3em] uppercase">Focus // 01</div>
+              <div className="absolute top-4 right-4 text-[10px] text-white/30 tracking-[0.3em] uppercase">Essence captor</div>
             </div>
 
             {/* Bottom Grid */}
