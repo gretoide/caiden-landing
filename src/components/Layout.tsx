@@ -61,7 +61,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               </div>
             </div>
 
-            <a href="#events" className="text-white/60 hover:text-white transition-all hover:tracking-[0.4em]">Events</a>
+            <a href="#events" className="text-white/60 hover:text-white transition-all hover:tracking-[0.4em]">Career</a>
             <a href="#partners" className="text-white/60 hover:text-white transition-all hover:tracking-[0.4em]">Partners</a>
             <a href="#contact" className="px-6 py-2 bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all">Contact</a>
           </div>

@@ -90,7 +90,7 @@ export default function EldenRing({ onOpen }: Props) {
             alt="Elden Ring Featured Banner"
             variant="full"
             className="w-full h-full"
-            imgClassName="grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000 cursor-pointer object-cover"
+            imgClassName="grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000 cursor-pointer object-cover md:object-[center_35%]"
             sizes="100vw"
             onClick={() => onOpen(data.gallery[0])}
           />

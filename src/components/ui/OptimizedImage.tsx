@@ -109,7 +109,7 @@ export default function OptimizedImage({
           width: '100%',
           height: '100%',
           objectFit: objectFit,
-          objectPosition: objectPosition ?? 'center',
+          ...(objectPosition ? { objectPosition } : {}),
           transform: zoom !== 1 ? `scale(${zoom})` : 'scale(1)',
           transformOrigin: objectPosition ?? 'center',
         }}

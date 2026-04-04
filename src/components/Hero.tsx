@@ -15,7 +15,7 @@ export default function Hero() {
           loading="eager"
           fetchPriority="high"
           className="absolute inset-0"
-          imgClassName="w-full h-full object-cover opacity-60"
+          imgClassName="w-full h-full object-cover opacity-60 md:object-[center_35%]"
           sizes="100vw"
         />
         {/* Dark subtle overlay for contrast */}

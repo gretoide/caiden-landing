@@ -94,6 +94,7 @@ export const SKILL_GALLERIES: Record<string, GalleryItem[]> = {
 
   // Skilled Materials (skilled-materials)
   'mat-1': [
+    { type: 'image', publicId: '2.1_-_Resins_-_0_el9as6' },
     { type: 'image', publicId: '2.1_-_Resins_-_1_gcrpdu' },
     { type: 'image', publicId: '2.1_-_Resins_-_2_bik2dy' }
   ],
