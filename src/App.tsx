@@ -7,7 +7,9 @@ const FeaturedBuilds = lazy(() => import('./components/showcase/FeaturedBuilds')
 const Skills = lazy(() => import('./components/skills/Skills'));
 const Brands = lazy(() => import('./components/brands/Brands'));
 const EventMap = lazy(() => import('./components/map/EventMap'));
+const prefetchEventMap = () => import('./components/map/EventMap');
 const Contact = lazy(() => import('./components/Contact'));
+import Prefetcher from './components/ui/Prefetcher';
 
 // Section Fallback Component
 const SectionFallback = () => (
@@ -23,11 +25,20 @@ function App() {
   return (
     <Layout>
       <Hero />
+      <Prefetcher loader={prefetchEventMap} />
       <Suspense fallback={<SectionFallback />}>
         <FeaturedBuilds />
+      </Suspense>
+      <Suspense fallback={<SectionFallback />}>
         <Skills />
+      </Suspense>
+      <Suspense fallback={<SectionFallback />}>
         <EventMap />
+      </Suspense>
+      <Suspense fallback={<SectionFallback />}>
         <Brands />
+      </Suspense>
+      <Suspense fallback={<SectionFallback />}>
         <Contact />
       </Suspense>
     </Layout>

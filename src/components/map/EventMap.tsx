@@ -19,8 +19,6 @@ const CUSTOM_STYLES = `
   .mapboxgl-ctrl-icon { filter: invert(1) brightness(2) opacity(0.5); }
 `;
 
-// Data Overhaul Logic: Events will be sorted by year descending below in the useMemo and rendering logic.
-
 const LOCATIONS = [
   {
     id: 'entre-rios',
@@ -232,7 +230,7 @@ const LOCATIONS = [
 ];
 
 export default function EventMap() {
-  const [selectedLocation, setSelectedLocation] = useState<typeof LOCATIONS[0] | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
   const [viewState, setViewState] = useState({
     longitude: -63.6167,
     latitude: -38.4161,
@@ -242,15 +240,36 @@ export default function EventMap() {
   });
   const [isInteracting, setIsInteracting] = useState(false);
 
-  const allEvents = useMemo(() => {
+  // Flatten and Jitter logic
+  const allEventsWithCoords = useMemo(() => {
+    // Group by lat/lng to apply jitter correctly
+    const coordGroups: Record<string, number> = {};
+    
     return LOCATIONS.flatMap(loc => 
-      loc.events.map(event => ({
-        ...event,
-        provinceName: loc.name,
-        lat: loc.lat,
-        lng: loc.lng,
-        locId: loc.id
-      }))
+      loc.events.map((event) => {
+        const coordKey = `${loc.lat},${loc.lng}`;
+        const indexInGroup = coordGroups[coordKey] || 0;
+        coordGroups[coordKey] = indexInGroup + 1;
+
+        // Apply a small deterministic jitter if there's more than one event at the same base coordinate
+        // This creates a small circle or line effect so markers don't overlap
+        const angle = (indexInGroup * 137.5) * (Math.PI / 180); // Golden angle for even distribution
+        const radius = 0.04; // Roughly 4-5km offset
+        const jitterLat = indexInGroup === 0 ? 0 : Math.cos(angle) * radius;
+        const jitterLng = indexInGroup === 0 ? 0 : Math.sin(angle) * radius;
+
+        return {
+          ...event,
+          id: `${loc.id}-${event.name.replace(/\s+/g, '-').toLowerCase()}`,
+          provinceName: loc.name,
+          description: loc.description,
+          baseLat: loc.lat,
+          baseLng: loc.lng,
+          lat: loc.lat + jitterLat,
+          lng: loc.lng + jitterLng,
+          locId: loc.id
+        };
+      })
     ).sort((a, b) => {
         const latestA = Math.max(...a.years.map(Number));
         const latestB = Math.max(...b.years.map(Number));
@@ -258,20 +277,20 @@ export default function EventMap() {
     });
   }, []);
 
-  const onMarkerClick = useCallback((loc: typeof LOCATIONS[0]) => {
+  const onMarkerClick = useCallback((event: any) => {
     setIsInteracting(true);
-    setSelectedLocation(loc);
+    setSelectedEvent(event);
     setViewState(prev => ({
       ...prev,
-      longitude: loc.lng,
-      latitude: loc.lat,
-      zoom: 5.5,
+      longitude: event.lng,
+      latitude: event.lat,
+      zoom: 7, // Zoom in more for individual events
       transitionDuration: 1200
     }));
   }, []);
 
   const onMapClick = useCallback(() => {
-    setSelectedLocation(null);
+    setSelectedEvent(null);
     setViewState(prev => ({
       ...prev,
       zoom: 3.5,
@@ -295,8 +314,8 @@ export default function EventMap() {
       'fill-color': BRAND_400,
       'fill-opacity': 0.05,
     },
-    filter: ['==', ['get', 'nombre'], selectedLocation?.provinceName || '']
-  }), [selectedLocation]);
+    filter: ['==', ['get', 'nombre'], selectedEvent?.provinceName || '']
+  }), [selectedEvent]);
 
   const lineLayer: LineLayer = {
     id: 'provinces-outline',
@@ -367,11 +386,11 @@ export default function EventMap() {
               </div>
             )}
 
-            {/* Mobile Tooltip (New) */}
-            {!selectedLocation && (
+            {/* Mobile Tooltip */}
+            {!selectedEvent && (
               <div className="absolute top-2 left-1/2 -translate-x-1/2 flex lg:hidden flex-col items-center gap-1 z-20 pointer-events-none animate-bounce">
                  <div className="px-3 py-1.5 bg-brand-400 text-black text-[9px] font-bold uppercase tracking-[0.2em] rounded-sm shadow-xl">
-                   SELECT MARKER
+                    SELECT EVENT
                  </div>
               </div>
             )}
@@ -413,22 +432,22 @@ export default function EventMap() {
                  <Layer {...lineLayer} />
               </Source>
 
-              {LOCATIONS.map(loc => {
+              {allEventsWithCoords.map((event) => {
                 return (
                   <Marker
-                    key={loc.id}
-                    longitude={loc.lng}
-                    latitude={loc.lat}
+                    key={event.id}
+                    longitude={event.lng}
+                    latitude={event.lat}
                     anchor="bottom"
                     onClick={e => {
                       e.originalEvent.stopPropagation();
-                      onMarkerClick(loc);
+                      onMarkerClick(event);
                     }}
                   >
                     <div className="cursor-pointer transition-all duration-300 hover:scale-110">
                       <div 
                         className={`relative rounded-full rounded-br-none bg-brand-400 rotate-[45deg] flex items-center justify-center border border-white/20 transition-all duration-500 ${
-                          selectedLocation?.id === loc.id ? 'w-10 h-10 scale-110 shadow-[0_0_20px_rgba(96,165,250,0.4)]' : 'w-8 h-8 opacity-80'
+                          selectedEvent?.id === event.id ? 'w-10 h-10 scale-110 shadow-[0_0_20px_rgba(96,165,250,0.4)]' : 'w-7 h-7 opacity-80'
                         }`}
                       >
                         <div className="w-[30%] h-[30%] bg-[#050505] rounded-full rotate-[-45deg]" />
@@ -440,14 +459,14 @@ export default function EventMap() {
             </Map>
           </div>
 
-          {/* Right Panel: Event List (Dynamic Drawer for Mobile) */}
+          {/* Right Panel: Event List */}
           <div className={`w-full lg:w-2/5 h-full flex flex-col overflow-hidden bg-[#0a0a0a]/95 lg:bg-[#0a0a0a] backdrop-blur-md lg:backdrop-blur-none transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]
-            ${selectedLocation 
+            ${selectedEvent 
               ? 'translate-y-0 opacity-100 visible z-30' 
               : 'translate-y-full opacity-0 invisible lg:visible lg:translate-y-0 lg:opacity-100 lg:z-10'} 
             max-lg:absolute max-lg:inset-0 max-lg:pt-12`}>
              
-              {/* Mobile Close Handle (Downward Arrow as requested) */}
+              {/* Mobile Close Handle */}
               <div className="lg:hidden flex justify-center pt-2 pb-0">
                  <button 
                    onClick={onMapClick}
@@ -462,15 +481,15 @@ export default function EventMap() {
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex flex-col gap-1.5">
                     <div className="flex items-center gap-3 text-brand-400 font-sans text-[9px] uppercase tracking-[0.4em] font-bold">
-                        <div className={`w-1.5 h-1.5 rounded-full bg-brand-400 ${selectedLocation ? 'animate-pulse' : ''}`} />
-                        {selectedLocation ? 'SECTOR PROFILE' : 'ALL EVENTS'}
+                        <div className={`w-1.5 h-1.5 rounded-full bg-brand-400 ${selectedEvent ? 'animate-pulse' : ''}`} />
+                        {selectedEvent ? 'EVENT DETAILS' : 'ALL EVENTS'}
                     </div>
                     <h3 className="text-white font-serif text-xl md:text-3xl tracking-[0.1em] uppercase leading-tight italic">
-                        {selectedLocation ? selectedLocation.name : 'ALL EVENTS'}
+                        {selectedEvent ? selectedEvent.name : 'ALL EVENTS'}
                     </h3>
                   </div>
                   {/* Desktop Return Button */}
-                  {selectedLocation && (
+                  {selectedEvent && (
                     <button 
                       onClick={onMapClick}
                       className="hidden lg:flex text-[11px] text-white/40 hover:text-brand-400 font-sans uppercase tracking-[0.2em] items-center gap-2 transition-all group/back border border-white/10 hover:border-brand-400/30 px-4 py-2 rounded-full bg-white/[0.04] shadow-lg self-start mt-1"
@@ -481,24 +500,19 @@ export default function EventMap() {
                   )}
                 </div>
                 <p className="text-white/30 font-sans text-xs leading-relaxed mb-0 pl-5 border-l border-brand-400/20 italic">
-                   {selectedLocation 
-                    ? selectedLocation.description 
+                   {selectedEvent 
+                    ? `Deployment details for ${selectedEvent.name} in ${selectedEvent.city}, ${selectedEvent.provinceName}.`
                     : 'Consolidated tracking of all marketing campaigns history across the Southern Cone. Click a marker or event to explore.'}
                 </p>
               </div>
 
              {/* Scrollable list */}
              <div className={`flex-1 overflow-y-auto p-8 pt-10 space-y-4 custom-scrollbar bg-black/10 transition-opacity duration-500 ${!isInteracting ? 'pointer-events-none opacity-50' : 'opacity-100'}`}>
-                {(selectedLocation ? [...selectedLocation.events].sort((a, b) => Math.max(...b.years.map(Number)) - Math.max(...a.years.map(Number))) : allEvents).map((event: any, idx) => {
+                {(selectedEvent ? [selectedEvent] : allEventsWithCoords).map((event: any, idx) => {
                   return (
                     <div key={idx} 
-                      className="group flex items-start gap-8 border-b border-white/5 pb-8 pt-4 last:border-0 transition-all duration-300 -mx-4 px-8 rounded-xl cursor-pointer hover:bg-white/[0.03] relative overflow-hidden"
-                      onClick={() => {
-                          if (!selectedLocation && 'locId' in event) {
-                              const loc = LOCATIONS.find(l => l.id === event.locId);
-                              if (loc) onMarkerClick(loc);
-                          }
-                      }}
+                      className={`group flex items-start gap-8 border-b border-white/5 pb-8 pt-4 last:border-0 transition-all duration-300 -mx-4 px-8 rounded-xl cursor-pointer hover:bg-white/[0.03] relative overflow-hidden ${selectedEvent?.id === event.id ? 'bg-white/[0.04]' : ''}`}
+                      onClick={() => onMarkerClick(event)}
                     >
                        <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 overflow-hidden flex items-center justify-center relative bg-black/20 rounded-lg">
                         <OptimizedImage
@@ -517,7 +531,7 @@ export default function EventMap() {
                      <div className="flex-1">
                         <div className="flex items-center gap-3 mb-3">
                            <span className="text-brand-400 font-sans text-[10px] uppercase tracking-[0.2em] font-bold">
-                                {selectedLocation ? event.city : event.provinceName}
+                                {event.city} // {event.provinceName}
                             </span>
                            <div className="w-[1px] h-3 bg-white/10" />
                            <span className="text-white/20 font-sans text-[9px] uppercase tracking-widest">{event.type}</span>
@@ -556,7 +570,7 @@ export default function EventMap() {
                       <div className="w-2 h-1 rounded-full bg-white" />
                    </div>
                    <span className="text-[8px] text-white uppercase tracking-[0.3em]">
-                        FIELD EXPERIENCE: {selectedLocation ? selectedLocation.events.length : allEvents.length}
+                        FIELD EXPERIENCE: {selectedEvent ? '1' : allEventsWithCoords.length}
                    </span>
                 </div>
                 <div className="font-mono text-[8px] text-brand-400/30 tracking-[0.2em] uppercase">LINK // ACTIVE</div>

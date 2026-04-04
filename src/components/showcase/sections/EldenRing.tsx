@@ -96,7 +96,7 @@ export default function EldenRing({ onOpen }: Props) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           <div className="absolute top-4 left-4 flex gap-2 overflow-hidden pointer-events-none">
-            <span className="text-[10px] text-white/80 font-bold uppercase tracking-tighter">Warrior of the lands</span>
+            <span className="text-[10px] text-white/80 font-bold uppercase tracking-[0.3em]">Warrior of the lands</span>
           </div>
           <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
             CROSSED BUILD SETS

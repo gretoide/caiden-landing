@@ -5,8 +5,8 @@
   --color-brand-500: #1a6cff;
   --color-brand-400: #60a5fa;
 
-  --font-serif: "Cinzel", serif;
-  --font-sans: "Inter", sans-serif;
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Outfit", sans-serif;
 }
 
 @layer base {

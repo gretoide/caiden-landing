@@ -19,5 +19,23 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['react-map-gl', 'mapbox-gl']
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('mapbox-gl') || id.includes('react-map-gl')) {
+              return 'mapbox';
+            }
+            if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
+              return 'vendor';
+            }
+            return 'libs';
+          }
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000
   }
 })
