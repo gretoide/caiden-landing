@@ -54,7 +54,6 @@ export default function Hero() {
 
         {/* Scroll indicator - fixed position and bridging the transition */}
         <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-6 animate-pulse">
-           <span className="text-white/20 text-[10px] uppercase tracking-[0.6em] font-sans">Index // Explore</span>
            <div className="w-[1px] h-24 bg-gradient-to-b from-brand-400 via-brand-400/20 to-transparent"></div>
         </div>
       </div>

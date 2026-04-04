@@ -15,7 +15,7 @@ export const SKILLS_CONTENT = {
     back: 'Return to Gallery',
     ctaExplore: 'Explore',
     showcase: 'Showcase',
-    items: 'LOC_ENTRIES',
+    items: 'FIELD EXPERIENCE',
   },
   categories: CRAFTSMANSHIP,
 };

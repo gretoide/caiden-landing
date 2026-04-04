@@ -66,8 +66,8 @@ export default function EldenRing({ onOpen }: Props) {
 
       <div className="relative z-10 container mx-auto px-6">
         {/* Header Section */}
-        <div className="mb-16 md:mb-24 max-w-4xl relative z-20">
-           <h2 className="elden-header-anim text-6xl md:text-[10rem] font-serif text-white leading-none drop-shadow-2xl">
+        <div className="mb-16 md:mb-24 max-w-none relative z-20">
+           <h2 className="elden-header-anim text-6xl md:text-[10rem] font-serif text-white leading-none drop-shadow-2xl whitespace-nowrap">
              {data.title}
            </h2>
            <div className="elden-header-anim flex flex-col md:flex-row md:items-end gap-6 mt-6">
@@ -98,8 +98,8 @@ export default function EldenRing({ onOpen }: Props) {
           <div className="absolute top-4 left-4 flex gap-2 overflow-hidden pointer-events-none">
             <span className="bg-red-600/40 backdrop-blur-sm px-3 py-1 text-[10px] text-white/80 font-bold uppercase tracking-tighter border border-white/5">Warrior of the lands</span>
           </div>
-          <div className="absolute bottom-6 left-6 opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0">
-            <p className="text-white/40 font-sans text-xs tracking-widest uppercase">Crossed build sets</p>
+          <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+            CROSSED BUILD SETS
           </div>
         </div>
 
@@ -115,6 +115,9 @@ export default function EldenRing({ onOpen }: Props) {
               imgClassName="grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
               onClick={() => onOpen(data.gallery[1])}
             />
+            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+              Warrior of the lands
+            </div>
           </div>
           {/* Shot 2 */}
           <div className="elden-item-anim col-span-6 md:col-span-5 row-span-1 relative group overflow-hidden bg-[#250707] border border-[#4a0a0a]/50">
@@ -127,6 +130,9 @@ export default function EldenRing({ onOpen }: Props) {
               objectPosition="center 50%"
               onClick={() => onOpen(data.gallery[2])}
             />
+            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+              Crossed build sets
+            </div>
           </div>
           {/* Shot 3 */}
           <div className="elden-item-anim col-span-7 md:col-span-4 row-span-1 md:row-span-2 relative group overflow-hidden bg-[#250707] border border-[#4a0a0a]/60">
@@ -138,6 +144,9 @@ export default function EldenRing({ onOpen }: Props) {
               imgClassName="grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
               onClick={() => onOpen(data.gallery[3])}
             />
+            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+              Drama design
+            </div>
           </div>
           {/* Shot 4 */}
           <div className="elden-item-anim col-span-5 md:col-span-8 row-span-1 relative group overflow-hidden bg-[#250707] border border-[#4a0a0a]/50">
@@ -150,6 +159,9 @@ export default function EldenRing({ onOpen }: Props) {
               objectPosition="center 20%"
               onClick={() => onOpen(data.gallery[4])}
             />
+            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+              Essence captor
+            </div>
           </div>
         </div>
 
@@ -167,8 +179,8 @@ export default function EldenRing({ onOpen }: Props) {
               onClick={() => onOpen(data.gallery[5])}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute bottom-6 left-6">
-              <span className="text-white/40 font-sans text-xs tracking-widest uppercase italic">Drama design</span>
+            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+              DRAMA DESIGN
             </div>
           </div>
 
@@ -185,7 +197,9 @@ export default function EldenRing({ onOpen }: Props) {
                 sizes="(min-width: 1024px) 40vw, 100vw"
                 onClick={() => onOpen(data.gallery[6])}
               />
-              <div className="absolute top-4 right-4 text-[10px] text-white/30 tracking-[0.3em] uppercase">Essence captor</div>
+              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+                ESSENCE CAPTOR
+              </div>
             </div>
 
             {/* Bottom Grid */}
@@ -199,7 +213,9 @@ export default function EldenRing({ onOpen }: Props) {
                   imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
                   onClick={() => onOpen(data.gallery[7])}
                 />
-                <div className="absolute bottom-3 left-3 text-[8px] text-white/30 tracking-[0.2em] uppercase">Focus // 02</div>
+                <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+                  FOCUS // 02
+                </div>
               </div>
               <div className="elden-item-anim relative group overflow-hidden border border-[#4a0a0a]/30 bg-[#250707] shadow-lg">
                 <OptimizedImage
@@ -210,7 +226,9 @@ export default function EldenRing({ onOpen }: Props) {
                   imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
                   onClick={() => onOpen(data.gallery[8])}
                 />
-                <div className="absolute bottom-3 left-3 text-[8px] text-white/30 tracking-[0.2em] uppercase">Focus // 03</div>
+                <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+                  FOCUS // 03
+                </div>
               </div>
             </div>
           </div>

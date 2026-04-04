@@ -93,7 +93,7 @@ export default function DiabloIV({ onOpen }: Props) {
               imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 cursor-pointer object-cover"
               onClick={() => onOpen(data.gallery[0])}
             />
-            <div className="absolute top-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm">
+            <div className="absolute top-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
               FULL SET
             </div>
           </div>
@@ -109,9 +109,8 @@ export default function DiabloIV({ onOpen }: Props) {
               sizes="(min-width: 1024px) 50vw, 100vw"
               onClick={() => onOpen(data.gallery[1])}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
-            <div className="absolute bottom-6 left-6">
-              <span className="text-white/40 font-sans text-xs tracking-widest uppercase italic">NECROMANCER FROM SACTUARY</span>
+            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+              NECROMANCER FROM SANCTUARY
             </div>
           </div>
 
@@ -126,8 +125,8 @@ export default function DiabloIV({ onOpen }: Props) {
                 imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
                 onClick={() => onOpen(data.gallery[2])}
               />
-              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm">
-                Study 01
+              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+                FOCUS // 01
               </div>
             </div>
             <div className="diablo-item-anim relative group overflow-hidden border border-white/5 aspect-square md:aspect-auto md:h-full">
@@ -139,8 +138,8 @@ export default function DiabloIV({ onOpen }: Props) {
                 imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
                 onClick={() => onOpen(data.gallery[3])}
               />
-              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm">
-                Study 02
+              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+                FOCUS // 02
               </div>
             </div>
           </div>

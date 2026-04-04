@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import Map, { Marker, Source, Layer } from 'react-map-gl';
-import { Globe, ChevronDown, Plus, Minus } from 'lucide-react';
+import { Globe, ChevronDown, Plus, Minus, Star } from 'lucide-react';
 import type { FillLayer, LineLayer } from 'react-map-gl';
 import OptimizedImage from '../ui/OptimizedImage';
 
@@ -31,15 +31,15 @@ const LOCATIONS = [
     lng: -60.4956,
     description: 'Central hub with a rich history of brand collaborations across Concordia, Paraná, and the Uruguay River region.',
     events: [
-      { city: 'Concordia', name: 'Frikimania', logoId: '2019_Feb_i8ywbx', years: ['2017', '2018', '2019', '2020', '2021', '2022', '2024'], type: 'Convention' },
+      { city: 'Concordia', name: 'Frikimania', logoId: '2019_Feb_i8ywbx', years: ['2017', '2018', '2019', '2020', '2021', '2022', '2024'], type: 'CONVENTION' },
       { city: 'Paraná', name: 'Paraná Comic Con', logoId: '2024_May_2_nnfc8i', years: ['2024'], type: 'INTERNATIONAL' },
-      { city: 'Gualeguaychú', name: 'Neo Freak', logoId: '2024_Ago_1_m01lci', years: ['2024'], type: 'Convention' },
-      { city: 'Villa Elisa', name: 'Mirai Fest', logoId: '2022_Feb_niodok', years: ['2022', '2023'], type: 'Festival' },
+      { city: 'Gualeguaychú', name: 'Neo Freak', logoId: '2024_Ago_1_m01lci', years: ['2024'], type: 'CONVENTION' },
+      { city: 'Villa Elisa', name: 'Mirai Fest', logoId: '2022_Feb_niodok', years: ['2022', '2023'], type: 'FESTIVAL' },
       { city: 'Concordia', name: 'Gamer Fest', logoId: '2023_May_2_m6mzrr', years: ['2023'], type: 'GAMING EXHIBITION' },
-      { city: 'Concordia', name: 'Asia Fest', logoId: '2016_Jul_wddizo', years: ['2016', '2017', '2018', '2019'], type: 'Festival' },
-      { city: 'Villaguay', name: 'Neko Fest', logoId: '2017_May_kcz85v', years: ['2017', '2018'], type: 'Fan Event' },
-      { city: 'Colón', name: 'Kyubi Fest', logoId: '2018_Abril_2_yo6cug', years: ['2018'], type: 'Festival' },
-      { city: 'Concordia', name: 'Zombie Walk', logoId: '2018_Nov_m4b5rz', years: ['2016', '2017'], type: 'Themed' }
+      { city: 'Concordia', name: 'Asia Fest', logoId: '2016_Jul_wddizo', years: ['2016', '2017', '2018', '2019'], type: 'FESTIVAL' },
+      { city: 'Villaguay', name: 'Neko Fest', logoId: '2017_May_kcz85v', years: ['2017', '2018'], type: 'FAN EVENT' },
+      { city: 'Colón', name: 'Kyubi Fest', logoId: '2018_Abril_2_yo6cug', years: ['2018'], type: 'FESTIVAL' },
+      { city: 'Concordia', name: 'Zombie Walk', logoId: '2018_Nov_m4b5rz', years: ['2016', '2017'], type: 'THEMED' }
     ]
   },
   {
@@ -51,7 +51,7 @@ const LOCATIONS = [
     lng: -55.8961,
     description: 'Northeastern operations with focus on long-running series like Ichi Ni San in Posadas.',
     events: [
-      { city: 'Posadas', name: 'Ichi Ni San Fest', logoId: '2016_Nov_udjntt', years: ['2016', '2023'], type: 'Festival' },
+      { city: 'Posadas', name: 'Ichi Ni San Fest', logoId: '2016_Nov_udjntt', years: ['2016', '2023'], type: 'FESTIVAL' },
       { city: 'Posadas', name: 'Cosplay & Games', logoId: '2017_Ago_2_z4f0xp', years: ['2017'], type: 'GAMING EXHIBITION' }
     ]
   },
@@ -64,11 +64,11 @@ const LOCATIONS = [
     lng: -58.3816,
     description: 'National capital operations and major event headquarters, including international Comic Con brand.',
     events: [
-      { city: 'CABA', name: 'Comic Con', logoId: '2023_Dec_sevrvj', years: ['2023', '2024', '2025'], type: 'International' },
+      { city: 'CABA', name: 'Comic Con', logoId: '2023_Dec_sevrvj', years: ['2023', '2024', '2025'], type: 'INTERNATIONAL' },
       { city: 'CABA', name: 'Anime Con', logoId: '2023_Sep_2_npt6jh', years: ['2022', '2024'], type: 'INTERNATIONAL' },
       { city: 'CABA', name: 'AGS', logoId: '2023_Oct_kja7mq', years: ['2023'], type: 'GAMING EXHIBITION' },
-      { city: 'Tandil', name: 'Kawaii Koto', logoId: '2023_Sep_1_ajbiqh', years: ['2023'], type: 'Culture' },
-      { city: 'CABA', name: 'Martin Fierro Digital', logoId: '2024_Ago_3_rlvmal', years: ['2024'], type: 'Awards' }
+      { city: 'Tandil', name: 'Kawaii Koto', logoId: '2023_Sep_1_ajbiqh', years: ['2023'], type: 'CULTURE' },
+      { city: 'CABA', name: 'Martin Fierro Digital', logoId: '2024_Ago_3_rlvmal', years: ['2024'], type: 'AWARDS', rank: 'AWARD' }
     ]
   },
   {
@@ -80,8 +80,8 @@ const LOCATIONS = [
     lng: -69.21,
     description: 'Deep south operational coverage and extreme environment deployments.',
     events: [
-      { city: 'Caleta Olivia', name: 'Kogarashi Fest', logoId: '2024_May_1_tiod5h', years: ['2024'], type: 'Festival' },
-      { city: 'Gallegos', name: 'Feña', logoId: '2024_Nov_2_tn9sgf', years: ['2024'], type: 'Themed' }
+      { city: 'Caleta Olivia', name: 'Kogarashi Fest', logoId: '2024_May_1_tiod5h', years: ['2024'], type: 'FESTIVAL' },
+      { city: 'Gallegos', name: 'Feña', logoId: '2024_Nov_2_tn9sgf', years: ['2024'], type: 'THEMED' }
     ]
   },
   {
@@ -117,7 +117,7 @@ const LOCATIONS = [
     lng: -64.26,
     description: 'North-central regional deployments.',
     events: [
-      { city: 'Santiago', name: 'Anime Town', logoId: '2018_Abril_1_t2twv4', years: ['2018'], type: 'Festival' }
+      { city: 'Santiago', name: 'Anime Town', logoId: '2018_Abril_1_t2twv4', years: ['2018'], type: 'FESTIVAL' }
     ]
   },
   {
@@ -129,7 +129,7 @@ const LOCATIONS = [
     lng: -60.70,
     description: 'Major regional coordination and commercial integrations.',
     events: [
-      { city: 'Santa Fe', name: 'D.M.O', logoId: '2019_Mar_a4qoex', years: ['2019'], type: 'Exhibition' }
+      { city: 'Santa Fe', name: 'D.M.O', logoId: '2019_Mar_a4qoex', years: ['2019'], type: 'EXHIBITION' }
     ]
   },
   {
@@ -141,7 +141,7 @@ const LOCATIONS = [
     lng: -63.00,
     description: 'Southern operational baseline in Viedma region.',
     events: [
-      { city: 'Viedma', name: 'Comarca Fest', logoId: '2019_Jul_gwrkyu', years: ['2019'], type: 'Festival' }
+      { city: 'Viedma', name: 'Comarca Fest', logoId: '2019_Jul_gwrkyu', years: ['2019'], type: 'FESTIVAL' }
     ]
   },
   {
@@ -153,7 +153,7 @@ const LOCATIONS = [
     lng: -64.18,
     description: 'Central logistic and marketing hub for nationwide events.',
     events: [
-      { city: 'Córdoba', name: 'CAF', logoId: '2023_Abr_dssdkl', years: ['2023'], type: 'Convention' }
+      { city: 'Córdoba', name: 'CAF', logoId: '2023_Abr_dssdkl', years: ['2023'], type: 'CONVENTION' }
     ]
   },
   {
@@ -177,7 +177,7 @@ const LOCATIONS = [
     lng: -58.98,
     description: 'Northeastern regional brand reach.',
     events: [
-      { city: 'Resistencia', name: 'Comic World', logoId: '2023_Nov_wbqtbx', years: ['2023'], type: 'Comic Con' }
+      { city: 'Resistencia', name: 'Comic World', logoId: '2023_Nov_wbqtbx', years: ['2023'], type: 'INTERNATIONAL' }
     ]
   },
   {
@@ -189,7 +189,7 @@ const LOCATIONS = [
     lng: -56.16,
     description: 'International expansion and cross-border collaborations.',
     events: [
-      { city: 'Montevideo', name: 'Expo Convention', logoId: '2024_Abr_sv4yve', years: ['2024'], type: 'International' }
+      { city: 'Montevideo', name: 'Expo Convention', logoId: '2024_Abr_sv4yve', years: ['2024'], type: 'INTERNATIONAL' }
     ]
   },
   {
@@ -201,7 +201,7 @@ const LOCATIONS = [
     lng: -65.30,
     description: 'Northernmost operational sector tracking.',
     events: [
-      { city: 'Jujuy', name: 'FunnAnime', logoId: '2024_Sep_2_vyqyqb', years: ['2024'], type: 'EXHIBITION' }
+      { city: 'Jujuy', name: 'Funnanime', logoId: '2024_Sep_2_vyqyqb', years: ['2024'], type: 'EXHIBITION' }
     ]
   },
   {
@@ -213,7 +213,7 @@ const LOCATIONS = [
     lng: -66.33,
     description: 'Cuyo region strategic integrations.',
     events: [
-      { city: 'San Luis', name: '3DFest', logoId: '2024_Oct_2_gj9wxq', years: ['2024'], type: 'Festival' }
+      { city: 'San Luis', name: '3DFest', logoId: '2024_Oct_2_gj9wxq', years: ['2024'], type: 'FESTIVAL' }
     ]
   },
   {
@@ -226,7 +226,7 @@ const LOCATIONS = [
     description: 'Mesopotamian regional coordination and brand awards.',
     events: [
       { city: 'Corrientes', name: 'K-Anime', logoId: '2024_Nov_1_zkt9qu', years: ['2024'], type: 'EVENT' },
-      { city: 'Corrientes', name: 'Blaze Awards', logoId: 'got_1_otuw4y', years: ['2024'], type: 'Awards' }
+      { city: 'Corrientes', name: 'Blaze Awards', logoId: 'got_1_otuw4y', years: ['2024'], type: 'AWARDS', rank: 'AWARD' }
     ]
   }
 ];
@@ -317,9 +317,9 @@ export default function EventMap() {
           <div className="max-w-2xl">
               <div className="flex items-center gap-4 mb-4">
                  <div className="w-10 h-[1px] bg-brand-400/60" />
-                 <span className="text-brand-400 font-sans tracking-[0.4em] uppercase text-[10px] font-bold">Operational Network</span>
+                 <span className="text-brand-400 font-sans tracking-[0.4em] uppercase text-[10px] font-bold">EVENT PORTFOLIO</span>
               </div>
-              <h2 className="text-white font-serif text-4xl md:text-5xl tracking-[0.2em] leading-none mb-6">EVENTS</h2>
+              <h2 className="text-white font-serif text-4xl md:text-5xl tracking-[0.2em] leading-none mb-6">CAREER</h2>
           </div>
           <div className="text-right flex flex-col items-end opacity-40">
               <div className="flex items-center gap-2 font-sans text-[10px] text-white uppercase tracking-widest mb-1">
@@ -526,6 +526,13 @@ export default function EventMap() {
                              <h4 className="text-white font-serif text-xl md:text-2xl tracking-wide uppercase group-hover:text-brand-400 transition-colors">
                                 {event.name}
                              </h4>
+                             {event.rank === 'AWARD' && (
+                                <Star 
+                                  size={16} 
+                                  fill="#facc15" 
+                                  className="text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.4)]" 
+                                />
+                             )}
                           </div>
                         
                         <div className="flex flex-wrap gap-1.5">
@@ -549,7 +556,7 @@ export default function EventMap() {
                       <div className="w-2 h-1 rounded-full bg-white" />
                    </div>
                    <span className="text-[8px] text-white uppercase tracking-[0.3em]">
-                        LOC_ENTRIES: {selectedLocation ? selectedLocation.events.length : allEvents.length}
+                        FIELD EXPERIENCE: {selectedLocation ? selectedLocation.events.length : allEvents.length}
                    </span>
                 </div>
                 <div className="font-mono text-[8px] text-brand-400/30 tracking-[0.2em] uppercase">LINK // ACTIVE</div>
