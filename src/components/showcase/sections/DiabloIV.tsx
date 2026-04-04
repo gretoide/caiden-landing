@@ -93,7 +93,7 @@ export default function DiabloIV({ onOpen }: Props) {
               imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 cursor-pointer object-cover"
               onClick={() => onOpen(data.gallery[0])}
             />
-            <div className="absolute top-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+            <div className="absolute top-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
               FULL SET
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function DiabloIV({ onOpen }: Props) {
               sizes="(min-width: 1024px) 50vw, 100vw"
               onClick={() => onOpen(data.gallery[1])}
             />
-            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
               NECROMANCER FROM SANCTUARY
             </div>
           </div>
@@ -125,7 +125,7 @@ export default function DiabloIV({ onOpen }: Props) {
                 imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
                 onClick={() => onOpen(data.gallery[2])}
               />
-              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
                 FOCUS // 01
               </div>
             </div>
@@ -138,7 +138,7 @@ export default function DiabloIV({ onOpen }: Props) {
                 imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
                 onClick={() => onOpen(data.gallery[3])}
               />
-              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
                 FOCUS // 02
               </div>
             </div>

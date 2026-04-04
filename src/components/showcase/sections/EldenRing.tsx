@@ -96,9 +96,9 @@ export default function EldenRing({ onOpen }: Props) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           <div className="absolute top-4 left-4 flex gap-2 overflow-hidden pointer-events-none">
-            <span className="bg-red-600/40 backdrop-blur-sm px-3 py-1 text-[10px] text-white/80 font-bold uppercase tracking-tighter border border-white/5">Warrior of the lands</span>
+            <span className="text-[10px] text-white/80 font-bold uppercase tracking-tighter">Warrior of the lands</span>
           </div>
-          <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+          <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
             CROSSED BUILD SETS
           </div>
         </div>
@@ -115,7 +115,7 @@ export default function EldenRing({ onOpen }: Props) {
               imgClassName="grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
               onClick={() => onOpen(data.gallery[1])}
             />
-            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
               Warrior of the lands
             </div>
           </div>
@@ -130,7 +130,7 @@ export default function EldenRing({ onOpen }: Props) {
               objectPosition="center 50%"
               onClick={() => onOpen(data.gallery[2])}
             />
-            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
               Crossed build sets
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function EldenRing({ onOpen }: Props) {
               imgClassName="grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
               onClick={() => onOpen(data.gallery[3])}
             />
-            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
               Drama design
             </div>
           </div>
@@ -159,7 +159,7 @@ export default function EldenRing({ onOpen }: Props) {
               objectPosition="center 20%"
               onClick={() => onOpen(data.gallery[4])}
             />
-            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
               Essence captor
             </div>
           </div>
@@ -179,7 +179,7 @@ export default function EldenRing({ onOpen }: Props) {
               onClick={() => onOpen(data.gallery[5])}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+            <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
               DRAMA DESIGN
             </div>
           </div>
@@ -197,7 +197,7 @@ export default function EldenRing({ onOpen }: Props) {
                 sizes="(min-width: 1024px) 40vw, 100vw"
                 onClick={() => onOpen(data.gallery[6])}
               />
-              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+              <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
                 ESSENCE CAPTOR
               </div>
             </div>
@@ -213,7 +213,7 @@ export default function EldenRing({ onOpen }: Props) {
                   imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
                   onClick={() => onOpen(data.gallery[7])}
                 />
-                <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+                <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
                   FOCUS // 02
                 </div>
               </div>
@@ -226,7 +226,7 @@ export default function EldenRing({ onOpen }: Props) {
                   imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
                   onClick={() => onOpen(data.gallery[8])}
                 />
-                <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm z-20">
+                <div className="absolute bottom-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
                   FOCUS // 03
                 </div>
               </div>
