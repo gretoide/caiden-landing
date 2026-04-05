@@ -3,16 +3,52 @@ import { SKILLS_CONTENT } from './content';
 import SubSkillCarousel from './SubSkillCarousel';
 import OptimizedImage from '../ui/OptimizedImage';
 import ImageModal from '../ui/ImageModal';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Skills() {
   const detailsRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState(SKILLS_CONTENT.categories[0].id);
+// ... existing state ...
   const [expandedPublicId, setExpandedPublicId] = useState<string | null>(null);
   const [selectedSkillId, setSelectedSkillId] = useState<string | null>(null);
   const [isAutoPlayDisabled, setIsAutoPlayDisabled] = useState(false);
 
   const activeData = SKILLS_CONTENT.categories.find((c) => c.id === activeTab) || SKILLS_CONTENT.categories[0];
   const [expertiseBgTick, setExpertiseBgTick] = useState(0);
+
+  // GSAP Parallax for Mobile
+  useGSAP(() => {
+    const isMobile = window.innerWidth < 768;
+    if (!isMobile) return;
+
+    ScrollTrigger.getAll().forEach(st => {
+      if (st.trigger && (st.trigger as HTMLElement).classList.contains('mobile-blade-st')) st.kill();
+    });
+
+    const blades = gsap.utils.toArray('.mobile-blade-anim');
+    blades.forEach((blade: any) => {
+      const img = blade.querySelector('.mobile-blade-bg');
+      gsap.fromTo(img, 
+        { yPercent: -15 }, 
+        {
+          yPercent: 15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: blade,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+            toggleClass: { targets: blade, className: "mobile-blade-st" }
+          }
+        }
+      );
+    });
+  }, { scope: containerRef, dependencies: [activeTab] });
   
   const expertiseCarouselItems = useMemo(() => {
     const selectedSubSkill = activeData.subSkills.find(s => s.id === selectedSkillId);
@@ -79,7 +115,7 @@ export default function Skills() {
   };
 
   return (
-    <section id="skills" className="w-full bg-black relative flex flex-col justify-center overflow-hidden py-12 md:py-24">
+    <section id="skills" ref={containerRef} className="w-full bg-black relative flex flex-col justify-center overflow-hidden py-12 md:py-24">
       <div className="max-w-[1600px] mx-auto w-full px-0 md:px-6 flex flex-col gap-12 lg:gap-16">
         {/* Section Header */}
         <div className="px-6 md:px-0 flex flex-col items-start text-left gap-3">
@@ -164,7 +200,7 @@ export default function Skills() {
               return (
                 <div
                   key={craft.id}
-                  className={`relative w-full cursor-pointer transition-all duration-500 ease-in-out group overflow-hidden border-b border-white/5 last:border-b-0 ${
+                  className={`mobile-blade-anim relative w-full cursor-pointer transition-all duration-500 ease-in-out group overflow-hidden border-b border-white/5 last:border-b-0 ${
                     isActive ? 'h-[160px]' : 'h-[60px] hover:h-[70px]'
                   }`}
                   onClick={() => {
@@ -175,7 +211,7 @@ export default function Skills() {
                   }}
                 >
                   {/* Background Image with diagonal clip/skew look */}
-                  <div className="absolute inset-0 scale-110">
+                  <div className="absolute inset-0 scale-125 mobile-blade-bg">
                     <OptimizedImage
                       publicId={craft.publicId}
                       alt={craft.title}

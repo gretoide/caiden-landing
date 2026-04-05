@@ -62,7 +62,7 @@ export default function GallerySection({ id, title, items }: GallerySectionProps
         </h2>
 
         {/* Masonry Layout via CSS Columns */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-6 space-y-3 sm:space-y-6">
           {items.map((item, i) => (
             <div 
               key={`${item.id}-${i}`} 
