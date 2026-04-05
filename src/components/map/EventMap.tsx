@@ -35,8 +35,7 @@ const LOCATIONS = [
       { city: 'Villa Adela', name: 'Mirai Fest', logoId: '2022_Feb_niodok', years: ['2022', '2023'], type: 'FESTIVAL', lat: -31.4397, lng: -58.0673 },
       { city: 'Concordia', name: 'Gamer Fest', logoId: '2023_May_2_m6mzrr', years: ['2023'], type: 'GAMING EXHIBITION', lat: -31.3927, lng: -58.0202 },
       { city: 'Concordia', name: 'Asia Fest', logoId: '2016_Jul_wddizo', years: ['2015', '2016', '2017', '2018', '2019'], type: 'FESTIVAL', lat: -31.3927, lng: -58.0202 },
-      { city: 'Paraná', name: 'Ein B-Pop', logoId: 'placeholder', years: ['2023'], type: 'EVENT', lat: -31.7444, lng: -60.5175 },
-      { city: 'Paraná', name: 'Anicubic', logoId: 'placeholder', years: ['2015'], type: 'CONVENTION', lat: -31.7444, lng: -60.5175 },
+      { city: 'Paraná', name: 'Ein B-Pop', logoId: '2023_May_1_mq94dr', years: ['2023'], type: 'EVENT', lat: -31.7444, lng: -60.5175 },
       { city: 'Villaguay', name: 'Neko Fest', logoId: '2017_May_kcz85v', years: ['2017', '2018'], type: 'FAN EVENT', lat: -31.8653, lng: -59.0269 },
       { city: 'Colón', name: 'Kyubi Fest', logoId: '2018_Abril_2_yo6cug', years: ['2018'], type: 'FESTIVAL', lat: -32.2217, lng: -58.1439 },
       { city: 'Concordia', name: 'Zombie Walk', logoId: '2018_Nov_m4b5rz', years: ['2016', '2017'], type: 'THEMED', lat: -31.3927, lng: -58.0202 }
@@ -66,9 +65,9 @@ const LOCATIONS = [
     events: [
       { city: 'CABA', name: 'Comic Con', logoId: '2023_Dec_sevrvj', years: ['2016', '2017', '2023', '2024', '2025'], type: 'INTERNATIONAL', lat: -34.6037, lng: -58.3816 },
       { city: 'CABA', name: 'Anime Con', logoId: '2023_Sep_2_npt6jh', years: ['2022', '2024'], type: 'INTERNATIONAL', lat: -34.6037, lng: -58.3816 },
-      { city: 'CABA', name: 'Anime Friends', logoId: 'placeholder', years: ['2015'], type: 'EXHIBITION', lat: -34.6037, lng: -58.3816 },
-      { city: 'CABA', name: 'ComiCópolis', logoId: 'placeholder', years: ['2015'], type: 'CONVENTION', lat: -34.6037, lng: -58.3816 },
-      { city: 'CABA', name: 'Anime Expo', logoId: 'placeholder', years: ['2018'], type: 'CONVENTION', lat: -34.6037, lng: -58.3816 },
+      { city: 'CABA', name: 'Anime Friends', logoId: '2015_Jul_2_l0hym6', years: ['2015'], type: 'EXHIBITION', lat: -34.6037, lng: -58.3816 },
+      { city: 'CABA', name: 'ComiCópolis', logoId: '2015_Sep_kmri9d', years: ['2015'], type: 'CONVENTION', lat: -34.6037, lng: -58.3816 },
+      { city: 'CABA', name: 'Anime Expo', logoId: '2018_Jul_2_pxdngc', years: ['2018'], type: 'CONVENTION', lat: -34.6037, lng: -58.3816 },
       { city: 'CABA', name: 'AGS', logoId: '2023_Oct_kja7mq', years: ['2023'], type: 'GAMING EXHIBITION', lat: -34.6037, lng: -58.3816 },
       { city: 'Tandil', name: 'Kawaii Koto', logoId: '2023_Sep_1_ajbiqh', years: ['2023'], type: 'CULTURE', lat: -37.3217, lng: -59.1331 },
       { city: 'CABA', name: 'Martin Fierro Digital', logoId: '2024_Ago_3_rlvmal', years: ['2024'], type: 'AWARDS', rank: 'AWARD', lat: -34.6037, lng: -58.3816 }
