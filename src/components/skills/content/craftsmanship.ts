@@ -168,34 +168,34 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
   {
     id: 'fx-makeup',
     title: 'Makeup & Prosthetics',
-    subtitle: 'Prosthetics & Skin',
-    description: 'High-fidelity character makeup and prosthetic application focusing on skin realism and seamless transformation.',
+    subtitle: 'Prosthetics & Skin Textures',
+    description: 'Advanced multidisciplinary practice combining artistic makeup, prosthetic integration, and SFX fabrication techniques, with an emphasis on lifelike finishes, dimensional depth, and material-driven texture creation.',
     expandedDetails:
-      'Mastery of silicone appliance application, edge blending, and advanced skin-tone pigmentation. We focus on achieving cinematic-grade character depth through translucent layering and professional-grade prosthetic integration.',
+      'Mastery of color theory. High-fidelity makeup artistry encompassing beauty, character, and creature work, integrating prosthetics and SFX, achieving cinematic-grade depth through translucent layering and detail-driven finishes.',
     publicId: 'got_1_otuw4y',
     subSkills: [
       {
         id: 'prosthetics',
-        title: 'Makeup',
-        description: 'On-set application of complex silicone appliances for seamless character transformations.',
+        title: 'Artistic Makeup',
+        description: 'Experience in makeup application for high-impact character and creature transformations, with a focus on building realistic and expressive skin textures.',
         publicId: '1.1_-_Makeup_wpqu4o',
-        tags: ['Makeup', 'Prosthetics', 'Skin'],
+        tags: ['Makeup', 'Skin', 'Textures'],
         gallery: SKILL_GALLERIES['prosthetics'] || [],
       },
       {
         id: 'finishing',
-        title: 'Resin Casting & Mold Making',
-        description: 'Creation of high-detail negative molds for the fabrication of specific character appliances and makeup components.',
+        title: 'Molding Making',
+        description: 'Technical artist specializing in mold making for special effects. Strong understanding of anatomy and material chemistry to ensure successful casts and durable molds.',
         publicId: '2.2_-_Resin_Casting_Mold_Making_-_1_cwu6qz',
-        tags: ['Molds', 'Casting', 'Appliances'],
+        tags: ['PROSTHETICS', 'ANATOMY', 'APPLIANCES'],
         gallery: SKILL_GALLERIES['finishing'] || [],
       },
       {
         id: 'sculpting',
         title: 'Prosthetic & SFX',
-        description: 'Specialized organic sculpting focusing on skin textures and anatomical modifications for character enhancements.',
+        description: 'SPFX Artist specializing in the design and creation of fantasy prosthetic appliances. Experienced in sculpting and casting high-detail pieces, with a strong focus on bringing imaginative characters to life.',
         publicId: 'got_1_otuw4y',
-        tags: ['Character', 'Prosthetics', 'Anatomy'],
+        tags: ['Prosthetics', 'Anatomy', 'Appliances'],
         gallery: SKILL_GALLERIES['sculpting'] || [],
       },
     ],
@@ -204,29 +204,29 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
   {
     id: 'woodworking',
     title: 'Wood working',
-    subtitle: 'Classic Craftsmanship',
-    description: 'Comprehensive woodworking services blending traditional joinery with modern fabrication for structural prop integrity.',
+    subtitle: 'Modern Craftsmanship',
+    description: 'Comprehensive woodworking services blending manual hand working with modern fabrication for structural prop integrity.',
     expandedDetails:
-      'We combine artisanal hand-tools with modern machinery to create complex armatures and detailed decorative elements. Our process ensures that wooden components are engineered for durability in high-performance environments.',
+      'Versatile Woodworker blending traditional hand-craftsmanship with modern automated and manually techniques. Experienced in delivering high-quality, custom pieces by selecting the best approach for every project, ensuring each work stands out through technical precision and artistic detail.',
     publicId: '0_-_Wood_Working_qttihy',
     subSkills: [
-      { id: 'wood-1', title: 'Wood Works', description: 'Professional timber selection and joinery techniques for structural prop foundations.', publicId: '1.1_-_Wood_works_woq1um', tags: ['Timber', 'Joinery', 'Structure'], gallery: SKILL_GALLERIES['wood-1'] || [] },
-      { id: 'wood-2', title: 'Handpower Tools', description: 'Expert use of specialized machinery for rapid prototyping and bespoke internal geometries.', publicId: '1.2_-_Handpower_tools_dhfkes', tags: ['PowerTools', 'Shaping', 'Fabricating'], gallery: SKILL_GALLERIES['wood-2'] || [] },
-      { id: 'wood-3', title: 'Laser Cutting', description: 'Precision digital cutting for intricate decorative patterns and functional mechanical components.', publicId: '1.3_-_Laser_Cutting_uznupv', tags: ['Laser', 'Precision', 'Vector'], gallery: SKILL_GALLERIES['wood-3'] || [] }
+      { id: 'wood-1', title: 'Wood Works', description: 'Artistic Woodworker skilled in blending traditional hand-carving with modern techniques. Focused on creating unique, standout pieces through a balance of technical precision and creative craftsmanship.', publicId: '1.1_-_Wood_works_woq1um', tags: ['Timber', 'MDF', 'Structure'], gallery: SKILL_GALLERIES['wood-1'] || [] },
+      { id: 'wood-2', title: 'Handpower Tools', description: 'Highly skilled in the expert operation of power tools, including jigsaws, grinders, lathes, and sanders. Experienced in precision clamping and assembly to ensure a high-quality finish on every artistic project.', publicId: '1.2_-_Handpower_tools_dhfkes', tags: ['Powertools', 'Shaping', 'Sanding'], gallery: SKILL_GALLERIES['wood-2'] || [] },
+      { id: 'wood-3', title: 'Laser Cutting', description: 'Proficient in automated laser cutting and digital fabrication. Expert in designing precision vectors using Adobe Illustrator and CorelDRAW to translate complex concepts into high-quality physical pieces with technical accuracy.', publicId: '1.3_-_Laser_Cutting_uznupv', tags: ['Laser', 'Precision', 'Software'], gallery: SKILL_GALLERIES['wood-3'] || [] }
     ],
     gallery: [{ type: 'image', publicId: 'wp_god_of_war_1_rskssx' }],
   },
   {
     id: '3d-design',
     title: '3D & Digital',
-    subtitle: 'Blender & Prototyping',
-    description: 'High-end digital design and rapid prototyping workflows for complex prop geometry and precision mechanical fit.',
-    expandedDetails: 'Using advanced modeling software, we create architectural drafts and high-poly organic sculpts before moving to physical production. Our digital-first approach allows for perfect symmetry and mechanical testing.',
+    subtitle: '3D Modeling and Artistic Digital Media',
+    description: 'Multidisciplinary designer with experience in the full creative process. Fully oriented to bring the ideas to the real world.',
+    expandedDetails: 'Specialist focused on the transition from digital concepts to physical objects. Expertise encompasses advanced 3D design and technical modeling, specifically optimized for 3D printing workflows. Adept at managing the entire development cycle, ensuring structural feasibility and precision from the initial software environment to the final manufactured output.',
     publicId: '0_-_3D_Digital_qcfqhs',
     subSkills: [
-      { id: 'dig-1', title: '3D Design', description: 'Conceptual modeling and architectural drafting for complex props and character accessories.', publicId: '1.1_-_3D_Design_azycbq', tags: ['Blender', 'Modeling', 'CAD'], gallery: SKILL_GALLERIES['dig-1'] || [] },
-      { id: 'dig-2', title: 'Digital Programs', description: 'Optimization of digital assets for varied manufacturing methods and mechanical logic testing.', publicId: '1.2_-_Digital_Programs_gju26u', tags: ['Software', 'CAM', 'Logic'], gallery: SKILL_GALLERIES['dig-2'] || [] },
-      { id: 'dig-3', title: '3D Print', description: 'Industrial-grade additive manufacturing using SLA and FDM technologies for high-fidelity physical replicas.', publicId: '1.3_-_3D_Print_n9ixal', tags: ['3DPrinting', 'SLA', 'Resin'], gallery: SKILL_GALLERIES['dig-3'] || [] }
+      { id: 'dig-1', title: '3D Design', description: '3D modeling and digital geometry creation. Skilled in developing complex volumes and surfaces, ensuring clean topology and technical accuracy for real production purposes.', publicId: '1.1_-_3D_Design_azycbq', tags: ['Modeling', '3D Print', 'Blender'], gallery: SKILL_GALLERIES['dig-1'] || [] },
+      { id: 'dig-2', title: 'Digital Programs', description: 'Wide digital ecosystem, including the Adobe Creative Suite, 3D modeling environments, Bridging software design with hardware through Arduino programming and 3D printing optimization.', publicId: '1.2_-_Digital_Programs_gju26u', tags: ['Software', 'Adobe', 'Digital'], gallery: SKILL_GALLERIES['dig-2'] || [] },
+      { id: 'dig-3', title: '3D Print', description: 'Extensive background in 3D printing projects, ranging from decorative pieces to functional wearables.', publicId: '1.3_-_3D_Print_n9ixal', tags: ['3D Printing', 'PLA', 'Resin'], gallery: SKILL_GALLERIES['dig-3'] || [] }
     ],
     gallery: [{ type: 'image', publicId: 'diablo_iv_2_thyv5o' }],
   },
@@ -234,13 +234,13 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     id: 'textiles',
     title: 'Fabrics & Sewing',
     subtitle: 'Fabrics & Patterning',
-    description: 'Technical garment construction and fabric manipulation focusing on silhouette, character period accuracy, and mobility.',
-    expandedDetails: 'We specialize in custom patterning that balances aesthetic screen accuracy with the mobility requirements of high-performance wear. Our expertise covers layered garment construction and specialized textile aging.',
+    description: 'Experience in garment construction, manual and computerized embroidery, and pattern making.',
+    expandedDetails: 'Involved in the full textile process, from initial design and pattern development to final assembly and specialized finishes.',
     publicId: '0_-_Fabrics_Sewing_xt7zay',
     subSkills: [
-      { id: 'tex-1', title: 'Fabrics Sewing', description: 'Advanced tailoring and industrial machine sewing for heavy-duty textiles and structured garments.', publicId: '1.1_-_Fabrics_Sewing_pzg0dj', tags: ['Sewing', 'Tailoring', 'Fit'], gallery: SKILL_GALLERIES['tex-1'] || [] },
-      { id: 'tex-2', title: 'Design', description: 'Period-accurate garment drafting and visual research for character-driven textile designs.', publicId: '1.2_-_Design_utu8dg', tags: ['Drafting', 'Silhouette', 'Period'], gallery: SKILL_GALLERIES['tex-2'] || [] },
-      { id: 'tex-3', title: 'Embroidery', description: 'Intricate surface detailing and specialized trim work for high-status and decorative garments.', publicId: '1.3_-_Embroidery_btgnap', tags: ['Detail', 'Texture', 'Trim'], gallery: SKILL_GALLERIES['tex-3'] || [] }
+      { id: 'tex-1', title: 'Fabrics Sewing', description: 'Focused on the complete process, including textile selection, fitting, and assembly for high-quality finishes.', publicId: '1.1_-_Fabrics_Sewing_pzg0dj', tags: ['Sewing', 'Machines', 'Tailoring'], gallery: SKILL_GALLERIES['tex-1'] || [] },
+      { id: 'tex-2', title: 'Pattern Design', description: 'Experience in garment construction and pattern making for costumes and apparel.', publicId: '1.2_-_Design_utu8dg', tags: ['Silhouette', 'Patterns', 'Design'], gallery: SKILL_GALLERIES['tex-2'] || [] },
+      { id: 'tex-3', title: 'Embroidery', description: 'Manual and computerized embroidery for high-end finishes and decorative details. Focused on precision stitching and luxury applications for garments.', publicId: '1.3_-_Embroidery_btgnap', tags: ['Detail', 'Manual', 'Automatized'], gallery: SKILL_GALLERIES['tex-3'] || [] }
     ],
     gallery: [{ type: 'image', publicId: 'mordred_fate_2_rkpzpt' }],
   },
@@ -249,12 +249,12 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     title: 'Lighting',
     subtitle: 'Electronics & Arduino',
     description: 'Integrated electronic systems and interactive illumination designed to bring props to life.',
-    expandedDetails: 'We develop custom PCB layouts and program micro-controllers to handle complex lighting sequences. Our systems are miniaturized for prop integration, focusing on battery efficiency and high-intensity output.',
+    expandedDetails: 'Circuit soldering and LED system integration. Focused on designing and programming lighting sequences, including assembly and hardware troubleshooting for custom electronic projects.',
     publicId: '0_-_Lightning_lblfpq',
     subSkills: [
-      { id: 'elec-1', title: 'LEDs', description: 'High-density addressable lighting arrays with custom sequences for vibrant visual feedback.', publicId: '1_-_LEDs_civgrw', tags: ['LEDs', 'Programming', 'Light'], gallery: SKILL_GALLERIES['elec-1'] || [] },
-      { id: 'elec-2', title: 'Arduino', description: 'Micro-controller programming for interactive prop logic and sensor-driven environmental responses.', publicId: '1.3_-_Arduino_u3bgqb', tags: ['Arduino', 'Logic', 'Interactive'], gallery: SKILL_GALLERIES['elec-2'] || [] },
-      { id: 'elec-3', title: 'Circuits', description: 'Bespoke wiring harness design and power management for portable, high-performance prop electronics.', publicId: '2.1_-_Circuits_-_0_w7evsy', tags: ['Circuits', 'Power', 'PCB'], gallery: SKILL_GALLERIES['elec-3'] || [] }
+      { id: 'elec-1', title: 'LEDs', description: 'LED system design and implementation. Experienced in programming lighting sequences and integrating light-emitting components for aesthetic purposes.', publicId: '1_-_LEDs_civgrw', tags: ['LEDs', 'Lights', 'Alive Objects'], gallery: SKILL_GALLERIES['elec-1'] || [] },
+      { id: 'elec-2', title: 'Arduino', description: 'Micro-controller programming for basic automation in interactive prop projects and hardware control.', publicId: '1.3_-_Arduino_u3bgqb', tags: ['Arduino', 'Logic', 'Programming'], gallery: SKILL_GALLERIES['elec-2'] || [] },
+      { id: 'elec-3', title: 'Circuits', description: 'Physical circuit assembly and lead-free or electronic soldering. Focused on component placement, wiring, and hardware assembly.', publicId: '2.1_-_Circuits_-_0_w7evsy', tags: ['Circuits', 'Welding', 'Power'], gallery: SKILL_GALLERIES['elec-3'] || [] }
     ],
     gallery: [{ type: 'image', publicId: 'wp_al_hacha_1_citmzg' }],
   },
@@ -263,12 +263,12 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     title: 'Skilled Materials',
     subtitle: 'Resins & Synthetics',
     description: 'Master-level manipulation of specialized composites and industrial synthetics for unique material properties.',
-    expandedDetails: 'We push the boundaries of materials science, creating custom blends of urethanes, flexible foams, and polymers to achieve specific characteristics like weight, flexibility, or hyper-realistic finishes.',
+    expandedDetails: 'Composite materials and mold making using resins, fiberglass, and silicone rubbers. Casting techniques and the use of putties for surface finishing and structural repair for long-term projects.',
     publicId: '2.1_-_Resins_-_0_el9as6',
     subSkills: [
-      { id: 'mat-1', title: 'Resins', description: 'Advanced clear-casting and high-strength resin builds with a focus on optical clarity and durability.', publicId: '1.1_-_Resins_bzvqg3', tags: ['Resin', 'Casting', 'Clear'], gallery: SKILL_GALLERIES['mat-1'] || [] },
+      { id: 'mat-1', title: 'Resins', description: 'Resin casting and processing. Experienced in mixing, degassing, and curing techniques for both structural parts and aesthetic finishes.', publicId: '1.1_-_Resins_bzvqg3', tags: ['Resin', 'Casting', 'Clear'], gallery: SKILL_GALLERIES['mat-1'] || [] },
       { id: 'mat-2', title: 'Fiberglass & Putties', description: 'Structural reinforcement and surface modeling using industrial composites and specialized filler compounds.', publicId: '1.2_-_Fiberglass_Putties_vv8rv0', tags: ['Composite', 'Putty', 'Strength'], gallery: SKILL_GALLERIES['mat-2'] || [] },
-      { id: 'mat-3', title: 'Rubber & Molderie', description: 'Creation of flexible components and complex multi-part elastic molds for organic movement simulation.', publicId: '1.3_-_Rubber_Molderie_lf2drd', tags: ['Rubber', 'Molds', 'Flexible'], gallery: SKILL_GALLERIES['mat-3'] || [] }
+      { id: 'mat-3', title: 'Rubber & Molderie', description: 'Creation and construction of multi-part molds and support shells to handle significant volumes for a better accuracy and surface detail.', publicId: '1.3_-_Rubber_Molderie_lf2drd', tags: ['Rubber', 'Molds', 'Flexible'], gallery: SKILL_GALLERIES['mat-3'] || [] }
     ],
     gallery: [{ type: 'image', publicId: '2.2_-_Resin_Casting_Mold_Making_-_1_cwu6qz' }],
   },
@@ -277,26 +277,26 @@ export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
     title: 'Painting',
     subtitle: 'Airbrushing & Weathering',
     description: 'Cinematic finishing techniques focused on material realism, environmental aging, and visual contrast.',
-    expandedDetails: 'Our painting workflow utilizes airbrushing, hand-painting, and chemical aging to simulate natural wear. We emphasize specularity and color depth to ensure props look authentic under any lighting condition.',
+    expandedDetails: 'Skilled in manual and digital painting capturing moments and conveying them through diverse aesthetics. Highly Proficient in Adobe Photoshop for image editing, photo manipulation, and complex compositing.',
     publicId: '0_-_Painting_nisxnq',
     subSkills: [
-      { id: 'paint-1', title: 'Traditional & Digital Drawing', description: 'Concept art illustration and manual drafting for pre-visualization and detailed surface patterns.', publicId: '1.1_-_Traditional_Digital_drawing_xwppb7', tags: ['Drawing', 'DigitalArt', 'Concept'], gallery: SKILL_GALLERIES['paint-1'] || [] },
-      { id: 'paint-2', title: 'Painting', description: 'High-end color theory application and multi-layer finishing for hyper-realistic textures.', publicId: '1.2_-_Painting_bbkiac', tags: ['Color', 'Weathering', 'Realism'], gallery: SKILL_GALLERIES['paint-2'] || [] },
-      { id: 'paint-3', title: 'Photomanipulation', description: 'Digital post-processing and composite editing for high-impact visual presentation.', publicId: '1.3_-_Photomanipulation_pjfox0', tags: ['Photoshop', 'Composite', 'Edit'], gallery: SKILL_GALLERIES['paint-3'] || [] }
+      { id: 'paint-1', title: 'Traditional & Digital Drawing', description: 'Seamlessly transition between traditional sketching/painting and digital rendering.', publicId: '1.1_-_Traditional_Digital_drawing_xwppb7', tags: ['Drawing', 'DigitalArt', 'Concept'], gallery: SKILL_GALLERIES['paint-1'] || [] },
+      { id: 'paint-2', title: 'Painting', description: 'Traditional painter. Expert in handling physical media—including oils, acrylics, and watercolors—to create evocative, high-texture compositions with a focus on classical techniques and light manipulation.', publicId: '1.2_-_Painting_bbkiac', tags: ['Color', 'Aesthetic', 'Acrylics'], gallery: SKILL_GALLERIES['paint-2'] || [] },
+      { id: 'paint-3', title: 'Photomanipulation', description: 'Skilled in manual and digital painting capturing moments and conveying them through diverse aesthetics. Highly Proficient in Adobe Photoshop for image editing, photo manipulation, and complex compositing.', publicId: '1.3_-_Photomanipulation_pjfox0', tags: ['Photoshop', 'Composite', 'Edit'], gallery: SKILL_GALLERIES['paint-3'] || [] }
     ],
     gallery: [{ type: 'image', publicId: 'skyrim_1_llcbuo' }],
   },
   {
     id: 'inorganic',
     title: 'Sculpting & Modeling',
-    subtitle: 'Metal, Stone & Synthetic',
+    subtitle: 'High Definition Textures',
     description: 'Mastery of non-organic textures and industrial modeling to replicate hard-surface materials with hyper-realistic detail.',
     expandedDetails: 'Applying advanced sculpting techniques to synthetic bases to simulate the weight and character of forged metal and weathered stone. Our process focuses on weight-accurate massing and believable structural wear patterns.',
     publicId: '0_-_Sculping_Modeling_xlweee',
     subSkills: [
-      { id: 'scul-1', title: 'Patterns & Modeling', description: 'Creation of precise structural templates and architectural patterns for large-scale hard-surface builds.', publicId: '1.1_-_Patterns_Modeling_igkhws', tags: ['Templates', 'Patterns', 'Industrial'], gallery: SKILL_GALLERIES['scul-1'] || [] },
-      { id: 'scul-2', title: 'Sculpting', description: 'Manual surface sculpting focusing on high-contrast inorganic textures like corroded metal and carved stone.', publicId: '1.2_-_Sculpting_lanu6k', tags: ['HardSurface', 'Iron', 'Carving'], gallery: SKILL_GALLERIES['scul-2'] || [] },
-      { id: 'scul-3', title: 'Textures', description: 'Engineering of realistic surface oxidation, pitting, and material-specific grain patterns on synthetic substrates.', publicId: '1.3_-_Textures_bqtcht', tags: ['Texture', 'Oxidation', 'Stone'], gallery: SKILL_GALLERIES['scul-3'] || [] }
+      { id: 'scul-1', title: 'Patterns & Modeling', description: 'Creation of precise structural templates and architectural patterns for large-scale hard-surface builds.', publicId: '1.1_-_Patterns_Modeling_igkhws', tags: ['Templates', 'Measurements', 'Design'], gallery: SKILL_GALLERIES['scul-1'] || [] },
+      { id: 'scul-2', title: 'Sculpting', description: 'Versatile sculptor with a comprehensive command of form and volume across physical and digital media. Expert in traditional hand-modeling—using clay, plasticine, and polymers—as well as advanced 3D digital sculpting optimized for high-precision printing and manufacturing.', publicId: '1.2_-_Sculpting_lanu6k', tags: ['Plasticine', 'Manual', 'Clay'], gallery: SKILL_GALLERIES['scul-2'] || [] },
+      { id: 'scul-3', title: 'Textures', description: 'Expert artist specializing in the high-fidelity recreation of inorganic textures. Proficient in manipulating paints, resins, and polymers to convincingly simulate weathered metals, oxidized surfaces, natural stone, leathers, and gemstones.', publicId: '1.3_-_Textures_bqtcht', tags: ['Visual', 'Fake Materials', 'Textures'], gallery: SKILL_GALLERIES['scul-3'] || [] }
     ],
     gallery: [{ type: 'image', publicId: 'elden_ring_8_gmazch' }],
   },
