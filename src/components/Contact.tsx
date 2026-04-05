@@ -1,10 +1,44 @@
 import DeferredBackground from './ui/DeferredBackground';
 import { IMAGES } from './showcase/content/images';
-import { Mail, Phone, Instagram } from 'lucide-react';
+import { Mail, Phone, Instagram, Send, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
 
 const CONTACT_BG = IMAGES.contact.background;
 
 export default function Contact() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const sendEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formRef.current) return;
+
+    setStatus('sending');
+    setErrorMessage('');
+
+    try {
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+      
+      setStatus('success');
+      formRef.current.reset();
+      
+      // Auto-reset after 5 seconds
+      setTimeout(() => setStatus('idle'), 5000);
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      setStatus('error');
+      setErrorMessage('Oops! Something went wrong. Please try again or use direct mail.');
+      setTimeout(() => setStatus('idle'), 6000);
+    }
+  };
+
   return (
     <section id="contact" className="py-48 relative bg-black w-full overflow-hidden border-t border-white/5">
       {/* Background Image */}
@@ -76,18 +110,23 @@ export default function Contact() {
 
             {/* Inquiry Form */}
             <div className="lg:col-span-3">
-              <form className="bg-black/40 p-8 md:p-12 border border-white/5 space-y-8" onSubmit={(e) => e.preventDefault()}>
+              <form 
+                ref={formRef}
+                onSubmit={sendEmail}
+                className="bg-black/40 p-8 md:p-12 border border-white/5 space-y-8"
+              >
                 <div className="grid md:grid-cols-2 gap-8">
                   <div className="relative group">
                     <input 
                       type="text"
-                      id="name"
+                      id="user_name"
+                      name="user_name"
                       className="peer w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-white transition-all duration-500 font-sans placeholder-transparent" 
                       placeholder="Full Name" 
                       required
                     />
                     <label 
-                      htmlFor="name" 
+                      htmlFor="user_name" 
                       className="absolute left-0 -top-4 text-[10px] font-sans tracking-[0.2em] text-white/60 uppercase transition-all duration-300 peer-placeholder-shown:text-white/40 peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-white cursor-text"
                     >
                       Full Name
@@ -96,13 +135,14 @@ export default function Contact() {
                   <div className="relative group">
                     <input 
                       type="email"
-                      id="email"
+                      id="user_email"
+                      name="user_email"
                       className="peer w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-white transition-all duration-500 font-sans placeholder-transparent" 
                       placeholder="Email Address" 
                       required
                     />
                     <label 
-                      htmlFor="email" 
+                      htmlFor="user_email" 
                       className="absolute left-0 -top-4 text-[10px] font-sans tracking-[0.2em] text-white/60 uppercase transition-all duration-300 peer-placeholder-shown:text-white/40 peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-white cursor-text"
                     >
                       Email Address
@@ -113,7 +153,10 @@ export default function Contact() {
                 <div className="space-y-2">
                   <label className="text-[10px] font-sans tracking-[0.3em] text-white/40 uppercase mb-2 block">Project Category</label>
                   <div className="relative">
-                    <select className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white hover:border-white/50 focus:outline-none focus:border-white transition-all duration-300 font-sans appearance-none cursor-pointer [&>option]:bg-black">
+                    <select 
+                      name="project_category"
+                      className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white hover:border-white/50 focus:outline-none focus:border-white transition-all duration-300 font-sans appearance-none cursor-pointer [&>option]:bg-black"
+                    >
                       <option>Film & Stage Prop</option>
                       <option>Commercial Advertising</option>
                       <option>Private Collector Commission</option>
@@ -129,25 +172,60 @@ export default function Contact() {
 
                 <div className="relative group pt-4">
                   <textarea 
-                    id="brief"
+                    id="message"
+                    name="message"
                     rows={4} 
                     className="peer w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white hover:border-white/50 focus:outline-none focus:border-white transition-all duration-300 font-sans resize-none placeholder-transparent" 
                     placeholder="Project Brief"
                     required
                   ></textarea>
                   <label 
-                    htmlFor="brief" 
+                    htmlFor="message" 
                     className="absolute left-4 -top-0 bg-transparent px-1 text-[10px] font-sans tracking-[0.2em] text-white/60 uppercase transition-all duration-300 peer-placeholder-shown:text-white/40 peer-placeholder-shown:top-8 peer-placeholder-shown:left-4 peer-focus:-top-0 peer-focus:bg-black peer-focus:text-white cursor-text z-10"
                   >
                     Describe your vision...
                   </label>
                 </div>
 
+                {status === 'error' && (
+                  <div className="flex items-center gap-3 text-red-400 bg-red-400/5 border border-red-400/20 px-4 py-3 text-xs font-sans animate-in fade-in slide-in-from-top-2">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    {errorMessage}
+                  </div>
+                )}
+
+                {status === 'success' && (
+                  <div className="flex items-center gap-3 text-green-400 bg-green-400/5 border border-green-400/20 px-4 py-3 text-xs font-sans animate-in fade-in slide-in-from-top-2">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    Message sent successfully! I'll get back to you soon.
+                  </div>
+                )}
+
                 <button 
                   type="submit" 
-                  className="w-full bg-white text-black font-sans font-black py-5 tracking-[0.4em] uppercase hover:bg-white/90 transition-all duration-500"
+                  disabled={status === 'sending' || status === 'success'}
+                  className={`w-full font-sans font-black py-5 tracking-[0.4em] uppercase transition-all duration-500 flex items-center justify-center gap-4 ${
+                    status === 'sending' || status === 'success'
+                      ? 'bg-white/10 text-white/40 cursor-not-allowed'
+                      : 'bg-white text-black hover:bg-white/90'
+                  }`}
                 >
-                  Send Inquiry
+                  {status === 'sending' ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Dispatching...
+                    </>
+                  ) : status === 'success' ? (
+                    <>
+                      <CheckCircle2 className="w-5 h-5" />
+                      Dispatched
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5 opacity-40" />
+                      Send Inquiry
+                    </>
+                  )}
                 </button>
               </form>
             </div>

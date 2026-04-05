@@ -108,7 +108,7 @@ const LOCATIONS = [
     lng: -58.17,
     description: 'Northern frontier brand integrations.',
     events: [
-      { city: 'Formosa', name: 'AVK Natsu Geek', logoId: '2018_Ene_zfirdd', years: ['2018'], type: 'CONVENTION' }
+      { city: 'Formosa Capital', name: 'AVK Natsu Geek', logoId: '2018_Ene_zfirdd', years: ['2018'], type: 'CONVENTION' }
     ]
   },
   {
@@ -120,7 +120,7 @@ const LOCATIONS = [
     lng: -64.26,
     description: 'North-central regional deployments.',
     events: [
-      { city: 'Santiago del Estero', name: 'Anime Town', logoId: '2018_Abril_1_t2twv4', years: ['2018'], type: 'FESTIVAL' }
+      { city: 'Santiago Capital', name: 'Anime Town', logoId: '2018_Abril_1_t2twv4', years: ['2018'], type: 'FESTIVAL' }
     ]
   },
   {
@@ -157,7 +157,7 @@ const LOCATIONS = [
     lng: -64.18,
     description: 'Central logistic and marketing hub for nationwide events.',
     events: [
-      { city: 'Córdoba', name: 'CAF', logoId: '2023_Abr_dssdkl', years: ['2023'], type: 'CONVENTION' },
+      { city: 'Córdoba Capital', name: 'CAF', logoId: '2023_Abr_dssdkl', years: ['2023'], type: 'CONVENTION' },
       { city: 'San Francisco', name: 'FrikiFest', logoId: '2024_Sep_1_oam2kd', years: ['2024'], type: 'EVENT' }
     ]
   },
@@ -218,7 +218,7 @@ const LOCATIONS = [
     lng: -66.33,
     description: 'Cuyo region strategic integrations.',
     events: [
-      { city: 'San Luis', name: '3DFest', logoId: '2024_Oct_2_gj9wxq', years: ['2024'], type: 'FESTIVAL' }
+      { city: 'San Luis Capital', name: '3DFest', logoId: '2024_Oct_2_gj9wxq', years: ['2024'], type: 'FESTIVAL' }
     ]
   },
   {
@@ -230,8 +230,8 @@ const LOCATIONS = [
     lng: -58.83,
     description: 'Mesopotamian regional coordination and brand awards.',
     events: [
-      { city: 'Corrientes', name: 'K-Anime', logoId: '2024_Nov_1_zkt9qu', years: ['2024'], type: 'EVENT' },
-      { city: 'Corrientes', name: 'Blaze Awards', logoId: 'B_jdz75u', years: ['2024'], type: 'AWARDS', rank: 'AWARD' }
+      { city: 'Corrientes Capital', name: 'K-Anime', logoId: '2024_Nov_1_zkt9qu', years: ['2024'], type: 'EVENT' },
+      { city: 'Corrientes Capital', name: 'Blaze Awards', logoId: 'B_jdz75u', years: ['2024'], type: 'AWARDS', rank: 'AWARD' }
     ]
   }
 ];
@@ -586,7 +586,9 @@ export default function EventMap() {
                       <div className="w-2 h-1 rounded-full bg-white" />
                    </div>
                    <span className="text-[8px] text-white uppercase tracking-[0.3em]">
-                        FIELD EXPERIENCE: {selectedEvent ? '1' : allEventsWithCoords.length}
+                        FIELD EXPERIENCE: {selectedEvent 
+                            ? selectedEvent.years.length 
+                            : allEventsWithCoords.reduce((acc: number, curr: any) => acc + curr.years.length, 0)}
                    </span>
                 </div>
                 <div className="font-mono text-[8px] text-brand-400/30 tracking-[0.2em] uppercase">LINK | ACTIVE</div>
