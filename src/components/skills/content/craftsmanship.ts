@@ -167,7 +167,7 @@ export type CraftsmanshipCategory = {
 export const CRAFTSMANSHIP: CraftsmanshipCategory[] = [
   {
     id: 'fx-makeup',
-    title: 'Makeup',
+    title: 'Makeup & Prosthetics',
     subtitle: 'Prosthetics & Skin',
     description: 'High-fidelity character makeup and prosthetic application focusing on skin realism and seamless transformation.',
     expandedDetails:

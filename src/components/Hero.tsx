@@ -28,23 +28,21 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-6xl mx-auto flex flex-col items-center">
-        <div className="flex items-center gap-4 mb-8 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_forwards]">
-          <div className="w-12 h-[1px] bg-brand-400"></div>
-          <span className="text-brand-400 font-sans text-[10px] md:text-xs tracking-[0.6em] uppercase font-bold">SINCE 2014 // MASTER PROPMAKER</span>
-          <div className="w-12 h-[1px] bg-brand-400"></div>
+        <div className="flex items-center justify-center w-full mb-8 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_forwards]">
+          <span className="text-brand-400 font-sans text-[10px] md:text-xs tracking-[0.6em] -mr-[0.6em] uppercase font-bold text-center">― Asset Crafter ―</span>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl md:text-8xl lg:text-[10rem] font-serif text-white tracking-widest leading-[0.85] mb-4 md:mb-8 italic translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.2s_forwards]">
-          CAIDEN <span className="text-white/20 block md:inline">DRI</span>
+        <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-[10rem] font-serif text-white tracking-widest leading-[0.85] mb-4 md:mb-8 italic translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.2s_forwards]">
+          CAIDEN <span className="text-white/60 md:text-white/30 block md:inline">DRI</span>
         </h1>
 
-        <div className="flex flex-col md:flex-row items-center gap-4 md:gap-12 mb-8 md:mb-12 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.4s_forwards]">
-          <h2 className="text-sm md:text-xl font-sans tracking-[0.5em] text-white uppercase font-light">
-            REALITY <span className="font-bold text-brand-400">SCULPTOR</span>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-8 md:mb-12 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.4s_forwards]">
+          <h2 className="text-sm md:text-xl font-sans tracking-[0.5em] -mr-[0.5em] text-white uppercase font-light">
+            PROFESSIONAL <span className="font-bold text-brand-400">PROPMAKER</span>
           </h2>
-          <div className="hidden md:block w-px h-6 bg-white/20"></div>
-          <h2 className="text-sm md:text-xl font-sans tracking-[0.5em] text-white uppercase font-light">
-            ASSET <span className="font-bold text-brand-400">CRAFTER</span>
+          <span className="hidden md:block text-brand-400/80 font-sans text-sm tracking-widest font-bold">//</span>
+          <h2 className="text-sm md:text-xl font-sans tracking-[0.5em] -mr-[0.5em] text-white uppercase font-light">
+            REALITY <span className="font-bold text-brand-400">SCULPTOR</span>
           </h2>
         </div>
         
@@ -52,10 +50,7 @@ export default function Hero() {
           Bridging the gap between design vision and physical reality through a decade of mastery in cross-disciplinary fabrication.
         </p>
 
-        {/* Scroll indicator - fixed position and bridging the transition */}
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-6 animate-pulse">
-           <div className="w-[1px] h-24 bg-gradient-to-b from-brand-400 via-brand-400/20 to-transparent"></div>
-        </div>
+
       </div>
     </section>
   );

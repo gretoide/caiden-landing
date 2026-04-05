@@ -33,7 +33,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               CMD <span className="font-light italic"></span>
             </span>
             <span className="text-[8px] text-brand-400 tracking-[0.5em] uppercase font-sans mt-1">
-              Premium Artist
+              MASTER VISUAL ARTIST
             </span>
           </div>
           
