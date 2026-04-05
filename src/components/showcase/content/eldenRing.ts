@@ -17,7 +17,7 @@ export const eldenRingData = {
     'H2_farxom',  // Mosaic 4
     'elden_ring_6_k5z39c',  // Focus Main
     'H4_ptxoik',  // Focus Detail 1 (placeholder/repeat if no more unique)
-    'H5_jmpkrm', // Focus Detail 2
+    'copy_of_copy_of_h5_p0mki9_987d97_75b764', // Focus Detail 2
     'H7_yzdgsy',  // Focus Detail 3
   ]
 } as const;
