@@ -91,7 +91,7 @@ const LOCATIONS = [
     lng: -65.10,
     description: 'Patagonian presence through strategic event collaborations.',
     events: [
-      { city: 'Trelew', name: 'Banzai', logoId: '2017_Ago_1_ebbazm', years: ['2017'], type: 'CONVENTION' }
+      { city: 'Chubut', name: 'Banzai', logoId: '2017_Ago_1_ebbazm', years: ['2017'], type: 'CONVENTION' }
     ]
   },
   {
@@ -115,7 +115,7 @@ const LOCATIONS = [
     lng: -64.26,
     description: 'North-central regional deployments.',
     events: [
-      { city: 'Santiago', name: 'Anime Town', logoId: '2018_Abril_1_t2twv4', years: ['2018'], type: 'FESTIVAL' }
+      { city: 'Santiago del Estero', name: 'Anime Town', logoId: '2018_Abril_1_t2twv4', years: ['2018'], type: 'FESTIVAL' }
     ]
   },
   {
@@ -127,7 +127,8 @@ const LOCATIONS = [
     lng: -60.70,
     description: 'Major regional coordination and commercial integrations.',
     events: [
-      { city: 'Santa Fe', name: 'D.M.O', logoId: '2019_Mar_a4qoex', years: ['2019'], type: 'EXHIBITION' }
+      { city: 'Santa Fe', name: 'D.M.O', logoId: '2019_Mar_a4qoex', years: ['2019'], type: 'EXHIBITION' },
+      { city: 'Rosario', name: 'Crack Bang Boom', logoId: '2023_Ago_2_ugqa2j', years: ['2024'], type: 'EVENT' }
     ]
   },
   {
@@ -139,7 +140,7 @@ const LOCATIONS = [
     lng: -63.00,
     description: 'Southern operational baseline in Viedma region.',
     events: [
-      { city: 'Viedma', name: 'Comarca Fest', logoId: '2019_Jul_gwrkyu', years: ['2019'], type: 'FESTIVAL' }
+      { city: 'Rio Negro', name: 'Comarca Fest', logoId: '2019_Jul_gwrkyu', years: ['2019'], type: 'FESTIVAL' }
     ]
   },
   {
@@ -151,7 +152,8 @@ const LOCATIONS = [
     lng: -64.18,
     description: 'Central logistic and marketing hub for nationwide events.',
     events: [
-      { city: 'Córdoba', name: 'CAF', logoId: '2023_Abr_dssdkl', years: ['2023'], type: 'CONVENTION' }
+      { city: 'Córdoba', name: 'CAF', logoId: '2023_Abr_dssdkl', years: ['2023'], type: 'CONVENTION' },
+      { city: 'San Francisco', name: 'FrikiFest', logoId: '2024_Sep_1_oam2kd', years: ['2024'], type: 'EVENT' }
     ]
   },
   {
@@ -163,7 +165,7 @@ const LOCATIONS = [
     lng: -64.28,
     description: 'Strategic integrations for national gaming expos.',
     events: [
-      { city: 'Sta Rosa', name: 'Fan Expo 4.0 x AGS', logoId: '2023_Sep_3_f6pict', years: ['2023'], type: 'GAMING EXHIBITION' }
+      { city: 'La Pampa', name: 'Fan Expo 4.0 x AGS', logoId: '2023_Sep_3_f6pict', years: ['2023'], type: 'GAMING EXHIBITION' }
     ]
   },
   {
@@ -175,7 +177,7 @@ const LOCATIONS = [
     lng: -58.98,
     description: 'Northeastern regional brand reach.',
     events: [
-      { city: 'Resistencia', name: 'Comic World', logoId: '2023_Nov_wbqtbx', years: ['2023'], type: 'INTERNATIONAL' }
+      { city: 'Chaco', name: 'Comic World', logoId: '2023_Nov_wbqtbx', years: ['2023'], type: 'INTERNATIONAL' }
     ]
   },
   {
@@ -514,7 +516,7 @@ export default function EventMap() {
                       className={`group flex items-start gap-8 border-b border-white/5 pb-8 pt-4 last:border-0 transition-all duration-300 -mx-4 px-8 rounded-xl cursor-pointer hover:bg-white/[0.03] relative overflow-hidden ${selectedEvent?.id === event.id ? 'bg-white/[0.04]' : ''}`}
                       onClick={() => onMarkerClick(event)}
                     >
-                       <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 overflow-hidden flex items-center justify-center relative bg-black/20 rounded-lg">
+                       <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 overflow-hidden flex items-center justify-center relative">
                         <OptimizedImage
                             publicId={event.logoId}
                             alt={event.name}
