@@ -1,13 +1,13 @@
 import { useState, useCallback, useMemo } from 'react';
 import Map, { Marker, Source, Layer } from 'react-map-gl';
 import { Globe, ChevronDown, Plus, Minus, Star } from 'lucide-react';
-import type { FillLayer, LineLayer } from 'react-map-gl';
+import type { LineLayer } from 'react-map-gl';
 import OptimizedImage from '../ui/OptimizedImage';
 
 // Configuration
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 const SECTION_BG = '#050505';
-const BRAND_400 = '#60a5fa';
+
 
 // Custom Styles
 const CUSTOM_STYLES = `
@@ -29,15 +29,17 @@ const LOCATIONS = [
     lng: -60.4956,
     description: 'Central hub with a rich history of brand collaborations across Concordia, Paraná, and the Uruguay River region.',
     events: [
-      { city: 'Concordia', name: 'Frikimania', logoId: '2019_Feb_i8ywbx', years: ['2017', '2018', '2019', '2020', '2021', '2022', '2024'], type: 'CONVENTION' },
-      { city: 'Paraná', name: 'Paraná Comic Con', logoId: '2024_May_2_nnfc8i', years: ['2024'], type: 'INTERNATIONAL' },
-      { city: 'Gualeguaychú', name: 'Neo Freak', logoId: '2024_Ago_1_m01lci', years: ['2024'], type: 'CONVENTION' },
-      { city: 'Villa Elisa', name: 'Mirai Fest', logoId: '2022_Feb_niodok', years: ['2022', '2023'], type: 'FESTIVAL' },
-      { city: 'Concordia', name: 'Gamer Fest', logoId: '2023_May_2_m6mzrr', years: ['2023'], type: 'GAMING EXHIBITION' },
-      { city: 'Concordia', name: 'Asia Fest', logoId: '2016_Jul_wddizo', years: ['2016', '2017', '2018', '2019'], type: 'FESTIVAL' },
-      { city: 'Villaguay', name: 'Neko Fest', logoId: '2017_May_kcz85v', years: ['2017', '2018'], type: 'FAN EVENT' },
-      { city: 'Colón', name: 'Kyubi Fest', logoId: '2018_Abril_2_yo6cug', years: ['2018'], type: 'FESTIVAL' },
-      { city: 'Concordia', name: 'Zombie Walk', logoId: '2018_Nov_m4b5rz', years: ['2016', '2017'], type: 'THEMED' }
+      { city: 'Concordia', name: 'Frikimania', logoId: '2019_Feb_i8ywbx', years: ['2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'], type: 'CONVENTION', lat: -31.3927, lng: -58.0202 },
+      { city: 'Paraná', name: 'Paraná Comic Con', logoId: '2024_May_2_nnfc8i', years: ['2024'], type: 'INTERNATIONAL', lat: -31.7444, lng: -60.5175 },
+      { city: 'Gualeguaychú', name: 'Neo Freak', logoId: '2024_Ago_1_m01lci', years: ['2024'], type: 'CONVENTION', lat: -33.0094, lng: -58.5147 },
+      { city: 'Villa Adela', name: 'Mirai Fest', logoId: '2022_Feb_niodok', years: ['2022', '2023'], type: 'FESTIVAL', lat: -31.4397, lng: -58.0673 },
+      { city: 'Concordia', name: 'Gamer Fest', logoId: '2023_May_2_m6mzrr', years: ['2023'], type: 'GAMING EXHIBITION', lat: -31.3927, lng: -58.0202 },
+      { city: 'Concordia', name: 'Asia Fest', logoId: '2016_Jul_wddizo', years: ['2015', '2016', '2017', '2018', '2019'], type: 'FESTIVAL', lat: -31.3927, lng: -58.0202 },
+      { city: 'Paraná', name: 'Ein B-Pop', logoId: 'placeholder', years: ['2023'], type: 'EVENT', lat: -31.7444, lng: -60.5175 },
+      { city: 'Paraná', name: 'Anicubic', logoId: 'placeholder', years: ['2015'], type: 'CONVENTION', lat: -31.7444, lng: -60.5175 },
+      { city: 'Villaguay', name: 'Neko Fest', logoId: '2017_May_kcz85v', years: ['2017', '2018'], type: 'FAN EVENT', lat: -31.8653, lng: -59.0269 },
+      { city: 'Colón', name: 'Kyubi Fest', logoId: '2018_Abril_2_yo6cug', years: ['2018'], type: 'FESTIVAL', lat: -32.2217, lng: -58.1439 },
+      { city: 'Concordia', name: 'Zombie Walk', logoId: '2018_Nov_m4b5rz', years: ['2016', '2017'], type: 'THEMED', lat: -31.3927, lng: -58.0202 }
     ]
   },
   {
@@ -62,11 +64,14 @@ const LOCATIONS = [
     lng: -58.3816,
     description: 'National capital operations and major event headquarters, including international Comic Con brand.',
     events: [
-      { city: 'CABA', name: 'Comic Con', logoId: '2023_Dec_sevrvj', years: ['2023', '2024', '2025'], type: 'INTERNATIONAL' },
-      { city: 'CABA', name: 'Anime Con', logoId: '2023_Sep_2_npt6jh', years: ['2022', '2024'], type: 'INTERNATIONAL' },
-      { city: 'CABA', name: 'AGS', logoId: '2023_Oct_kja7mq', years: ['2023'], type: 'GAMING EXHIBITION' },
-      { city: 'Tandil', name: 'Kawaii Koto', logoId: '2023_Sep_1_ajbiqh', years: ['2023'], type: 'CULTURE' },
-      { city: 'CABA', name: 'Martin Fierro Digital', logoId: '2024_Ago_3_rlvmal', years: ['2024'], type: 'AWARDS', rank: 'AWARD' }
+      { city: 'CABA', name: 'Comic Con', logoId: '2023_Dec_sevrvj', years: ['2016', '2017', '2023', '2024', '2025'], type: 'INTERNATIONAL', lat: -34.6037, lng: -58.3816 },
+      { city: 'CABA', name: 'Anime Con', logoId: '2023_Sep_2_npt6jh', years: ['2022', '2024'], type: 'INTERNATIONAL', lat: -34.6037, lng: -58.3816 },
+      { city: 'CABA', name: 'Anime Friends', logoId: 'placeholder', years: ['2015'], type: 'EXHIBITION', lat: -34.6037, lng: -58.3816 },
+      { city: 'CABA', name: 'ComiCópolis', logoId: 'placeholder', years: ['2015'], type: 'CONVENTION', lat: -34.6037, lng: -58.3816 },
+      { city: 'CABA', name: 'Anime Expo', logoId: 'placeholder', years: ['2018'], type: 'CONVENTION', lat: -34.6037, lng: -58.3816 },
+      { city: 'CABA', name: 'AGS', logoId: '2023_Oct_kja7mq', years: ['2023'], type: 'GAMING EXHIBITION', lat: -34.6037, lng: -58.3816 },
+      { city: 'Tandil', name: 'Kawaii Koto', logoId: '2023_Sep_1_ajbiqh', years: ['2023'], type: 'CULTURE', lat: -37.3217, lng: -59.1331 },
+      { city: 'CABA', name: 'Martin Fierro Digital', logoId: '2024_Ago_3_rlvmal', years: ['2024'], type: 'AWARDS', rank: 'AWARD', lat: -34.6037, lng: -58.3816 }
     ]
   },
   {
@@ -78,8 +83,8 @@ const LOCATIONS = [
     lng: -69.21,
     description: 'Deep south operational coverage and extreme environment deployments.',
     events: [
-      { city: 'Caleta Olivia', name: 'Kogarashi Fest', logoId: '2024_May_1_tiod5h', years: ['2024'], type: 'FESTIVAL' },
-      { city: 'Gallegos', name: 'Feña', logoId: '2024_Nov_2_tn9sgf', years: ['2024'], type: 'THEMED' }
+      { city: 'Caleta Olivia', name: 'Kogarashi Fest', logoId: '2024_May_1_tiod5h', years: ['2024'], type: 'FESTIVAL', lat: -46.4397, lng: -67.5200 },
+      { city: 'Calafate', name: 'Feña', logoId: '2024_Nov_2_tn9sgf', years: ['2024'], type: 'THEMED', lat: -50.3449, lng: -72.2721 }
     ]
   },
   {
@@ -91,7 +96,7 @@ const LOCATIONS = [
     lng: -65.10,
     description: 'Patagonian presence through strategic event collaborations.',
     events: [
-      { city: 'Chubut', name: 'Banzai', logoId: '2017_Ago_1_ebbazm', years: ['2017'], type: 'CONVENTION' }
+      { city: 'Comodoro Rivadavia', name: 'Banzai', logoId: '2017_Ago_1_ebbazm', years: ['2017'], type: 'CONVENTION' }
     ]
   },
   {
@@ -127,8 +132,8 @@ const LOCATIONS = [
     lng: -60.70,
     description: 'Major regional coordination and commercial integrations.',
     events: [
-      { city: 'Santa Fe', name: 'D.M.O', logoId: '2019_Mar_a4qoex', years: ['2019'], type: 'EXHIBITION' },
-      { city: 'Rosario', name: 'Crack Bang Boom', logoId: '2023_Ago_2_ugqa2j', years: ['2024'], type: 'EVENT' }
+      { city: 'Rosario', name: 'D.M.O', logoId: '2019_Mar_a4qoex', years: ['2019'], type: 'EXHIBITION' },
+      { city: 'Rosario', name: 'Crack Bang Boom', logoId: '2023_Ago_2_ugqa2j', years: ['2016', '2024'], type: 'EVENT' }
     ]
   },
   {
@@ -140,7 +145,7 @@ const LOCATIONS = [
     lng: -63.00,
     description: 'Southern operational baseline in Viedma region.',
     events: [
-      { city: 'Rio Negro', name: 'Comarca Fest', logoId: '2019_Jul_gwrkyu', years: ['2019'], type: 'FESTIVAL' }
+      { city: 'Viedma', name: 'Comarca Fest', logoId: '2019_Jul_gwrkyu', years: ['2019'], type: 'FESTIVAL' }
     ]
   },
   {
@@ -165,7 +170,7 @@ const LOCATIONS = [
     lng: -64.28,
     description: 'Strategic integrations for national gaming expos.',
     events: [
-      { city: 'La Pampa', name: 'Fan Expo 4.0 x AGS', logoId: '2023_Sep_3_f6pict', years: ['2023'], type: 'GAMING EXHIBITION' }
+      { city: 'General Pico', name: 'Fan Expo 4.0 x AGS', logoId: '2023_Sep_3_f6pict', years: ['2023'], type: 'GAMING EXHIBITION' }
     ]
   },
   {
@@ -177,7 +182,7 @@ const LOCATIONS = [
     lng: -58.98,
     description: 'Northeastern regional brand reach.',
     events: [
-      { city: 'Chaco', name: 'Comic World', logoId: '2023_Nov_wbqtbx', years: ['2023'], type: 'INTERNATIONAL' }
+      { city: 'Resistencia', name: 'Comic World', logoId: '2023_Nov_wbqtbx', years: ['2023'], type: 'INTERNATIONAL' }
     ]
   },
   {
@@ -189,7 +194,7 @@ const LOCATIONS = [
     lng: -56.16,
     description: 'International expansion and cross-border collaborations.',
     events: [
-      { city: 'Montevideo', name: 'Expo Convention', logoId: '2024_Abr_sv4yve', years: ['2024'], type: 'INTERNATIONAL' }
+      { city: 'Punta del Este', name: 'Expo Convention', logoId: '2024_Abr_sv4yve', years: ['2024'], type: 'INTERNATIONAL' }
     ]
   },
   {
@@ -201,7 +206,7 @@ const LOCATIONS = [
     lng: -65.30,
     description: 'Northernmost operational sector tracking.',
     events: [
-      { city: 'Jujuy', name: 'Funnanime', logoId: '2024_Sep_2_vyqyqb', years: ['2024'], type: 'EXHIBITION' }
+      { city: 'San Salvador', name: 'Funnanime', logoId: '2024_Sep_2_vyqyqb', years: ['2024'], type: 'EXHIBITION' }
     ]
   },
   {
@@ -248,27 +253,34 @@ export default function EventMap() {
     const coordGroups: Record<string, number> = {};
     
     return LOCATIONS.flatMap(loc => 
-      loc.events.map((event) => {
-        const coordKey = `${loc.lat},${loc.lng}`;
+      loc.events.map((event: any) => {
+        const baseLat = event.lat ?? loc.lat;
+        const baseLng = event.lng ?? loc.lng;
+        const coordKey = `${baseLat},${baseLng}`;
         const indexInGroup = coordGroups[coordKey] || 0;
         coordGroups[coordKey] = indexInGroup + 1;
 
         // Apply a small deterministic jitter if there's more than one event at the same base coordinate
-        // This creates a small circle or line effect so markers don't overlap
-        const angle = (indexInGroup * 137.5) * (Math.PI / 180); // Golden angle for even distribution
-        const radius = 0.04; // Roughly 4-5km offset
+        const angle = (indexInGroup * 137.5) * (Math.PI / 180);
+        const radius = 0.04;
         const jitterLat = indexInGroup === 0 ? 0 : Math.cos(angle) * radius;
         const jitterLng = indexInGroup === 0 ? 0 : Math.sin(angle) * radius;
+
+        // Province name logic for tags
+        let provinceDisplay = loc.provinceName;
+        if (loc.id === 'buenos-aires' && event.city !== 'CABA') {
+            provinceDisplay = 'Buenos Aires';
+        }
 
         return {
           ...event,
           id: `${loc.id}-${event.name.replace(/\s+/g, '-').toLowerCase()}`,
-          provinceName: loc.name,
+          provinceName: provinceDisplay,
           description: loc.description,
-          baseLat: loc.lat,
-          baseLng: loc.lng,
-          lat: loc.lat + jitterLat,
-          lng: loc.lng + jitterLng,
+          baseLat: baseLat,
+          baseLng: baseLng,
+          lat: baseLat + jitterLat,
+          lng: baseLng + jitterLng,
           locId: loc.id
         };
       })
@@ -282,22 +294,10 @@ export default function EventMap() {
   const onMarkerClick = useCallback((event: any) => {
     setIsInteracting(true);
     setSelectedEvent(event);
-    setViewState(prev => ({
-      ...prev,
-      longitude: event.lng,
-      latitude: event.lat,
-      zoom: 7, // Zoom in more for individual events
-      transitionDuration: 1200
-    }));
   }, []);
 
   const onMapClick = useCallback(() => {
     setSelectedEvent(null);
-    setViewState(prev => ({
-      ...prev,
-      zoom: 3.5,
-      transitionDuration: 1000
-    }));
   }, []);
 
   const handleZoom = useCallback((delta: number) => {
@@ -307,17 +307,6 @@ export default function EventMap() {
       transitionDuration: 300
     }));
   }, []);
-
-  const highlightLayer: FillLayer = useMemo(() => ({
-    id: 'province-highlight',
-    type: 'fill',
-    source: 'provinces',
-    paint: {
-      'fill-color': BRAND_400,
-      'fill-opacity': 0.05,
-    },
-    filter: ['==', ['get', 'nombre'], selectedEvent?.provinceName || '']
-  }), [selectedEvent]);
 
   const lineLayer: LineLayer = {
     id: 'provinces-outline',
@@ -430,7 +419,6 @@ export default function EventMap() {
               attributionControl={false}
             >
               <Source id="provinces" type="geojson" data="https://raw.githubusercontent.com/mgubels/argentina-geojson/master/provincias.json">
-                 <Layer {...highlightLayer} />
                  <Layer {...lineLayer} />
               </Source>
 
