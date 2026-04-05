@@ -226,7 +226,7 @@ const LOCATIONS = [
     description: 'Mesopotamian regional coordination and brand awards.',
     events: [
       { city: 'Corrientes', name: 'K-Anime', logoId: '2024_Nov_1_zkt9qu', years: ['2024'], type: 'EVENT' },
-      { city: 'Corrientes', name: 'Blaze Awards', logoId: 'got_1_otuw4y', years: ['2024'], type: 'AWARDS', rank: 'AWARD' }
+      { city: 'Corrientes', name: 'Blaze Awards', logoId: 'B_jdz75u', years: ['2024'], type: 'AWARDS', rank: 'AWARD' }
     ]
   }
 ];
@@ -503,7 +503,7 @@ export default function EventMap() {
                 </div>
                 <p className="text-white/30 font-sans text-xs leading-relaxed mb-0 pl-5 border-l border-brand-400/20 italic">
                    {selectedEvent 
-                    ? `Deployment details for ${selectedEvent.name} in ${selectedEvent.city}, ${selectedEvent.provinceName}.`
+                    ? `Deployment details for ${selectedEvent.name} in ${selectedEvent.city.toLowerCase() === selectedEvent.provinceName.toLowerCase() || selectedEvent.provinceName.toLowerCase().includes(selectedEvent.city.toLowerCase()) ? selectedEvent.provinceName : `${selectedEvent.city}, ${selectedEvent.provinceName}`}.`
                     : 'Consolidated tracking of all marketing campaigns history across the Southern Cone. Click a marker or event to explore.'}
                 </p>
               </div>
@@ -531,12 +531,38 @@ export default function EventMap() {
                      </div>
 
                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-3">
-                           <span className="text-brand-400 font-sans text-[10px] uppercase tracking-[0.2em] font-bold">
-                                {event.city} // {event.provinceName}
-                            </span>
-                           <div className="w-[1px] h-3 bg-white/10" />
-                           <span className="text-white/20 font-sans text-[9px] uppercase tracking-widest">{event.type}</span>
+                        <div className="flex items-center flex-wrap gap-2.5 mb-3">
+                           {(() => {
+                              let raw = [event.city, event.provinceName];
+                              if (event.city.toLowerCase() === event.provinceName.toLowerCase() || 
+                                  event.provinceName.toLowerCase().includes(event.city.toLowerCase())) {
+                                  raw = [event.provinceName];
+                              }
+                              
+                              const locParts = raw
+                                  .flatMap(s => s.split(/[\/|\-]/).map((t: string) => t.trim()))
+                                  .filter((v, i, a) => a.findIndex((t: string) => t.toLowerCase() === v.toLowerCase()) === i && v.length > 0)
+                                  .slice(0, 2);
+                                  
+                              const colors = ['text-brand-400 font-bold', 'text-brand-400/70'];
+                              
+                              return (
+                                 <>
+                                    {locParts.map((tag, i) => (
+                                       <div key={i} className="flex items-center gap-2.5">
+                                          <span className={`font-sans text-[10px] uppercase tracking-[0.2em] ${colors[i] || 'text-brand-400/20'}`}>
+                                             {tag}
+                                          </span>
+                                          {i < locParts.length - 1 && (
+                                             <span className="text-brand-400/30 font-bold tracking-widest text-[8px] mx-0.5">//</span>
+                                          )}
+                                       </div>
+                                    ))}
+                                    {locParts.length > 0 && <div className="w-[1px] h-3 bg-white/10 ml-0.5" />}
+                                    <span className="text-white/30 font-sans text-[9px] uppercase tracking-widest">{event.type}</span>
+                                 </>
+                              );
+                           })()}
                         </div>
                           <div className="flex items-center gap-4 mb-4">
                              <h4 className="text-white font-serif text-xl md:text-2xl tracking-wide uppercase group-hover:text-brand-400 transition-colors">
@@ -575,7 +601,7 @@ export default function EventMap() {
                         FIELD EXPERIENCE: {selectedEvent ? '1' : allEventsWithCoords.length}
                    </span>
                 </div>
-                <div className="font-mono text-[8px] text-brand-400/30 tracking-[0.2em] uppercase">LINK // ACTIVE</div>
+                <div className="font-mono text-[8px] text-brand-400/30 tracking-[0.2em] uppercase">LINK | ACTIVE</div>
              </div>
           </div>
         </div>

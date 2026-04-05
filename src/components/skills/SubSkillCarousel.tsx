@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
 import OptimizedImage from '../ui/OptimizedImage';
 import type { GalleryItem } from './content/craftsmanship';
 import { cloudinaryVideoUrl } from '../../lib/cloudinary';
@@ -11,13 +12,35 @@ type Props = {
 };
 
 export default function SubSkillCarousel({ items, activeIndex, onNext, onPrev }: Props) {
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
   if (!items || items.length === 0) return null;
+
+  // Swipe handlers
+  const minSwipeDistance = 50;
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  const handleTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    if (distance > minSwipeDistance) onNext?.();
+    if (distance < -minSwipeDistance) onPrev?.();
+  };
 
   // Ensure index is within bounds
   const safeIndex = ((activeIndex % items.length) + items.length) % items.length;
 
   return (
-    <div className="absolute inset-0 overflow-hidden bg-black flex items-center justify-center group/carousel">
+    <div 
+      className="absolute inset-0 overflow-hidden bg-black flex items-center justify-center group/carousel touch-pan-y"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {items.map((item, idx) => {
         const isActive = idx === safeIndex;
         
@@ -61,7 +84,7 @@ export default function SubSkillCarousel({ items, activeIndex, onNext, onPrev }:
               e.stopPropagation();
               onPrev?.();
             }}
-            className="absolute left-6 z-30 p-3 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-white/70 hover:text-white hover:bg-brand-400 hover:text-black hover:border-brand-400 transition-all opacity-80 group-hover/carousel:opacity-100 translate-x-0 group-hover/carousel:-translate-x-2"
+            className="hidden md:block absolute left-6 z-30 p-3 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-white/70 hover:text-white hover:bg-brand-400 hover:text-black hover:border-brand-400 transition-all opacity-80 group-hover/carousel:opacity-100 translate-x-0 group-hover/carousel:-translate-x-2"
           >
             <ChevronLeft size={24} />
           </button>
@@ -70,7 +93,7 @@ export default function SubSkillCarousel({ items, activeIndex, onNext, onPrev }:
               e.stopPropagation();
               onNext?.();
             }}
-            className="absolute right-6 z-30 p-3 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-white/70 hover:text-white hover:bg-brand-400 hover:text-black hover:border-brand-400 transition-all opacity-80 group-hover/carousel:opacity-100 translate-x-0 group-hover/carousel:translate-x-2"
+            className="hidden md:block absolute right-6 z-30 p-3 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-white/70 hover:text-white hover:bg-brand-400 hover:text-black hover:border-brand-400 transition-all opacity-80 group-hover/carousel:opacity-100 translate-x-0 group-hover/carousel:translate-x-2"
           >
             <ChevronRight size={24} />
           </button>

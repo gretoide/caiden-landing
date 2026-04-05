@@ -184,7 +184,7 @@ export default function Skills() {
                       imgClassName={`object-cover transition-all duration-1000 ${isActive ? 'scale-100 opacity-100' : 'scale-110 opacity-40 grayscale-[0.5]'}`}
                       sizes="100vw"
                     />
-                    <div className={`absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent transition-opacity duration-500 ${isActive ? 'opacity-60' : 'opacity-85'}`} />
+                    <div className={`absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/10 transition-opacity duration-500 ${isActive ? 'opacity-90' : 'opacity-100'}`} />
                   </div>
 
                   {/* Content for the mobile blade */}
