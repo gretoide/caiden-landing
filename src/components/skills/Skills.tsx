@@ -34,9 +34,9 @@ export default function Skills() {
     blades.forEach((blade: any) => {
       const img = blade.querySelector('.mobile-blade-bg');
       gsap.fromTo(img, 
-        { yPercent: -15 }, 
+        { yPercent: -30 }, 
         {
-          yPercent: 15,
+          yPercent: 30,
           ease: "none",
           scrollTrigger: {
             trigger: blade,
@@ -211,7 +211,7 @@ export default function Skills() {
                   }}
                 >
                   {/* Background Image with diagonal clip/skew look */}
-                  <div className="absolute inset-0 scale-125 mobile-blade-bg">
+                  <div className="absolute inset-0 scale-[1.6] mobile-blade-bg">
                     <OptimizedImage
                       publicId={craft.publicId}
                       alt={craft.title}

@@ -49,11 +49,11 @@ export default function Brands() {
       <div className="max-w-[1400px] mx-auto px-10 relative space-y-12 group">
         {/* Row 1: Right to Left */}
         <div className="relative flex overflow-hidden">
-          <div className="flex animate-marquee-left whitespace-nowrap gap-24 md:gap-40 py-4 items-center">
+          <div className="flex animate-marquee-left whitespace-nowrap gap-12 md:gap-40 py-4 items-center">
             {displayRow1.map((publicId, idx) => (
               <div 
                 key={`${publicId}-${idx}`} 
-                className="flex items-center justify-center min-w-[200px] md:min-w-[280px] group/item cursor-pointer h-14 md:h-20"
+                className="flex items-center justify-center min-w-[120px] md:min-w-[280px] group/item cursor-pointer h-12 md:h-20"
               >
                 <div className="relative w-full h-full transition-all duration-700">
                     <OptimizedImage
@@ -73,11 +73,11 @@ export default function Brands() {
 
         {/* Row 2: Left to Right */}
         <div className="relative flex overflow-hidden">
-          <div className="flex animate-marquee-right whitespace-nowrap gap-24 md:gap-40 py-4 items-center">
+          <div className="flex animate-marquee-right whitespace-nowrap gap-12 md:gap-40 py-4 items-center">
             {displayRow2.map((publicId, idx) => (
               <div 
                 key={`${publicId}-${idx}`} 
-                className="flex items-center justify-center min-w-[200px] md:min-w-[280px] group/item cursor-pointer h-14 md:h-20"
+                className="flex items-center justify-center min-w-[120px] md:min-w-[280px] group/item cursor-pointer h-12 md:h-20"
               >
                 <div className="relative w-full h-full transition-all duration-700">
                     <OptimizedImage
@@ -97,11 +97,11 @@ export default function Brands() {
 
         {/* Row 3: Right to Left (Faster or Slower) */}
         <div className="relative flex overflow-hidden">
-          <div className="flex animate-marquee-left whitespace-nowrap gap-24 md:gap-40 py-4 items-center" style={{ animationDuration: '50s' }}>
+          <div className="flex animate-marquee-left whitespace-nowrap gap-12 md:gap-40 py-4 items-center" style={{ animationDuration: '50s' }}>
             {displayRow3.map((publicId, idx) => (
               <div 
                 key={`${publicId}-${idx}`} 
-                className="flex items-center justify-center min-w-[200px] md:min-w-[280px] group/item cursor-pointer h-14 md:h-20"
+                className="flex items-center justify-center min-w-[120px] md:min-w-[280px] group/item cursor-pointer h-12 md:h-20"
               >
                 <div className="relative w-full h-full transition-all duration-700">
                     <OptimizedImage
