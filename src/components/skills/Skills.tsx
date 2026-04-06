@@ -31,22 +31,23 @@ export default function Skills() {
     });
 
     const blades = gsap.utils.toArray('.mobile-blade-anim');
-    blades.forEach((blade: any) => {
+    const container = document.querySelector('.mobile-blades-wrapper');
+    if (!container) return;
+
+    const mainTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: container,
+        start: "top 80%",
+        end: "bottom 20%",
+        scrub: 1.6,
+      }
+    });
+
+    blades.forEach((blade: any, index: number) => {
       const img = blade.querySelector('.mobile-blade-bg');
-      gsap.fromTo(img, 
-        { yPercent: -30 }, 
-        {
-          yPercent: 30,
-          ease: "none",
-          scrollTrigger: {
-            trigger: blade,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-            toggleClass: { targets: blade, className: "mobile-blade-st" }
-          }
-        }
-      );
+      // Wave effect: zoom in and out in sequence (Smoothed & Enhanced)
+      mainTl.to(img, { scale: 1.22, duration: 0.8, ease: "power2.inOut" }, index * 0.6)
+            .to(img, { scale: 1, duration: 0.8, ease: "power2.inOut" }, (index * 0.6) + 0.6);
     });
   }, { scope: containerRef, dependencies: [activeTab] });
   
@@ -193,7 +194,7 @@ export default function Skills() {
           </div>
 
           {/* MOBILE: Vertical Diagonal Blade Stack */}
-          <div className="flex md:hidden flex-col w-full bg-black">
+          <div className="mobile-blades-wrapper flex md:hidden flex-col w-full bg-black">
             {SKILLS_CONTENT.categories.map((craft, index) => {
               const isActive = activeTab === craft.id;
               
@@ -211,13 +212,13 @@ export default function Skills() {
                   }}
                 >
                   {/* Background Image with diagonal clip/skew look */}
-                  <div className="absolute inset-0 scale-[1.6] mobile-blade-bg">
+                  <div className="absolute inset-0 mobile-blade-bg">
                     <OptimizedImage
                       publicId={craft.publicId}
                       alt={craft.title}
                       variant="hero"
                       fill
-                      imgClassName={`object-cover transition-all duration-1000 ${isActive ? 'scale-100 opacity-100' : 'scale-110 opacity-40 grayscale-[0.5]'}`}
+                      imgClassName={`object-cover transition-all duration-1000 ${isActive ? 'opacity-100' : 'opacity-40 grayscale-[0.5]'}`}
                       sizes="100vw"
                     />
                     <div className={`absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/10 transition-opacity duration-500 ${isActive ? 'opacity-90' : 'opacity-100'}`} />
