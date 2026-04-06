@@ -62,7 +62,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-48 relative bg-black w-full overflow-hidden border-t border-white/5">
+    <section className="py-48 relative bg-black w-full overflow-hidden border-t border-white/5">
       {/* Background Image */}
       <LazyBg
         publicId={CONTACT_BG}

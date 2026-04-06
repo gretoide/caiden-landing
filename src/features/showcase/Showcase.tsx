@@ -15,7 +15,7 @@ export default function Showcase() {
   const [expandedPublicId, setExpandedPublicId] = useState<string | null>(null);
 
   return (
-    <div id="work" className="bg-black w-full flex flex-col">
+    <div className="bg-black w-full flex flex-col">
       <Suspense fallback={<ShowcaseFallback />}>
         <EldenRing onOpen={setExpandedPublicId} />
       </Suspense>

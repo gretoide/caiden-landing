@@ -31,35 +31,45 @@ function App() {
       <Preload loader={prefetchEventMap} />
 
       {/* BELOW THE FOLD: Lazy Rendering */}
-      <SectionLoader minHeight="800px">
-        <Suspense fallback={<SectionFallback />}>
-          <Showcase />
-        </Suspense>
-      </SectionLoader>
+      <div id="work">
+        <SectionLoader minHeight="800px">
+          <Suspense fallback={<SectionFallback />}>
+            <Showcase />
+          </Suspense>
+        </SectionLoader>
+      </div>
 
-      <SectionLoader minHeight="900px">
-        <Suspense fallback={<SectionFallback />}>
-          <Skills />
-        </Suspense>
-      </SectionLoader>
+      <div id="skills">
+        <SectionLoader minHeight="900px">
+          <Suspense fallback={<SectionFallback />}>
+            <Skills />
+          </Suspense>
+        </SectionLoader>
+      </div>
 
-      <SectionLoader minHeight="800px">
-        <Suspense fallback={<SectionFallback />}>
-          <EventMap />
-        </Suspense>
-      </SectionLoader>
+      <div id="events">
+        <SectionLoader minHeight="800px">
+          <Suspense fallback={<SectionFallback />}>
+            <EventMap />
+          </Suspense>
+        </SectionLoader>
+      </div>
 
-      <SectionLoader minHeight="300px" rootMargin="100px">
-        <Suspense fallback={<SectionFallback />}>
-          <Brands />
-        </Suspense>
-      </SectionLoader>
+      <div id="partners">
+        <SectionLoader minHeight="300px" rootMargin="100px">
+          <Suspense fallback={<SectionFallback />}>
+            <Brands />
+          </Suspense>
+        </SectionLoader>
+      </div>
 
-      <SectionLoader minHeight="600px">
-        <Suspense fallback={<SectionFallback />}>
-          <Contact />
-        </Suspense>
-      </SectionLoader>
+      <div id="contact">
+        <SectionLoader minHeight="600px">
+          <Suspense fallback={<SectionFallback />}>
+            <Contact />
+          </Suspense>
+        </SectionLoader>
+      </div>
     </Layout>
   );
 }

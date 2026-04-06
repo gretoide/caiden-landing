@@ -30,7 +30,7 @@ export default function Brands() {
   const displayRow3 = [...row3, ...row3, ...row3];
 
   return (
-    <section id="partners" className="w-full bg-[#050505] py-24 md:py-32 relative overflow-hidden border-t border-white/5">
+    <section className="w-full bg-[#050505] py-24 md:py-32 relative overflow-hidden border-t border-white/5">
       <div className="max-w-[1400px] mx-auto px-10 mb-20 text-center">
         <div className="flex flex-col items-center gap-8">
             <div className="flex flex-col items-center">

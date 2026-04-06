@@ -160,7 +160,7 @@ export default function Skills() {
   }, []);
 
   return (
-    <section id="skills" ref={containerRef} className="w-full bg-black relative flex flex-col justify-center overflow-hidden py-12 md:py-24">
+    <section ref={containerRef} className="w-full bg-black relative flex flex-col justify-center overflow-hidden py-12 md:py-24">
       <div className="max-w-[1600px] mx-auto w-full px-0 md:px-6 flex flex-col gap-12 lg:gap-16">
         {/* Section Header */}
         <div className="px-6 md:px-0 flex flex-col items-start text-left gap-3">

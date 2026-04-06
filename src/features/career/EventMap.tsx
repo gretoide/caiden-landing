@@ -111,7 +111,7 @@ export default function EventMap() {
   };
 
   return (
-    <section id="events" className="w-full bg-[#050505] py-24 md:py-32 relative overflow-hidden border-t border-white/5">
+    <section className="w-full bg-[#050505] py-24 md:py-32 relative overflow-hidden border-t border-white/5">
       <div className="max-w-[1600px] mx-auto px-6 relative z-10">
         
         {/* Header Container */}
