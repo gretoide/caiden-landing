@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
@@ -6,7 +6,6 @@ export default function Cursor() {
   const cursorDotRef = useRef<HTMLDivElement>(null);
   const cursorOutlineRef = useRef<HTMLDivElement>(null);
   const spotlightRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
 
   useGSAP(() => {
     const cursorDot = cursorDotRef.current;
@@ -15,53 +14,42 @@ export default function Cursor() {
 
     if (!cursorDot || !cursorOutline || !spotlight) return;
 
-    // Set initial scale to 0
-    gsap.set([cursorDot, cursorOutline], { scale: 0 });
+    // Reveal cursor on first mouse move using a one-time listener
+    const showCursor = () => {
+      gsap.to([cursorDot, cursorOutline], { scale: 1, duration: 0.3, ease: 'back.out(2)' });
+      window.removeEventListener('mousemove', showCursor);
+    };
+    window.addEventListener('mousemove', showCursor, { once: true });
+
+    // Use a single reusable quickTo for each axis — avoids creating a new tween per frame
+    const dotX = gsap.quickTo(cursorDot, 'x', { duration: 0.15, ease: 'power2.out' });
+    const dotY = gsap.quickTo(cursorDot, 'y', { duration: 0.15, ease: 'power2.out' });
+    const outlineX = gsap.quickTo(cursorOutline, 'x', { duration: 0.4, ease: 'power3.out' });
+    const outlineY = gsap.quickTo(cursorOutline, 'y', { duration: 0.4, ease: 'power3.out' });
+    const spotlightX = gsap.quickTo(spotlight, 'x', { duration: 1.2, ease: 'power2.out' });
+    const spotlightY = gsap.quickTo(spotlight, 'y', { duration: 1.2, ease: 'power2.out' });
 
     const moveCursor = (e: MouseEvent) => {
-      if (!isVisible) setIsVisible(true);
-
       const { clientX: x, clientY: y } = e;
-      const target = e.target as HTMLElement;
-      const isPointer = target?.closest('a, button, [role="button"], [data-cursor="pointer"], .cursor-pointer');
+      const isPointer = !!(e.target as HTMLElement)?.closest(
+        'a, button, [role="button"], [data-cursor="pointer"], .cursor-pointer'
+      );
 
-      // Inner dot follows instantly
-      gsap.to(cursorDot, {
-        x,
-        y,
-        scale: isPointer ? 0 : 1,
-        opacity: isPointer ? 0 : 1,
-        duration: 0.15,
-        ease: 'power2.out',
-      });
+      dotX(x); dotY(y);
+      outlineX(x); outlineY(y);
+      spotlightX(x); spotlightY(y);
 
-      // Outer outline follows with a smooth lag
+      gsap.to(cursorDot, { scale: isPointer ? 0 : 1, opacity: isPointer ? 0 : 1, duration: 0.2 });
       gsap.to(cursorOutline, {
-        x,
-        y,
         scale: isPointer ? 2.5 : 1,
-        backgroundColor: isPointer ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
-        borderColor: isPointer ? 'rgba(255, 255, 255, 0.3)' : 'white',
-        duration: 0.4,
-        ease: 'power3.out',
-      });
-
-      // Spotlight effect follows
-      gsap.to(spotlight, {
-        x,
-        y,
-        duration: 1.2,
-        ease: 'power2.out',
+        backgroundColor: isPointer ? 'rgba(255,255,255,0.1)' : 'transparent',
+        borderColor: isPointer ? 'rgba(255,255,255,0.3)' : 'white',
+        duration: 0.3,
       });
     };
 
-    const handleMouseDown = () => {
-      gsap.to(cursorOutline, { scale: 1.5, duration: 0.2 });
-    };
-
-    const handleMouseUp = () => {
-      gsap.to(cursorOutline, { scale: 1, duration: 0.2 });
-    };
+    const handleMouseDown = () => gsap.to(cursorOutline, { scale: 1.5, duration: 0.2 });
+    const handleMouseUp = () => gsap.to(cursorOutline, { scale: 1, duration: 0.2 });
 
     window.addEventListener('mousemove', moveCursor);
     window.addEventListener('mousedown', handleMouseDown);
@@ -72,26 +60,28 @@ export default function Cursor() {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isVisible]);
+  }, []); // Empty deps — setup once, never recreate
 
   return (
     <>
-      <div 
+      <div
         ref={spotlightRef}
         className="fixed top-0 left-0 w-[600px] h-[600px] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[90] opacity-50 mix-blend-screen hidden md:block"
         style={{
           background: 'radial-gradient(circle, rgba(96, 165, 250, 0.25) 0%, rgba(96, 165, 250, 0.05) 40%, rgba(0, 0, 0, 0) 70%)',
         }}
       />
-      
-      <div 
+
+      <div
         ref={cursorDotRef}
         className="fixed top-0 left-0 w-1.5 h-1.5 bg-brand-400 rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 hidden md:block"
+        style={{ scale: 0 }}
       />
-      
-      <div 
+
+      <div
         ref={cursorOutlineRef}
         className="fixed top-0 left-0 w-8 h-8 border border-white/50 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 hidden md:block transition-[border-color,background-color] duration-300"
+        style={{ scale: 0 }}
       />
     </>
   );

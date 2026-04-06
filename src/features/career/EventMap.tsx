@@ -4,6 +4,7 @@ import { Globe, ChevronDown, Plus, Minus, Star } from 'lucide-react';
 import type { LineLayer } from 'react-map-gl';
 import Image from '../../shared/ui/Image';
 import { LOCATIONS } from './data';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 // Configuration
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
