@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { SKILLS_CONTENT, loadCategoryDetails, type CraftsmanshipCategory } from './data';
+import { SKILLS_CONTENT } from './data';
 import SkillCarousel from './SkillCarousel';
 
 import Image from '../../shared/ui/Image';
@@ -15,10 +15,10 @@ export default function Skills() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState(SKILLS_CONTENT.categories[0].id);
   
-  // State for dynamic content loading
-  const [activeMetadata, setActiveMetadata] = useState(SKILLS_CONTENT.categories.find((c) => c.id === activeTab) || SKILLS_CONTENT.categories[0]);
-  const [details, setDetails] = useState<CraftsmanshipCategory | null>(null);
-  const [isSyncing, setIsSyncing] = useState(false);
+  // All data is now loaded synchronously
+  const activeMetadata = useMemo(() => 
+    SKILLS_CONTENT.categories.find((c) => c.id === activeTab) || SKILLS_CONTENT.categories[0],
+  [activeTab]);
 
   // Other UI state
   const [expandedPublicId, setExpandedPublicId] = useState<string | null>(null);
@@ -26,34 +26,7 @@ export default function Skills() {
   const [isAutoPlayDisabled, setIsAutoPlayDisabled] = useState(false);
   const [expertiseBgTick, setExpertiseBgTick] = useState(0);
 
-  // Sync activeMetadata when tab changes
-  useEffect(() => {
-    const meta = SKILLS_CONTENT.categories.find((c) => c.id === activeTab) || SKILLS_CONTENT.categories[0];
-    setActiveMetadata(meta);
-  }, [activeTab]);
-
-  // Load details when tab changes
-  useEffect(() => {
-    let isMounted = true;
-    const fetchDetails = async () => {
-      setIsSyncing(true);
-      try {
-        const data = await loadCategoryDetails(activeTab);
-        if (isMounted) {
-          setDetails(data);
-          setIsSyncing(false);
-        }
-      } catch (error) {
-        console.error('Failed to load skill details:', error);
-        if (isMounted) setIsSyncing(false);
-      }
-    };
-    fetchDetails();
-    return () => { isMounted = false; };
-  }, [activeTab]);
-
-
-  // GSAP Parallax for Mobile
+  // GSAP Lighting Effect for Mobile (No height change)
   useGSAP(() => {
     const isMobile = window.innerWidth < 768;
     if (!isMobile) return;
@@ -66,39 +39,59 @@ export default function Skills() {
     const container = document.querySelector('.mobile-blades-wrapper');
     if (!container) return;
 
+    // Timeline for the scroll-triggered "lighting" effect
     const mainTl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
         start: "top 80%",
         end: "bottom 20%",
-        scrub: 1.6,
+        scrub: 1.2,
       }
     });
 
     blades.forEach((blade: any, index: number) => {
-      const img = blade.querySelector('.mobile-blade-bg');
+      const img = blade.querySelector('.mobile-blade-img-inner');
+      const textContainer = blade.querySelector('.mobile-blade-content');
       const isActive = blade.classList.contains('is-active');
-      const startHeight = isActive ? 160 : 60;
-      const peakHeight = isActive ? 180 : 145;
-      const peakScale = isActive ? 1.25 : 1.22;
 
-      mainTl.to(blade, { height: peakHeight, duration: 0.8, ease: "power2.inOut" }, index * 0.6)
-            .to(blade, { height: startHeight, duration: 0.8, ease: "power2.inOut" }, (index * 0.6) + 0.6);
+      // Subtle lighting: instead of going dark, we just gain saturation/pop in the middle
+      // Start state: somewhat desaturated but visible
+      gsap.set(img, { filter: isActive ? "grayscale(0) brightness(1.1)" : "grayscale(0.5) brightness(0.7)" });
+      if (!isActive) gsap.set(textContainer, { opacity: 0.5 });
 
-      mainTl.to(img, { scale: peakScale, duration: 0.8, ease: "power2.inOut" }, index * 0.6)
-            .to(img, { scale: isActive ? 1.1 : 1, duration: 0.8, ease: "power2.inOut" }, (index * 0.6) + 0.6);
+      mainTl.to(img, { 
+        filter: "grayscale(0) brightness(1.1)", 
+        duration: 0.8, 
+        ease: "power2.inOut" 
+      }, index * 0.6)
+      .to(img, { 
+        filter: isActive ? "grayscale(0) brightness(1.1)" : "grayscale(0.5) brightness(0.7)", 
+        duration: 0.8, 
+        ease: "power2.inOut" 
+      }, (index * 0.6) + 0.6);
+
+      mainTl.to(textContainer, { 
+        opacity: 1, 
+        duration: 0.8, 
+        ease: "power2.inOut" 
+      }, index * 0.6)
+      .to(textContainer, { 
+        opacity: isActive ? 1 : 0.5, 
+        duration: 0.8, 
+        ease: "power2.inOut" 
+      }, (index * 0.6) + 0.6);
     });
   }, { scope: containerRef, dependencies: [activeTab] });
   
   const expertiseCarouselItems = useMemo(() => {
-    const selectedSubSkill = details?.subSkills.find(s => s.id === selectedSkillId);
+    const selectedSubSkill = activeMetadata.subSkills.find(s => s.id === selectedSkillId);
     if (selectedSubSkill && selectedSubSkill.gallery && selectedSubSkill.gallery.length > 0) {
       return selectedSubSkill.gallery;
     }
-    return details?.gallery && details.gallery.length > 0 
-      ? details.gallery 
+    return activeMetadata.gallery && activeMetadata.gallery.length > 0 
+      ? activeMetadata.gallery 
       : [{ type: 'image', publicId: activeMetadata.publicId } as const];
-  }, [details, selectedSkillId, activeMetadata]);
+  }, [activeMetadata, selectedSkillId]);
 
   const expertiseCarouselKey = useMemo(() => 
     expertiseCarouselItems.map(item => item.publicId).join('|'), 
@@ -228,7 +221,7 @@ export default function Skills() {
               return (
                 <div
                   key={craft.id}
-                  className={`mobile-blade-anim relative w-full cursor-pointer transition-[opacity,filter,border-color] duration-500 ease-in-out group overflow-hidden border-b border-white/5 last:border-b-0 ${isActive ? 'h-[160px] is-active' : 'h-[60px]'}`}
+                  className={`mobile-blade-anim relative w-full cursor-pointer transition-colors duration-500 ease-in-out group overflow-hidden border-b border-white/5 last:border-b-0 ${isActive ? 'h-[160px] is-active' : 'h-[60px]'}`}
                   onClick={() => {
                     setActiveTab(craft.id);
                     setExpertiseBgTick(0);
@@ -237,18 +230,20 @@ export default function Skills() {
                   }}
                 >
                   <div className="absolute inset-0 mobile-blade-bg">
-                    <Image
-                      publicId={craft.publicId}
-                      alt={craft.title}
-                      variant="hero"
-                      fill
-                      imgClassName={`object-cover transition-all duration-1000 ${isActive ? 'opacity-100' : 'opacity-40 grayscale-[0.5]'}`}
-                      sizes="100vw"
-                    />
-                    <div className={`absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/10 transition-opacity duration-500 ${isActive ? 'opacity-90' : 'opacity-100'}`} />
+                    <div className="mobile-blade-img-inner absolute inset-0">
+                       <Image
+                         publicId={craft.publicId}
+                         alt={craft.title}
+                         variant="hero"
+                         fill
+                         imgClassName={`object-cover transition-all duration-1000 ${isActive ? 'opacity-100' : 'opacity-80'}`}
+                         sizes="100vw"
+                       />
+                       <div className={`absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/10 transition-opacity duration-500 ${isActive ? 'opacity-90' : 'opacity-100'}`} />
+                    </div>
                   </div>
 
-                  <div className="absolute inset-0 flex items-center px-8 z-20">
+                  <div className="mobile-blade-content absolute inset-0 flex items-center px-8 z-20">
                      <div className="flex flex-col items-start gap-0.5">
                         <span className={`font-sans tracking-[0.3em] uppercase transition-all duration-500 ${isActive ? 'text-brand-400 text-[10px] font-bold' : 'text-white/20 text-[9px]'}`}>
                           {`0${index + 1} // ${craft.subtitle.split(' & ')[0]}`}
@@ -264,7 +259,6 @@ export default function Skills() {
                        </div>
                      )}
                   </div>
-                  <div className="absolute bottom-0 right-0 w-[40%] h-full bg-brand-400/5 transform skew-x-[-25deg] translate-x-[20%] pointer-events-none" />
                 </div>
               );
             })}
@@ -280,17 +274,11 @@ export default function Skills() {
           style={{ animation: 'fade-in-up 0.5s ease-out forwards' }}
           key={activeTab}
         >
-          {/* Syncing Overlay */}
-          <div className={`absolute inset-0 z-50 bg-black/40 backdrop-blur-sm flex flex-col items-center justify-center transition-opacity duration-500 ${isSyncing ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-            <div className="w-10 h-10 border-2 border-brand-400/30 border-t-brand-400 rounded-full animate-spin mb-4" />
-            <span className="text-[10px] text-brand-400 uppercase tracking-[0.4em] font-sans font-bold">Synchronizing...</span>
-          </div>
-
-          <div className={isSyncing ? 'blur-sm grayscale opacity-50 transition-all duration-700' : 'blur-0 grayscale-0 opacity-100 transition-all duration-700'}>
+          <div className="opacity-100 transition-all duration-700">
             {!selectedSkillId ? (
               /* --- VIEW A: SKILL GRID --- */
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full animate-in fade-in slide-in-from-bottom-4 duration-700">
-                {details?.subSkills.map((skill) => (
+                {activeMetadata.subSkills.map((skill) => (
                   <div
                     key={skill.id}
                     onClick={() => setSelectedSkillId(skill.id)}
@@ -334,7 +322,7 @@ export default function Skills() {
               /* --- VIEW B: SKILL SPLIT --- */
               <div className="flex flex-col gap-8 w-full animate-in fade-in slide-in-from-right-4 duration-700">
                 <div className="flex justify-center gap-4 overflow-x-auto pb-4 custom-scrollbar">
-                  {details?.subSkills.map((skill) => {
+                  {activeMetadata.subSkills.map((skill) => {
                     const isActive = skill.id === selectedSkillId;
                     return (
                       <button
@@ -365,20 +353,20 @@ export default function Skills() {
                     </p>
                     <div className="w-8 h-[1px] bg-white/20 mb-12" />
                     <p className="text-white/50 font-sans leading-relaxed text-xs max-w-md mb-12 border-l border-white/10 pl-4 py-2">
-                      {details?.expandedDetails}
+                      {activeMetadata.expandedDetails}
                     </p>
                     <div className="flex flex-wrap gap-2 mb-6">
-                      {details?.subSkills.find(s => s.id === selectedSkillId)?.tags.map((tag) => (
+                      {activeMetadata.subSkills.find(s => s.id === selectedSkillId)?.tags.map((tag) => (
                         <span key={tag} className="text-[9px] font-sans tracking-widest uppercase text-brand-400 border border-brand-400/30 px-2 py-1 bg-black/40">
                           {tag}
                         </span>
                       ))}
                     </div>
                     <h3 className="text-3xl lg:text-5xl font-serif text-white mb-6 uppercase tracking-tight">
-                      {details?.subSkills.find(s => s.id === selectedSkillId)?.title}
+                      {activeMetadata.subSkills.find(s => s.id === selectedSkillId)?.title}
                     </h3>
                     <p className="text-white/70 font-sans leading-relaxed text-base md:text-lg mb-12 italic border-l-2 border-brand-400/40 pl-6">
-                      {details?.subSkills.find(s => s.id === selectedSkillId)?.description}
+                      {activeMetadata.subSkills.find(s => s.id === selectedSkillId)?.description}
                     </p>
                     <button onClick={() => setSelectedSkillId(null)} className="mt-auto flex items-center gap-3 text-white/30 font-sans text-[10px] tracking-[0.4em] uppercase hover:text-brand-400 transition-all border-t border-white/5 w-fit py-4">
                       {SKILLS_CONTENT.uiLabels.back}
