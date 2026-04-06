@@ -44,8 +44,8 @@ export default function SectionLoader({
   return (
     <div 
       ref={containerRef} 
-      className={`relative w-full ${className}`}
-      style={{ minHeight: isVisible ? 'auto' : minHeight }}
+      className={`relative w-full flex flex-col ${className}`}
+      style={{ minHeight }}
     >
       {isVisible ? children : null}
     </div>

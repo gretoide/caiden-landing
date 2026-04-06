@@ -28,6 +28,9 @@ export default defineConfig({
             if (id.includes('mapbox-gl') || id.includes('react-map-gl')) {
               return 'mapbox';
             }
+            if (id.includes('gsap')) {
+              return 'gsap';
+            }
             if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
               return 'vendor';
             }

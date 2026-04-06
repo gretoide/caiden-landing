@@ -1,30 +1,17 @@
-import { useState, lazy, Suspense } from 'react';
+import { useState } from 'react';
 import Lightbox from '../../shared/ui/Lightbox';
-
-const EldenRing = lazy(() => import('./sections/EldenRing'));
-const DiabloIV = lazy(() => import('./sections/DiabloIV'));
-const Skyrim = lazy(() => import('./sections/Skyrim'));
-
-const ShowcaseFallback = () => (
-  <div className="w-full h-[600px] bg-black border-y border-white/5 animate-pulse flex items-center justify-center">
-    <div className="text-[10px] text-white/20 uppercase tracking-[0.4em]">INITIATING SHOWCASE...</div>
-  </div>
-);
+import EldenRing from './sections/EldenRing';
+import DiabloIV from './sections/DiabloIV';
+import Skyrim from './sections/Skyrim';
 
 export default function Showcase() {
   const [expandedPublicId, setExpandedPublicId] = useState<string | null>(null);
 
   return (
     <div className="bg-black w-full flex flex-col">
-      <Suspense fallback={<ShowcaseFallback />}>
-        <EldenRing onOpen={setExpandedPublicId} />
-      </Suspense>
-      <Suspense fallback={<ShowcaseFallback />}>
-        <DiabloIV onOpen={setExpandedPublicId} />
-      </Suspense>
-      <Suspense fallback={<ShowcaseFallback />}>
-        <Skyrim onOpen={setExpandedPublicId} />
-      </Suspense>
+      <EldenRing onOpen={setExpandedPublicId} />
+      <DiabloIV onOpen={setExpandedPublicId} />
+      <Skyrim onOpen={setExpandedPublicId} />
 
       {expandedPublicId && (
         <Lightbox key={expandedPublicId} publicId={expandedPublicId} onClose={() => setExpandedPublicId(null)} />

@@ -112,8 +112,8 @@ export const ARGENTINA_LOCATIONS: LocationItem[] = [
     lng: -60.70,
     description: 'Major regional coordination and commercial integrations.',
     events: [
-      { city: 'Rosario', name: 'D.M.O', logoId: '2019_Mar_a4qoex', years: ['2019'], type: 'EXHIBITION' },
-      { city: 'Rosario', name: 'Crack Bang Boom', logoId: '2023_Ago_2_ugqa2j', years: ['2016', '2024'], type: 'EVENT' }
+      { city: 'Rosario', name: 'D.M.O', logoId: '2019_Mar_a4qoex', years: ['2019'], type: 'EXHIBITION', lat: -32.9468, lng: -60.6393 },
+      { city: 'Rosario', name: 'Crack Bang Boom', logoId: '2023_Ago_2_ugqa2j', years: ['2016', '2023', '2024'], type: 'INTERNATIONAL', lat: -32.9416, lng: -60.6322 }
     ]
   },
   {
