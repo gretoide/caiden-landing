@@ -60,12 +60,12 @@ export default function Skills() {
       if (!isActive) gsap.set(textContainer, { opacity: 0.5 });
 
       mainTl.to(img, { 
-        filter: "grayscale(0) brightness(1.1)", 
+        filter: "grayscale(0) brightness(1.6)", 
         duration: 0.8, 
         ease: "power2.inOut" 
       }, index * 0.6)
       .to(img, { 
-        filter: isActive ? "grayscale(0) brightness(1.1)" : "grayscale(0.5) brightness(0.7)", 
+        filter: isActive ? "grayscale(0) brightness(1.6)" : "grayscale(0.5) brightness(0.7)", 
         duration: 0.8, 
         ease: "power2.inOut" 
       }, (index * 0.6) + 0.6);
