@@ -1,22 +1,23 @@
 import { lazy, Suspense } from 'react';
-import Layout from './components/Layout';
-import Hero from './components/Hero';
+import Layout from './features/layout/Layout';
+import Hero from './features/hero/Hero';
 
 // Critical components stay static for immediate rendering
-const FeaturedBuilds = lazy(() => import('./components/showcase/FeaturedBuilds'));
-const Skills = lazy(() => import('./components/skills/Skills'));
-const Brands = lazy(() => import('./components/brands/Brands'));
-const EventMap = lazy(() => import('./components/map/EventMap'));
-const prefetchEventMap = () => import('./components/map/EventMap');
-const Contact = lazy(() => import('./components/Contact'));
-import Prefetcher from './components/ui/Prefetcher';
+const Showcase = lazy(() => import('./features/showcase/Showcase'));
+const Skills = lazy(() => import('./features/skills/Skills'));
+const Brands = lazy(() => import('./features/brands/Brands'));
+const EventMap = lazy(() => import('./features/career/EventMap'));
+const prefetchEventMap = () => import('./features/career/EventMap');
+const Contact = lazy(() => import('./features/contact/Contact'));
+import SectionLoader from './shared/ui/SectionLoader';
+import Preload from './shared/ui/Preload';
 
 // Section Fallback Component
 const SectionFallback = () => (
-  <div className="w-full h-96 bg-[#050505] flex items-center justify-center border-y border-white/5">
-    <div className="flex flex-col items-center gap-4 opacity-20">
-      <div className="w-12 h-12 border-2 border-brand-400/50 rounded-full border-t-white animate-spin" />
-      <span className="text-[10px] text-white uppercase tracking-[0.5em] font-sans font-bold">Synchronizing Section...</span>
+  <div className="w-full h-full flex flex-col items-center justify-center py-20 bg-black">
+    <div className="flex flex-col items-center gap-4 opacity-30 scale-75">
+      <div className="w-12 h-12 border-2 border-brand-400/30 border-t-brand-400 rounded-full animate-spin" />
+      <span className="text-[9px] text-brand-400 uppercase tracking-[0.5em] font-sans font-bold">Synchronizing Section...</span>
     </div>
   </div>
 );
@@ -24,23 +25,41 @@ const SectionFallback = () => (
 function App() {
   return (
     <Layout>
+      {/* ABOVE THE FOLD: Immediate Rendering */}
       <Hero />
-      <Prefetcher loader={prefetchEventMap} />
-      <Suspense fallback={<SectionFallback />}>
-        <FeaturedBuilds />
-      </Suspense>
-      <Suspense fallback={<SectionFallback />}>
-        <Skills />
-      </Suspense>
-      <Suspense fallback={<SectionFallback />}>
-        <EventMap />
-      </Suspense>
-      <Suspense fallback={<SectionFallback />}>
-        <Brands />
-      </Suspense>
-      <Suspense fallback={<SectionFallback />}>
-        <Contact />
-      </Suspense>
+      
+      <Preload loader={prefetchEventMap} />
+
+      {/* BELOW THE FOLD: Lazy Rendering */}
+      <SectionLoader minHeight="800px">
+        <Suspense fallback={<SectionFallback />}>
+          <Showcase />
+        </Suspense>
+      </SectionLoader>
+
+      <SectionLoader minHeight="900px">
+        <Suspense fallback={<SectionFallback />}>
+          <Skills />
+        </Suspense>
+      </SectionLoader>
+
+      <SectionLoader minHeight="800px">
+        <Suspense fallback={<SectionFallback />}>
+          <EventMap />
+        </Suspense>
+      </SectionLoader>
+
+      <SectionLoader minHeight="300px" rootMargin="100px">
+        <Suspense fallback={<SectionFallback />}>
+          <Brands />
+        </Suspense>
+      </SectionLoader>
+
+      <SectionLoader minHeight="600px">
+        <Suspense fallback={<SectionFallback />}>
+          <Contact />
+        </Suspense>
+      </SectionLoader>
     </Layout>
   );
 }
