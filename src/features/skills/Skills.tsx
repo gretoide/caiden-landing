@@ -26,62 +26,75 @@ export default function Skills() {
   const [isAutoPlayDisabled, setIsAutoPlayDisabled] = useState(false);
   const [expertiseBgTick, setExpertiseBgTick] = useState(0);
 
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // GSAP Lighting Effect for Mobile (No height change)
   useGSAP(() => {
-    const isMobile = window.innerWidth < 768;
     if (!isMobile) return;
-
-    ScrollTrigger.getAll().forEach(st => {
-      if (st.trigger && (st.trigger as HTMLElement).classList.contains('mobile-blade-st')) st.kill();
-    });
 
     const blades = gsap.utils.toArray('.mobile-blade-anim');
     const container = document.querySelector('.mobile-blades-wrapper');
-    if (!container) return;
+    if (!container || blades.length === 0) return;
 
-    // Timeline for the scroll-triggered "lighting" effect
-    const mainTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: container,
-        start: "top 80%",
-        end: "bottom 20%",
-        scrub: 1.2,
-      }
-    });
-
-    blades.forEach((blade: any, index: number) => {
+    // Individual blade transitions tied to scroll position
+    blades.forEach((blade: any) => {
       const img = blade.querySelector('.mobile-blade-img-inner');
-      const textContainer = blade.querySelector('.mobile-blade-content');
+      const text = blade.querySelector('.mobile-blade-content');
       const isActive = blade.classList.contains('is-active');
+      
+      // If it's active, it's always bright and standout (no scale)
+      if (isActive) {
+        gsap.set(img, { filter: "grayscale(0) brightness(1.4)" });
+        gsap.set(text, { opacity: 1, filter: "drop-shadow(0 0 15px rgba(255,255,255,0.3)) drop-shadow(0 0 10px rgba(0,0,0,0.8))" });
+        return; 
+      }
 
-      // Subtle lighting: instead of going dark, we just gain saturation/pop in the middle
-      // Start state: somewhat desaturated but visible
-      gsap.set(img, { filter: isActive ? "grayscale(0) brightness(1.1)" : "grayscale(0.5) brightness(0.7)" });
-      if (!isActive) gsap.set(textContainer, { opacity: 0.5 });
+      // Initial state for non-active blades: dim and desaturated but legible
+      gsap.set(img, { filter: "grayscale(0.8) brightness(0.35)" });
+      gsap.set(text, { opacity: 0.25, filter: "none" });
 
-      mainTl.to(img, { 
-        filter: "grayscale(0) brightness(1.6)", 
-        duration: 0.8, 
-        ease: "power2.inOut" 
-      }, index * 0.6)
+      // Create a seamless Timeline for entering and leaving the focal point
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: blade,
+          start: "top 95%",
+          end: "bottom 5%",
+          scrub: 1.5,
+          invalidateOnRefresh: true,
+        }
+      });
+
+      tl.to(img, { 
+        filter: "grayscale(0) brightness(1.6)",
+        ease: "power2.inOut",
+        duration: 0.5 
+      }, 0)
+      .to(text, { 
+        opacity: 1,
+        filter: "drop-shadow(0 0 20px rgba(255,255,255,0.4)) drop-shadow(0 0 10px rgba(0,0,0,0.9))",
+        ease: "power2.inOut",
+        duration: 0.5 
+      }, 0)
       .to(img, { 
-        filter: isActive ? "grayscale(0) brightness(1.6)" : "grayscale(0.5) brightness(0.7)", 
-        duration: 0.8, 
-        ease: "power2.inOut" 
-      }, (index * 0.6) + 0.6);
-
-      mainTl.to(textContainer, { 
-        opacity: 1, 
-        duration: 0.8, 
-        ease: "power2.inOut" 
-      }, index * 0.6)
-      .to(textContainer, { 
-        opacity: isActive ? 1 : 0.5, 
-        duration: 0.8, 
-        ease: "power2.inOut" 
-      }, (index * 0.6) + 0.6);
+        filter: "grayscale(0.8) brightness(0.35)",
+        ease: "power2.inOut",
+        duration: 0.5 
+      }, 0.5)
+      .to(text, { 
+        opacity: 0.25,
+        filter: "none",
+        ease: "power2.inOut",
+        duration: 0.5 
+      }, 0.5);
     });
-  }, { scope: containerRef, dependencies: [activeTab] });
+  }, { scope: containerRef, dependencies: [activeTab, isMobile] });
   
   const expertiseCarouselItems = useMemo(() => {
     const selectedSubSkill = activeMetadata.subSkills.find(s => s.id === selectedSkillId);
@@ -244,7 +257,7 @@ export default function Skills() {
                   </div>
 
                   <div className="mobile-blade-content absolute inset-0 flex items-center px-8 z-20">
-                     <div className="flex flex-col items-start gap-0.5">
+                     <div className="flex flex-col items-start gap-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                         <span className={`font-sans tracking-[0.3em] uppercase transition-all duration-500 ${isActive ? 'text-brand-400 text-[10px] font-bold' : 'text-white/20 text-[9px]'}`}>
                           {`0${index + 1} // ${craft.subtitle.split(' & ')[0]}`}
                         </span>
@@ -308,7 +321,7 @@ export default function Skills() {
                           </span>
                         ))}
                       </div>
-                      <h4 className="text-2xl font-serif text-white mb-2 group-hover:text-brand-400 transition-colors duration-300">
+                      <h4 className="text-2xl font-serif text-white mb-2 group-hover:text-brand-400 transition-colors duration-300 drop-shadow-lg">
                         {skill.title}
                       </h4>
                       <p className="text-white/50 font-sans text-xs leading-relaxed line-clamp-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">

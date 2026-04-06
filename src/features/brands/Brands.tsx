@@ -31,16 +31,51 @@ export default function Brands() {
 
   return (
     <section id="partners" className="w-full bg-[#050505] py-24 md:py-32 relative overflow-hidden border-t border-white/5">
-      <div className="max-w-[1400px] mx-auto px-10 mb-20 text-center md:text-left">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-            <div>
-                <div className="flex items-center gap-4 mb-3 justify-center md:justify-start">
+      <div className="max-w-[1400px] mx-auto px-10 mb-20 text-center">
+        <div className="flex flex-col items-center gap-8">
+            <div className="flex flex-col items-center">
+                <div className="flex items-center gap-4 mb-4">
                     <div className="w-10 h-[1px] bg-brand-400/60"></div>
                     <span className="text-brand-400 font-sans text-[10px] tracking-[0.5em] uppercase font-bold">Trusted Alliances</span>
+                    <div className="w-10 h-[1px] bg-brand-400/60"></div>
                 </div>
-                <h2 className="text-white font-serif text-4xl md:text-5xl tracking-widest leading-tight">STRATEGIC PARTNERS</h2>
+                
+                <div className="flex items-center gap-4 md:gap-10 relative justify-center">
+                    {/* Laurel Left (Flipped) */}
+                    <div 
+                      className="w-12 h-12 md:w-32 md:h-32 opacity-20"
+                      style={{
+                        maskImage: "url('/laurel_leaf.png')",
+                        WebkitMaskImage: "url('/laurel_leaf.png')",
+                        maskSize: 'contain',
+                        WebkitMaskSize: 'contain',
+                        maskRepeat: 'no-repeat',
+                        WebkitMaskRepeat: 'no-repeat',
+                        backgroundColor: '#60a5fa',
+                        transform: 'scaleX(-1)'
+                      }}
+                    />
+
+                    <h2 className="text-white font-serif text-4xl md:text-6xl tracking-widest leading-tight uppercase relative z-10 whitespace-nowrap drop-shadow-2xl">
+                        Strategic <br className="md:hidden" /> Partners
+                    </h2>
+
+                    {/* Laurel Right (Default) */}
+                    <div 
+                      className="w-12 h-12 md:w-32 md:h-32 opacity-20"
+                      style={{
+                        maskImage: "url('/laurel_leaf.png')",
+                        WebkitMaskImage: "url('/laurel_leaf.png')",
+                        maskSize: 'contain',
+                        WebkitMaskSize: 'contain',
+                        maskRepeat: 'no-repeat',
+                        WebkitMaskRepeat: 'no-repeat',
+                        backgroundColor: '#60a5fa'
+                      }}
+                    />
+                </div>
             </div>
-            <div className="text-white/20 text-[9px] uppercase tracking-[0.3em] font-sans border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-8 max-w-xs">
+            <div className="text-white/20 text-[9px] uppercase tracking-[0.3em] font-sans border-t border-white/10 pt-4 max-w-lg text-center">
                 COLLABORATIONS // MARKETING // GLOBAL OUTREACH // CROSS-OVER EVENTS
             </div>
         </div>
