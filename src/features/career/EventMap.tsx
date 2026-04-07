@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import Map, { Marker, Source, Layer } from 'react-map-gl';
-import { Star, Maximize2, X } from 'lucide-react';
+import { Star, X, Plane, Activity, Radio, ChevronRight } from 'lucide-react';
 import type { LineLayer } from 'react-map-gl';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from '../../shared/ui/Image';
@@ -181,6 +181,11 @@ export default function EventMap() {
                   }`}
                 >
                     <div className="w-[30%] h-[30%] bg-[#050505] rounded-full rotate-[-45deg]" />
+                    {marker.eventCount > 1 && !isSelected && (
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-white text-black text-[7px] font-bold rounded-full flex items-center justify-center rotate-[-45deg] shadow-lg">
+                        {marker.eventCount}
+                      </div>
+                    )}
                 </div>
                 {variant === 'preview' && (
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 border border-brand-400 rounded-full animate-ping opacity-20" />
@@ -194,69 +199,151 @@ export default function EventMap() {
   );
 
   return (
-    <section className="w-full bg-[#050505] py-24 md:py-32 relative overflow-hidden border-t border-white/5">
+    <section className="w-full bg-[#050505] pt-24 md:pt-32 pb-12 md:pb-16 relative overflow-hidden border-t border-white/5">
+      {/* Background Horizon Glow for Depth */}
+      <div className="absolute bottom-0 left-0 w-full h-[40%] bg-gradient-to-t from-brand-400/10 to-transparent z-[1] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(circle,rgba(96,165,250,0.08)_0%,transparent_60%)] z-0 pointer-events-none" />
+
+      {/* Background Data Trails, Arrows & Airplanes per sketch */}
+      <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden opacity-100">
+        <svg className="w-full h-full opacity-40 shadow-[0_0_50px_rgba(96,165,250,0.1)]" viewBox="0 0 1000 1000" fill="none" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa" />
+            </marker>
+          </defs>
+          
+          {/* Curved Data Trails with Arrows - Increased Density */}
+          <path d="M-100,200 Q300,400 500,100" stroke="#60a5fa" strokeWidth="2.5" strokeDasharray="10 15" markerEnd="url(#arrowhead)" className="opacity-50" vectorEffect="non-scaling-stroke" />
+          <path d="M1100,800 Q700,600 500,900" stroke="#60a5fa" strokeWidth="2.5" strokeDasharray="10 15" markerEnd="url(#arrowhead)" className="opacity-50" vectorEffect="non-scaling-stroke" />
+          <path d="M-50,700 Q400,500 200,950" stroke="#60a5fa" strokeWidth="2" strokeDasharray="6 12" markerEnd="url(#arrowhead)" className="opacity-40" vectorEffect="non-scaling-stroke" />
+          <path d="M1050,100 Q600,300 800,-50" stroke="#60a5fa" strokeWidth="2" strokeDasharray="6 12" markerEnd="url(#arrowhead)" className="opacity-40" vectorEffect="non-scaling-stroke" />
+          
+          <path d="M-100,400 Q400,600 900,200" stroke="#60a5fa" strokeWidth="2" strokeDasharray="12 20" markerEnd="url(#arrowhead)" className="opacity-30" vectorEffect="non-scaling-stroke" />
+          <path d="M1100,200 Q600,400 100,800" stroke="#60a5fa" strokeWidth="2" strokeDasharray="12 20" markerEnd="url(#arrowhead)" className="opacity-30" vectorEffect="non-scaling-stroke" />
+          
+          <path d="M200,-50 Q500,500 800,1050" stroke="#60a5fa" strokeWidth="1.5" strokeDasharray="5 15" markerEnd="url(#arrowhead)" className="opacity-25" vectorEffect="non-scaling-stroke" />
+          <path d="M800,-50 Q500,500 200,1050" stroke="#60a5fa" strokeWidth="1.5" strokeDasharray="5 15" markerEnd="url(#arrowhead)" className="opacity-25" vectorEffect="non-scaling-stroke" />
+
+          <path d="M-100,100 Q500,100 1100,100" stroke="#60a5fa" strokeWidth="1" strokeDasharray="20 30" markerEnd="url(#arrowhead)" className="opacity-20" vectorEffect="non-scaling-stroke" />
+          <path d="M-100,900 Q500,900 1100,900" stroke="#60a5fa" strokeWidth="1" strokeDasharray="20 30" markerEnd="url(#arrowhead)" className="opacity-20" vectorEffect="non-scaling-stroke" />
+          <path d="M100,-100 Q100,500 100,1100" stroke="#60a5fa" strokeWidth="1" strokeDasharray="20 30" markerEnd="url(#arrowhead)" className="opacity-20" vectorEffect="non-scaling-stroke" />
+          <path d="M900,-100 Q900,500 900,1100" stroke="#60a5fa" strokeWidth="1" strokeDasharray="20 30" markerEnd="url(#arrowhead)" className="opacity-20" vectorEffect="non-scaling-stroke" />
+        </svg>
+
+        {/* Floating Airplanes */}
+        {[...Array(3)].map((_, i) => (
+          <motion.div
+            key={`plane-${i}`}
+            animate={{ 
+              x: i % 2 === 0 ? [-200, 1200] : [1200, -200],
+              y: [100 + i * 250, 200 + i * 200],
+              opacity: [0, 0.8, 0]
+            }}
+            transition={{ duration: 15 + i * 5, repeat: Infinity, ease: "linear", delay: i * 5 }}
+            className="absolute text-brand-400"
+          >
+            <div className="relative">
+              <Plane size={36} className={`${i % 2 === 0 ? "rotate-45" : "-rotate-135"} drop-shadow-[0_0_20px_rgba(96,165,250,0.9)]`} />
+              <div className="absolute inset-0 bg-brand-400/20 blur-2xl rounded-full" />
+            </div>
+          </motion.div>
+        ))}
+
+        {/* Pulsing Blue Flashes (Luciernagas) */}
+        {[...Array(10)].map((_, i) => (
+          <motion.div
+            key={`flash-${i}`}
+            animate={{ 
+               opacity: [0, 1, 0], 
+               scale: [0.5, 2.2, 0.5],
+            }}
+            transition={{ duration: 2 + Math.random() * 4, repeat: Infinity, delay: Math.random() * 8 }}
+            className="absolute w-1 h-1 bg-white rounded-full"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              boxShadow: '0 0 30px rgba(96,165,250,1), 0 0 10px white, 0 0 50px rgba(96,165,250,0.4)'
+            }}
+          />
+        ))}
+      </div>
+
       <div className="max-w-[1400px] mx-auto px-6 relative z-10">
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
            
            {/* Left Column: Tactical Map Square */}
-           <div className="order-2 lg:order-1 flex justify-center lg:justify-start">
-              <div className="relative w-full max-w-[500px] aspect-square bg-[#080808] border border-white/10 group/preview overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-                 {/* Tactical Grid Overlay */}
-                 <div className="absolute inset-0 z-10 pointer-events-none opacity-20">
-                    <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(96,165,250,0.15) 1px, transparent 1px)', backgroundSize: '25px 25px' }} />
-                    {/* Animated Scanline */}
-                    <motion.div 
-                      animate={{ y: ['0%', '100%', '0%'] }}
-                      transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-                      className="absolute w-full h-[2px] bg-brand-400/30 shadow-[0_0_10px_rgba(96,165,250,0.5)] z-20"
-                    />
-                 </div>
+            <div className="order-2 lg:order-1 flex justify-center lg:justify-start relative">
+               {/* Background Glow behind map */}
+               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-brand-400/5 blur-[120px] rounded-full pointer-events-none" />
+               
+               <div className="relative w-full max-w-[650px] aspect-square bg-[#080808] border border-white/10 group/preview overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8),0_0_30px_rgba(96,165,250,0.05)]">
+                  {/* Tactical Grid Overlay */}
+                  <div className="absolute inset-0 z-10 pointer-events-none opacity-20">
+                     <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(96,165,250,0.15) 1px, transparent 1px)', backgroundSize: '25px 25px' }} />
+                     {/* Animated Scanline */}
+                     <motion.div 
+                       animate={{ y: ['0%', '100%', '0%'] }}
+                       transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+                       className="absolute w-full h-[2px] bg-brand-400/30 shadow-[0_0_10px_rgba(96,165,250,0.5)] z-20"
+                     />
+                  </div>
 
-                 {/* Corner Brackets */}
-                 <div className="absolute top-3 left-3 w-6 h-6 border-t border-l border-brand-400/30 z-20" />
-                 <div className="absolute top-3 right-3 w-6 h-6 border-t border-r border-brand-400/30 z-20" />
-                 <div className="absolute bottom-3 left-3 w-6 h-6 border-b border-l border-brand-400/30 z-20" />
-                 <div className="absolute bottom-3 right-3 w-6 h-6 border-b border-r border-brand-400/30 z-20" />
+                  {/* Corner Brackets */}
+                  <div className="absolute top-3 left-3 w-6 h-6 border-t border-l border-brand-400/30 z-20" />
+                  <div className="absolute top-3 right-3 w-6 h-6 border-t border-r border-brand-400/30 z-20" />
+                  <div className="absolute bottom-3 left-3 w-6 h-6 border-b border-l border-brand-400/30 z-20" />
+                  <div className="absolute bottom-3 right-3 w-6 h-6 border-b border-r border-brand-400/30 z-20" />
 
-                 {/* The Tactical Schematic Map */}
-                 <div className="absolute inset-0 scale-105">
-                    {renderMap(false, 'preview')}
-                 </div>
+                  {/* The Tactical Schematic Map */}
+                  <div className="absolute inset-0 scale-105">
+                     {renderMap(false, 'preview')}
+                  </div>
 
-                 {/* Expansion Overlay (Hover) */}
-                 <div 
-                   className="absolute inset-0 z-30 flex items-center justify-center bg-black/20 opacity-0 group-hover/preview:opacity-100 transition-all duration-500 cursor-pointer backdrop-blur-[2px]"
-                   onClick={() => setIsModalOpen(true)}
-                 >
-                    <div className="flex flex-col items-center gap-3">
-                       <div className="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center shadow-2xl transform scale-90 group-hover/preview:scale-100 transition-all">
-                          <Maximize2 size={24} />
-                       </div>
-                       <span className="text-white text-[8px] uppercase tracking-[0.4em] font-bold">Launch Full Map</span>
-                    </div>
-                 </div>
-              </div>
-           </div>
+                  {/* Expansion Overlay (Central Button as per sketch) */}
+                  <div 
+                    className="absolute inset-0 z-30 flex items-center justify-center bg-black/10 cursor-pointer"
+                    onClick={() => setIsModalOpen(true)}
+                  >
+                     <motion.div 
+                       whileHover={{ scale: 1.05 }}
+                       whileTap={{ scale: 0.95 }}
+                       className="group/btn relative px-8 py-4 bg-brand-400/10 backdrop-blur-md border border-brand-400/30 hover:border-brand-400 transition-all duration-500 shadow-[0_0_30px_rgba(96,165,250,0.2)]"
+                     >
+                        {/* Glow effect for button */}
+                        <div className="absolute inset-0 bg-brand-400/10 blur-xl opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                        
+                        <div className="relative z-10 flex flex-col items-center gap-2">
+                           <div className="flex items-center gap-3">
+                              <Star size={14} className="text-brand-400 group-hover/btn:rotate-90 transition-transform duration-500" />
+                              <span className="text-white text-[10px] uppercase font-bold tracking-[0.4em]">View Full History</span>
+                           </div>
+                           <div className="w-full h-[1px] bg-brand-400/20 group-hover/btn:bg-brand-400/50 transition-colors" />
+                        </div>
+                     </motion.div>
+                  </div>
+               </div>
+            </div>
 
            {/* Right Column: Informational Header & CTA */}
            <div className="order-1 lg:order-2 flex flex-col items-start lg:pl-12">
               <div className="mb-12 md:mb-16">
-                 {/* Header matching ProjectSection style */}
-                 <h2 className="text-[6rem] md:text-[10rem] font-serif text-white tracking-widest leading-none mb-4 uppercase">
-                    EVENTS
-                 </h2>
-                 <div className="flex items-center gap-6 mt-2">
-                    <p className="text-brand-400 font-sans text-xl md:text-2xl font-bold uppercase tracking-[0.3em]">
-                       REGISTER
-                    </p>
-                    <div className="h-[1px] flex-grow bg-gradient-to-r from-brand-400 to-transparent opacity-30 mt-1"></div>
-                 </div>
+                  {/* Header matching ProjectSection style */}
+                  <h2 className="text-[6rem] md:text-[10rem] font-serif text-white tracking-widest leading-none mb-4 uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                     CAREER
+                  </h2>
+                  <div className="flex items-center gap-6 mt-2">
+                     <p className="text-brand-400 font-sans text-xl md:text-2xl font-bold uppercase tracking-[0.3em] drop-shadow-[0_0_15px_rgba(96,165,250,0.4)]">
+                        PARTICIPATIONS
+                     </p>
+                     <div className="h-[1px] flex-grow bg-gradient-to-r from-brand-400 to-transparent opacity-30 mt-1"></div>
+                  </div>
               </div>
 
               <div className="space-y-8">
                  <p className="text-white/40 font-sans text-sm md:text-base leading-relaxed tracking-wide max-w-sm border-l border-brand-400/20 pl-6 italic">
-                    A comprehensive register of events and brand collaborations I have participated in across the Southern Cone. From international conventions to exclusive marketing campaigns.
+                    A panoramic operational history of campaign visualisations and promotional activations executed across the Southern Cone.
                  </p>
 
                  <div className="flex flex-col gap-6">
@@ -266,7 +353,7 @@ export default function EventMap() {
                     >
                        <span className="relative z-10 flex items-center gap-3">
                           <Star size={14} className="group-hover:rotate-[360deg] transition-transform duration-1000" />
-                          See All Participations
+                          View Full History
                        </span>
                     </button>
 
@@ -283,24 +370,43 @@ export default function EventMap() {
       {/* MODAL PORTAL */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 lg:p-12">
-             {/* Backdrop */}
-             <motion.div 
-               initial={{ opacity: 0 }}
-               animate={{ opacity: 1 }}
-               exit={{ opacity: 0 }}
-               onClick={() => setIsModalOpen(false)}
-               className="absolute inset-0 bg-black/90 backdrop-blur-md cursor-pointer"
-             />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Modal Backdrop with Fireflies */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsModalOpen(false)}
+              className="absolute inset-0 bg-black/90 backdrop-blur-sm overflow-hidden"
+            >
+               {/* Background Data Trails & Stars for Modal Backdrop */}
+               <div className="absolute inset-0 pointer-events-none opacity-20">
+                  <svg className="w-full h-full" viewBox="0 0 1000 1000" fill="none" preserveAspectRatio="xMidYMid slice">
+                     <path d="M-100,300 Q400,100 900,500" stroke="#60a5fa" strokeWidth="1" strokeDasharray="10 20" className="opacity-30" />
+                     <path d="M1100,700 Q600,900 100,500" stroke="#60a5fa" strokeWidth="1" strokeDasharray="10 20" className="opacity-30" />
+                  </svg>
+                  {[...Array(8)].map((_, i) => (
+                     <motion.div
+                        key={`modal-flash-${i}`}
+                        animate={{ opacity: [0, 0.6, 0], scale: [0.5, 1.5, 0.5] }}
+                        transition={{ duration: 3 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 5 }}
+                        className="absolute w-1 h-1 bg-brand-400 rounded-full blur-[1px]"
+                        style={{ top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%` }}
+                     />
+                  ))}
+               </div>
+            </motion.div>
+            
+            {/* Modal Container */}
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="relative w-[95vw] max-w-[1400px] h-[85vh] bg-[#050505] border border-white/10 rounded-none shadow-[0_0_100px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col md:flex-row z-[101]"
+            >
+               {/* Background Glow inside modal */}
+               <div className="absolute -top-[20%] -left-[20%] w-[60%] h-[60%] bg-brand-400/5 blur-[120px] rounded-full pointer-events-none" />
 
-             {/* Modal Container */}
-             <motion.div 
-               initial={{ opacity: 0, scale: 0.95, y: 20 }}
-               animate={{ opacity: 1, scale: 1, y: 0 }}
-               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-               className="relative w-full h-full max-w-[1500px] bg-[#050505] border border-white/10 rounded-2xl shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col md:flex-row z-[101]"
-             >
                 {/* Full Interactive Map */}
                 <div className="w-full md:w-3/5 h-[40vh] md:h-full relative overflow-hidden">
                    {renderMap(true, 'full')}
@@ -323,37 +429,42 @@ export default function EventMap() {
 
                 {/* Event Details Sidebar */}
                 <div className="w-full md:w-2/5 h-full flex flex-col bg-[#0a0a0a] border-l border-white/10">
-                   {/* Sidebar Header */}
-                   <div className="p-8 border-b border-white/5">
-                      <div className="flex items-center justify-between mb-4">
-                         <div className="flex flex-col gap-1.5">
-                            <div className="flex items-center gap-3 text-brand-400 font-sans text-[9px] uppercase tracking-[0.4em] font-bold">
-                               <div className={`w-1.5 h-1.5 rounded-full bg-brand-400 ${selectedCityId ? 'animate-pulse' : ''}`} />
-                               {selectedCityId ? `${selectedCityMetadata?.city.toUpperCase()} DEPLOYMENTS` : 'GLOBAL REGISTER'}
-                            </div>
-                            <h3 className="text-white font-serif text-2xl tracking-[0.1em] uppercase italic">
-                               {selectedCityId ? selectedCityMetadata?.city : 'ALL OPERATIONS'}
-                            </h3>
-                         </div>
-                         {/* Desktop Close Button */}
-                         <button 
+                   {/* Header: More Tech/Nomadic */}
+                    <div className="p-8 border-b border-white/5 bg-gradient-to-r from-brand-400/5 via-transparent to-transparent">
+                       <div className="flex items-center justify-between mb-6">
+                          <div className="flex flex-col gap-2">
+                             <div className="flex items-center gap-3 text-brand-400 font-sans text-[8px] uppercase tracking-[0.5em] font-bold">
+                                <Radio size={10} className="animate-pulse" />
+                                <span className="drop-shadow-[0_0_8px_rgba(96,165,250,0.6)]">STATION.ID: CAIDEN_OPERATIONS</span>
+                             </div>
+                             <h3 className="text-white font-serif text-3xl tracking-[0.1em] uppercase italic">
+                                {selectedCityId ? selectedCityMetadata?.city : 'GLOBAL TRAVEL LOG'}
+                             </h3>
+                          </div>
+                          {/* Desktop Close Button */}
+                          <button 
                             onClick={() => setIsModalOpen(false)}
-                            className="hidden md:flex w-10 h-10 items-center justify-center text-white/20 hover:text-white/100 hover:bg-white/5 rounded-full transition-all border border-transparent hover:border-white/10"
-                            title="Close ESC"
-                         >
-                            <X size={24} />
-                         </button>
-                      </div>
-                      
-                      {selectedCityId && (
-                         <button 
-                            onClick={resetView}
-                            className="text-[10px] text-brand-400/60 hover:text-brand-400 font-sans uppercase tracking-[0.2em] flex items-center gap-2 mb-4 transition-all"
-                         >
-                            <span>←</span> Reset Filter
-                         </button>
-                      )}
-                   </div>
+                            className="hidden md:flex p-3 text-white/40 hover:text-white transition-colors border border-white/10 hover:border-white/30 rounded-full group/close"
+                          >
+                            <X size={20} className="group-hover/close:rotate-90 transition-transform duration-300" />
+                          </button>
+                       </div>
+
+                       {/* Status Indicators */}
+                       <div className="flex items-center gap-6 text-[8px] text-white/30 font-sans tracking-[0.3em] uppercase">
+                          <div className="flex items-center gap-2">
+                             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                             DATA_STREAM: ACTIVE
+                          </div>
+                          <div className="flex items-center gap-2">
+                             <Activity size={10} className="text-brand-400" />
+                             RECORDS: {allEvents.length}
+                          </div>
+                          <div className="hidden sm:block ml-auto border-l border-white/10 pl-6 h-3 leading-3 italic">
+                             Southern Cone Operational Network
+                          </div>
+                       </div>
+                    </div>
 
                    {/* Full scrollable list */}
                    <div className="flex-1 overflow-y-auto p-8 pt-6 custom-scrollbar bg-black/10">
@@ -374,6 +485,7 @@ export default function EventMap() {
                                  <span className="text-brand-400 font-sans text-[10px] uppercase font-bold tracking-widest">{event.city}</span>
                                  <div className="w-[1px] h-3 bg-white/10" />
                                  <span className="text-white/30 font-sans text-[9px] uppercase tracking-widest">{event.type}</span>
+                                 <ChevronRight size={10} className="text-brand-400/40 ml-auto" />
                               </div>
                               <div className="flex items-center gap-3 mb-3">
                                  <h4 className="text-white font-serif text-xl tracking-wide uppercase transition-colors">
@@ -396,10 +508,17 @@ export default function EventMap() {
                    </div>
 
                    {/* Footer Info */}
-                   <div className="p-6 bg-[#050505] border-t border-white/5 flex items-center justify-between text-[8px] text-white/20 uppercase tracking-[0.3em]">
-                      <span>SECURE ARCHIVE ACCESS</span>
-                      <span>RECORDS ATTESTED</span>
-                   </div>
+                    <div className="p-6 bg-[#050505] border-t border-white/5 flex items-center justify-between text-[7px] text-white/20 uppercase tracking-[0.4em] font-bold">
+                       <div className="flex items-center gap-4">
+                          <span>SECURE ARCHIVE ACCESS</span>
+                          <span className="w-1 h-1 bg-white/5 rounded-full" />
+                          <span>STATION: CMD_TERM_01</span>
+                       </div>
+                       <div className="flex items-center gap-4">
+                          <span className="w-1 h-1 bg-white/5 rounded-full" />
+                          <span>RECORDS ATTESTED</span>
+                       </div>
+                    </div>
                 </div>
              </motion.div>
           </div>

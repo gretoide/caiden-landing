@@ -5,7 +5,6 @@ import { useState, useRef, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
 
 const CATEGORIES = [
-  'Film & Stage Prop',
   'Commercial Advertising',
   'Private Collector Commission',
   'Other / Collaboration'
@@ -112,7 +111,7 @@ export default function Contact() {
                   },
                   { 
                     href: "https://instagram.com/cai.cosplay", 
-                    label: "Social Identity", 
+                    label: "Visual Portfolio", 
                     value: "@cai.cosplay", 
                     icon: Instagram 
                   }

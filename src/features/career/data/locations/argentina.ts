@@ -138,7 +138,7 @@ export const ARGENTINA_LOCATIONS: LocationItem[] = [
     description: 'Central logistic and marketing hub for nationwide events.',
     events: [
       { city: 'Córdoba Capital', name: 'CAF', logoId: '2023_Abr_dssdkl', years: ['2023'], type: 'CONVENTION' },
-      { city: 'San Francisco', name: 'FrikiFest', logoId: '2024_Sep_1_oam2kd', years: ['2024'], type: 'EVENT' }
+      { city: 'San Francisco', name: 'FrikiFest', logoId: '2024_Sep_1_oam2kd', years: ['2024'], type: 'EVENT', lat: -31.4285, lng: -62.0818 }
     ]
   },
   {
