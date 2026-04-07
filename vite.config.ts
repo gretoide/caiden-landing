@@ -28,8 +28,14 @@ export default defineConfig({
             if (id.includes('mapbox-gl') || id.includes('react-map-gl')) {
               return 'mapbox';
             }
+            if (id.includes('framer-motion') || id.includes('motion-dom')) {
+              return 'motion';
+            }
             if (id.includes('gsap')) {
               return 'gsap';
+            }
+            if (id.includes('lucide')) {
+              return 'icons';
             }
             if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
               return 'vendor';
@@ -39,6 +45,6 @@ export default defineConfig({
         }
       }
     },
-    chunkSizeWarningLimit: 1000
+    chunkSizeWarningLimit: 1500
   }
 })

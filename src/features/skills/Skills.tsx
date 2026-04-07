@@ -45,28 +45,30 @@ export default function Skills() {
       const isActive = blade.classList.contains('is-active');
       
       if (isActive) {
-        gsap.set(img, { filter: "grayscale(0) brightness(1.4)" });
+        gsap.set(img, { filter: "grayscale(0) brightness(1.3)" });
         gsap.set(text, { opacity: 1, filter: "drop-shadow(0 0 15px rgba(255,255,255,0.3)) drop-shadow(0 0 10px rgba(0,0,0,0.8))" });
         return; 
       }
 
-      gsap.set(img, { filter: "grayscale(0.8) brightness(0.35)" });
-      gsap.set(text, { opacity: 0.25, filter: "none" });
+      // Base state: visible but slightly dimmed (not black)
+      gsap.set(img, { filter: "grayscale(0.4) brightness(0.7)" });
+      gsap.set(text, { opacity: 0.45, filter: "none" });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: blade,
-          start: "top 95%",
-          end: "bottom 5%",
-          scrub: 1.5,
+          start: "top 90%",
+          end: "bottom 10%",
+          scrub: 0.5, // Faster response
           invalidateOnRefresh: true,
         }
       });
 
-      tl.to(img, { filter: "grayscale(0) brightness(1.6)", ease: "power2.inOut", duration: 0.5 }, 0)
-        .to(text, { opacity: 1, filter: "drop-shadow(0 0 20px rgba(255,255,255,0.4)) drop-shadow(0 0 10px rgba(0,0,0,0.9))", ease: "power2.inOut", duration: 0.5 }, 0)
-        .to(img, { filter: "grayscale(0.8) brightness(0.35)", ease: "power2.inOut", duration: 0.5 }, 0.5)
-        .to(text, { opacity: 0.25, filter: "none", ease: "power2.inOut", duration: 0.5 }, 0.5);
+      // Simple one-way peak as it centers
+      tl.to(img, { filter: "grayscale(0) brightness(1.25)", ease: "sine.inOut", duration: 0.5 }, 0)
+        .to(text, { opacity: 1, filter: "drop-shadow(0 0 15px rgba(255,255,255,0.3))", ease: "sine.inOut", duration: 0.5 }, 0)
+        .to(img, { filter: "grayscale(0.4) brightness(0.7)", ease: "sine.inOut", duration: 0.5 }, 0.5)
+        .to(text, { opacity: 0.45, filter: "none", ease: "sine.inOut", duration: 0.5 }, 0.5);
     });
   }, { scope: containerRef, dependencies: [activeTab, isMobile] });
 
