@@ -2,6 +2,7 @@ import LazyBg from '../../shared/ui/LazyBg';
 import { CONTACT_BG } from './data/images';
 import { Phone, Instagram, Send, CheckCircle2, AlertCircle, Loader2, ChevronDown, Mail } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
+import emailjs from '@emailjs/browser';
 
 const CATEGORIES = [
   'Film & Stage Prop',
