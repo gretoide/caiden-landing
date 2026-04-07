@@ -190,19 +190,6 @@ export default function EventMap() {
               <Marker key={marker.id} longitude={marker.lng} latitude={marker.lat} anchor="bottom" onClick={e => { e.originalEvent.stopPropagation(); onMarkerClick(marker); }}>
                 {/* Outer touch target div (44px min for mobile accessibility) */}
                 <div className="relative w-12 h-12 flex items-center justify-center cursor-pointer touch-manipulation group/marker">
-                  {/* Selected Pulse Ring */}
-                  <AnimatePresence>
-                    {isSelected && (
-                      <motion.div 
-                        initial={{ scale: 0.5, opacity: 0 }}
-                        animate={{ scale: [0.5, 1.5], opacity: [0, 0.5, 0] }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
-                        className="absolute inset-0 bg-brand-400 rounded-full blur-md" 
-                      />
-                    )}
-                  </AnimatePresence>
-
                   <div className={`transition-all duration-300 ${interactive ? 'group-hover/marker:scale-110' : ''}`}>
                     <div className={`relative rounded-full rounded-br-none bg-brand-400 rotate-[45deg] flex items-center justify-center border border-white/20 transition-all duration-500 ${isSelected ? 'w-9 h-9 scale-110 shadow-[0_0_20px_rgba(96,165,250,0.6)] z-10' : 'w-6 h-6 opacity-80'}`}>
                         <div className="w-[30%] h-[30%] bg-[#050505] rounded-full rotate-[-45deg]" />

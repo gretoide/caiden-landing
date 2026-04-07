@@ -17,6 +17,8 @@ export const ARGENTINA_LOCATIONS: LocationItem[] = [
       { city: 'Concordia', name: 'Gamer Fest', logoId: '2023_May_2_m6mzrr', years: ['2023'], type: 'GAMING EXHIBITION', lat: -31.3927, lng: -58.0202 },
       { city: 'Concordia', name: 'Asia Fest', logoId: '2016_Jul_wddizo', years: ['2015', '2016', '2017', '2018', '2019'], type: 'FESTIVAL', lat: -31.3927, lng: -58.0202 },
       { city: 'Paraná', name: 'Ein B-Pop', logoId: '2023_May_1_mq94dr', years: ['2023'], type: 'EVENT', lat: -31.7444, lng: -60.5175 },
+      { city: 'Paraná', name: 'Anicubic', logoId: '2024_Anicubic_placeholder', years: ['2024'], type: 'FESTIVAL', lat: -31.7444, lng: -60.5175 },
+      { city: 'Paraná', name: 'Ani Chan', logoId: '2015_Ago_uuwjtc', years: ['2015'], type: 'CONVENTION', lat: -31.7444, lng: -60.5175 },
       { city: 'Villaguay', name: 'Neko Fest', logoId: '2017_May_kcz85v', years: ['2017', '2018'], type: 'FAN EVENT', lat: -31.8653, lng: -59.0269 },
       { city: 'Colón', name: 'Kyubi Fest', logoId: '2018_Abril_2_yo6cug', years: ['2018'], type: 'FESTIVAL', lat: -32.2217, lng: -58.1439 },
       { city: 'Concordia', name: 'Zombie Walk', logoId: '2018_Nov_m4b5rz', years: ['2016', '2017'], type: 'THEMED', lat: -31.3927, lng: -58.0202 }
@@ -76,7 +78,7 @@ export const ARGENTINA_LOCATIONS: LocationItem[] = [
     lng: -65.10,
     description: 'Patagonian presence through strategic event collaborations.',
     events: [
-      { city: 'Comodoro Rivadavia', name: 'Banzai', logoId: '2017_Ago_1_ebbazm', years: ['2017'], type: 'CONVENTION' }
+      { city: 'Comodoro Rivadavia', name: 'Banzai', logoId: '2017_Ago_1_ebbazm', years: ['2017'], type: 'CONVENTION', lat: -45.8647, lng: -67.4850 }
     ]
   },
   {
@@ -113,7 +115,7 @@ export const ARGENTINA_LOCATIONS: LocationItem[] = [
     description: 'Major regional coordination and commercial integrations.',
     events: [
       { city: 'Rosario', name: 'D.M.O', logoId: '2019_Mar_a4qoex', years: ['2019'], type: 'EXHIBITION', lat: -32.9468, lng: -60.6393 },
-      { city: 'Rosario', name: 'Crack Bang Boom', logoId: '2023_Ago_2_ugqa2j', years: ['2016', '2023', '2024'], type: 'INTERNATIONAL', lat: -32.9416, lng: -60.6322 }
+      { city: 'Rosario', name: 'Crack Bang Boom', logoId: '2023_Ago_2_ugqa2j', years: ['2016', '2023'], type: 'INTERNATIONAL', lat: -32.9416, lng: -60.6322 }
     ]
   },
   {
@@ -125,7 +127,7 @@ export const ARGENTINA_LOCATIONS: LocationItem[] = [
     lng: -63.00,
     description: 'Southern operational baseline in Viedma region.',
     events: [
-      { city: 'Viedma', name: 'Comarca Fest', logoId: '2019_Jul_gwrkyu', years: ['2019'], type: 'FESTIVAL' }
+      { city: 'Viedma', name: 'Comarca Fest', logoId: '2019_Jul_gwrkyu', years: ['2019'], type: 'FESTIVAL', lat: -40.8127, lng: -63.0033 }
     ]
   },
   {
