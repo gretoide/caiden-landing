@@ -26,15 +26,16 @@ export default function Layout({ children }: { children: ReactNode }) {
     }
   }, [isMobileMenuOpen]);
 
+  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMenu = () => setIsMobileMenuOpen(false);
-
+ 
   const navLinks = [
-    { label: 'Work', href: '#work' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Career', href: '#events' },
-    { label: 'Partners', href: '#partners' }
+    { label: 'Work', id: 'work' },
+    { label: 'Skills', id: 'skills' },
+    { label: 'Career', id: 'events' },
+    { label: 'Partners', id: 'partners' }
   ];
-
+ 
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
       <Cursor />
@@ -59,10 +60,18 @@ export default function Layout({ children }: { children: ReactNode }) {
           
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-12 text-[10px] font-sans tracking-[0.3em] uppercase">
-            <a href="#work" className="text-white/60 hover:text-white transition-all hover:tracking-[0.4em]">Work</a>
+            <a 
+              href="#work" 
+              className="text-white/60 hover:text-white transition-all hover:tracking-[0.4em]"
+            >
+              Work
+            </a>
             
             <div className="group relative">
-              <a href="#skills" className="text-white/60 hover:text-white transition-all hover:tracking-[0.4em] flex items-center gap-2">
+              <a 
+                href="#skills" 
+                className="text-white/60 hover:text-white transition-all hover:tracking-[0.4em] flex items-center gap-2"
+              >
                 Skills
                 <span className="text-[7px] text-white/30 group-hover:rotate-180 transition-transform duration-300">▼</span>
               </a>
@@ -81,23 +90,23 @@ export default function Layout({ children }: { children: ReactNode }) {
                  </div>
               </div>
             </div>
-
+ 
             <a href="#events" className="text-white/60 hover:text-white transition-all hover:tracking-[0.4em]">Career</a>
             <a href="#partners" className="text-white/60 hover:text-white transition-all hover:tracking-[0.4em]">Partners</a>
             <a href="#contact" className="px-6 py-2 bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all">Contact</a>
           </div>
-
+ 
           {/* Mobile Menu Toggle */}
           <button 
             className="md:hidden z-[101] text-white/80 hover:text-white transition-colors"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={toggleMenu}
             aria-label="Toggle Menu"
           >
             {isMobileMenuOpen ? <X size={28} strokeWidth={1.5} /> : <Menu size={28} strokeWidth={1.5} />}
           </button>
         </div>
       </nav>
-
+ 
       {/* Mobile Full-Screen Overlay Menu */}
       <div 
         className={`fixed inset-0 z-[90] bg-[#050505]/95 backdrop-blur-3xl flex flex-col justify-center px-10 transition-all duration-700 md:hidden ${
@@ -116,9 +125,9 @@ export default function Layout({ children }: { children: ReactNode }) {
               style={{ transitionDelay: `${index * 100}ms` }}
             >
               <a 
-                href={link.href}
+                href={`#${link.id}`}
                 onClick={closeMenu}
-                className="text-4xl font-serif tracking-[0.2em] uppercase italic text-white/80 hover:text-brand-400 transition-all duration-500 block mb-2"
+                className="text-4xl font-serif tracking-[0.2em] uppercase italic text-white/80 hover:text-brand-400 transition-all duration-500 block mb-2 text-left w-full"
               >
                 {link.label}
               </a>
@@ -131,7 +140,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                       key={craft.id}
                       href={`#skills-${craft.id}`}
                       onClick={closeMenu}
-                      className="text-[12px] font-sans tracking-[0.25em] uppercase text-white/40 hover:text-brand-400 transition-all"
+                      className="text-[12px] font-sans tracking-[0.25em] uppercase text-white/40 hover:text-brand-400 transition-all text-left"
                     >
                       {craft.title}
                     </a>
@@ -140,7 +149,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               )}
             </div>
           ))}
-
+ 
           <div className="h-[1px] w-full bg-white/5 my-4" />
           
           <a 
@@ -150,7 +159,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
             }`}
           >
-            Let's Talk <span className="text-2xl leading-none">→</span>
+            Contact <span className="text-2xl leading-none">→</span>
           </a>
         </div>
       </div>

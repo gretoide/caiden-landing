@@ -12,7 +12,13 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 100px; /* Offset for fixed navbar globally */
   }
+  
+  [id] {
+    scroll-margin-top: 100px; /* Ensure ancors account for navbar */
+  }
+
   body {
     @apply bg-brand-900 text-slate-100 font-sans antialiased;
   }
