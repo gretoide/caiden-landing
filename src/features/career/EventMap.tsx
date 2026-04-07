@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import Map, { Marker, Source, Layer } from 'react-map-gl';
-import { Star, X, Plane, ChevronRight } from 'lucide-react';
+import { Star, X, ChevronRight } from 'lucide-react';
 import type { LineLayer } from 'react-map-gl';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from '../../shared/ui/Image';
