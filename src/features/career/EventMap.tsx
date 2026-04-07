@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import Map, { Marker, Source, Layer } from 'react-map-gl';
-import { Star, X, Plane, Activity, Radio, ChevronRight } from 'lucide-react';
+import { Star, X, Plane, ChevronRight } from 'lucide-react';
 import type { LineLayer } from 'react-map-gl';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from '../../shared/ui/Image';
@@ -9,8 +9,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 // Configuration
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
-const SECTION_BG = '#050505';
-
 // Custom Styles
 const CUSTOM_STYLES = `
   .custom-scrollbar::-webkit-scrollbar { width: 3px; }
@@ -123,7 +121,7 @@ export default function EventMap() {
   };
 
   const renderMap = (interactive = false, variant: 'preview' | 'full' = 'full') => (
-    <div className={`w-full h-full relative ${variant === 'preview' ? 'grayscale brightness-75 contrast-125 sepia-[0.3] hue-rotate-[160deg]' : ''}`}>
+    <div className={`w-full h-full relative ${variant === 'preview' ? 'grayscale opacity-80 brightness-[0.7] contrast-125' : ''}`}>
       <Map
         {...viewState}
         onMove={evt => interactive && setViewState(evt.viewState)}
@@ -147,9 +145,9 @@ export default function EventMap() {
               }
             });
           }
-          if (map.getLayer('water')) map.setPaintProperty('water', 'fill-color', SECTION_BG);
-          if (map.getLayer('background')) map.setPaintProperty('background', 'background-color', SECTION_BG);
-          if (map.getLayer('land')) map.setPaintProperty('land', 'fill-color', '#080808');
+          if (map.getLayer('water')) map.setPaintProperty('water', 'fill-color', '#000000');
+          if (map.getLayer('background')) map.setPaintProperty('background', 'background-color', '#000000');
+          if (map.getLayer('land')) map.setPaintProperty('land', 'fill-color', '#050505');
           if (map.getLayer('admin-0-boundary')) map.setPaintProperty('admin-0-boundary', 'line-color', 'rgba(255,255,255,0.05)');
         }}
         style={{ width: '100%', height: '100%' }}
@@ -208,27 +206,51 @@ export default function EventMap() {
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden opacity-100">
         <svg className="w-full h-full opacity-40 shadow-[0_0_50px_rgba(96,165,250,0.1)]" viewBox="0 0 1000 1000" fill="none" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-              <polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa" />
+            <marker id="arrowhead" markerWidth="12" markerHeight="9" refX="0" refY="4.5" orient="auto">
+              <polygon points="0 0, 12 4.5, 0 9" fill="#93c5fd" />
             </marker>
           </defs>
           
-          {/* Curved Data Trails with Arrows - Increased Density */}
-          <path d="M-100,200 Q300,400 500,100" stroke="#60a5fa" strokeWidth="2.5" strokeDasharray="10 15" markerEnd="url(#arrowhead)" className="opacity-50" vectorEffect="non-scaling-stroke" />
-          <path d="M1100,800 Q700,600 500,900" stroke="#60a5fa" strokeWidth="2.5" strokeDasharray="10 15" markerEnd="url(#arrowhead)" className="opacity-50" vectorEffect="non-scaling-stroke" />
-          <path d="M-50,700 Q400,500 200,950" stroke="#60a5fa" strokeWidth="2" strokeDasharray="6 12" markerEnd="url(#arrowhead)" className="opacity-40" vectorEffect="non-scaling-stroke" />
-          <path d="M1050,100 Q600,300 800,-50" stroke="#60a5fa" strokeWidth="2" strokeDasharray="6 12" markerEnd="url(#arrowhead)" className="opacity-40" vectorEffect="non-scaling-stroke" />
-          
-          <path d="M-100,400 Q400,600 900,200" stroke="#60a5fa" strokeWidth="2" strokeDasharray="12 20" markerEnd="url(#arrowhead)" className="opacity-30" vectorEffect="non-scaling-stroke" />
-          <path d="M1100,200 Q600,400 100,800" stroke="#60a5fa" strokeWidth="2" strokeDasharray="12 20" markerEnd="url(#arrowhead)" className="opacity-30" vectorEffect="non-scaling-stroke" />
-          
-          <path d="M200,-50 Q500,500 800,1050" stroke="#60a5fa" strokeWidth="1.5" strokeDasharray="5 15" markerEnd="url(#arrowhead)" className="opacity-25" vectorEffect="non-scaling-stroke" />
-          <path d="M800,-50 Q500,500 200,1050" stroke="#60a5fa" strokeWidth="1.5" strokeDasharray="5 15" markerEnd="url(#arrowhead)" className="opacity-25" vectorEffect="non-scaling-stroke" />
-
-          <path d="M-100,100 Q500,100 1100,100" stroke="#60a5fa" strokeWidth="1" strokeDasharray="20 30" markerEnd="url(#arrowhead)" className="opacity-20" vectorEffect="non-scaling-stroke" />
-          <path d="M-100,900 Q500,900 1100,900" stroke="#60a5fa" strokeWidth="1" strokeDasharray="20 30" markerEnd="url(#arrowhead)" className="opacity-20" vectorEffect="non-scaling-stroke" />
-          <path d="M100,-100 Q100,500 100,1100" stroke="#60a5fa" strokeWidth="1" strokeDasharray="20 30" markerEnd="url(#arrowhead)" className="opacity-20" vectorEffect="non-scaling-stroke" />
-          <path d="M900,-100 Q900,500 900,1100" stroke="#60a5fa" strokeWidth="1" strokeDasharray="20 30" markerEnd="url(#arrowhead)" className="opacity-20" vectorEffect="non-scaling-stroke" />
+          {/* Curved Data Trails with Arrows - Organic Drift & Pulse Animation */}
+          {[
+            { d: "M-100,200 Q300,400 500,100", strokeWidth: "3.5", dash: "12 18", opacity: 0.7 },
+            { d: "M1100,800 Q700,600 500,900", strokeWidth: "3.5", dash: "12 18", opacity: 0.7 },
+            { d: "M-50,700 Q400,500 200,950", strokeWidth: "3", dash: "8 15", opacity: 0.6 },
+            { d: "M1050,100 Q600,300 800,-50", strokeWidth: "3", dash: "8 15", opacity: 0.6 },
+            { d: "M-100,400 Q400,600 900,200", strokeWidth: "2.5", dash: "15 25", opacity: 0.5 },
+            { d: "M1100,200 Q600,400 100,800", strokeWidth: "2.5", dash: "15 25", opacity: 0.5 },
+            { d: "M200,-50 Q500,500 800,1050", strokeWidth: "2", dash: "8 20", opacity: 0.4 },
+            { d: "M800,-50 Q500,500 200,1050", strokeWidth: "2", dash: "8 20", opacity: 0.4 },
+            { d: "M-100,100 Q500,100 1100,100", strokeWidth: "1.5", dash: "25 35", opacity: 0.3 },
+            { d: "M-100,900 Q500,900 1100,900", strokeWidth: "1.5", dash: "25 35", opacity: 0.3 },
+            { d: "M100,-100 Q100,500 100,1100", strokeWidth: "1.5", dash: "25 35", opacity: 0.3 },
+            { d: "M900,-100 Q900,500 900,1100", strokeWidth: "1.5", dash: "25 35", opacity: 0.3 },
+          ].map((path, i) => (
+            <motion.path
+              key={`path-${i}`}
+              d={path.d}
+              stroke="#60a5fa"
+              strokeWidth={path.strokeWidth}
+              strokeDasharray={path.dash}
+              markerEnd="url(#arrowhead)"
+              vectorEffect="non-scaling-stroke"
+              initial={{ opacity: path.opacity * 0.4, strokeDashoffset: 0, x: 0, y: 0, scale: 0.98 }}
+              animate={{ 
+                opacity: [path.opacity * 0.3, path.opacity, path.opacity * 0.3],
+                strokeDashoffset: [0, -120],
+                x: [-(5 + Math.random() * 10), 5 + Math.random() * 10],
+                y: [-(5 + Math.random() * 10), 5 + Math.random() * 10],
+                scale: [0.98, 1.02, 0.98]
+              }}
+              transition={{ 
+                opacity: { duration: 5 + Math.random() * 5, repeat: Infinity, ease: "easeInOut", delay: Math.random() * 5 },
+                strokeDashoffset: { duration: 30 + Math.random() * 20, repeat: Infinity, ease: "linear" },
+                x: { duration: 8 + Math.random() * 8, repeat: Infinity, ease: "easeInOut" },
+                y: { duration: 8 + Math.random() * 8, repeat: Infinity, ease: "easeInOut" },
+                scale: { duration: 10 + Math.random() * 5, repeat: Infinity, ease: "easeInOut" }
+              }}
+            />
+          ))}
         </svg>
 
         {/* Floating Airplanes */}
