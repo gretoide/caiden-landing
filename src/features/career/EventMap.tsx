@@ -343,7 +343,7 @@ export default function EventMap() {
 
               <div className="space-y-8">
                  <p className="text-white/40 font-sans text-sm md:text-base leading-relaxed tracking-wide max-w-sm border-l border-brand-400/20 pl-6 italic">
-                    A panoramic operational history of campaign visualisations and promotional activations executed across the Southern Cone.
+                    A comprehensive operational chronicle of creative visualizations and promotional activations executed across the Southern Cone.
                  </p>
 
                  <div className="flex flex-col gap-6">
@@ -353,13 +353,13 @@ export default function EventMap() {
                     >
                        <span className="relative z-10 flex items-center gap-3">
                           <Star size={14} className="group-hover:rotate-[360deg] transition-transform duration-1000" />
-                          View Full History
+                          View full History
                        </span>
                     </button>
 
                     <div className="flex items-center gap-4 text-white/20 text-[9px] font-mono tracking-[0.2em] font-bold">
                        <div className="w-2 h-2 rounded-full bg-brand-400/30 animate-pulse" />
-                       STATION.ID: CAIDEN_MASTER // DATA_STREAM: ACTIVE
+                       REGISTRY // ACTIVE
                     </div>
                  </div>
               </div>
@@ -402,6 +402,7 @@ export default function EventMap() {
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              data-cursor="no-glow"
               className="relative w-[95vw] max-w-[1400px] h-[85vh] bg-[#050505] border border-white/10 rounded-none shadow-[0_0_100px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col md:flex-row z-[101]"
             >
                {/* Background Glow inside modal */}
@@ -430,15 +431,14 @@ export default function EventMap() {
                 {/* Event Details Sidebar */}
                 <div className="w-full md:w-2/5 h-full flex flex-col bg-[#0a0a0a] border-l border-white/10">
                    {/* Header: More Tech/Nomadic */}
-                    <div className="p-8 border-b border-white/5 bg-gradient-to-r from-brand-400/5 via-transparent to-transparent">
-                       <div className="flex items-center justify-between mb-6">
-                          <div className="flex flex-col gap-2">
-                             <div className="flex items-center gap-3 text-brand-400 font-sans text-[8px] uppercase tracking-[0.5em] font-bold">
-                                <Radio size={10} className="animate-pulse" />
-                                <span className="drop-shadow-[0_0_8px_rgba(96,165,250,0.6)]">STATION.ID: CAIDEN_OPERATIONS</span>
+                    <div className="p-10 border-b border-white/5 bg-gradient-to-r from-brand-400/5 via-transparent to-transparent">
+                       <div className="flex items-center justify-between mb-2">
+                          <div className="flex flex-col gap-4">
+                             <div className="flex items-center gap-4 text-brand-400 font-sans text-[9px] uppercase tracking-[0.5em] font-bold">
+                                <span className="drop-shadow-[0_0_8px_rgba(96,165,250,0.6)]">COLLABORATION REGISTER</span>
                              </div>
-                             <h3 className="text-white font-serif text-3xl tracking-[0.1em] uppercase italic">
-                                {selectedCityId ? selectedCityMetadata?.city : 'GLOBAL TRAVEL LOG'}
+                             <h3 className="text-white font-serif text-4xl lg:text-5xl tracking-[0.1em] uppercase italic leading-tight">
+                                {selectedCityId ? `${selectedCityMetadata?.city.toUpperCase()} OPERATIONS` : 'LOG REGISTRY'}
                              </h3>
                           </div>
                           {/* Desktop Close Button */}
@@ -448,21 +448,6 @@ export default function EventMap() {
                           >
                             <X size={20} className="group-hover/close:rotate-90 transition-transform duration-300" />
                           </button>
-                       </div>
-
-                       {/* Status Indicators */}
-                       <div className="flex items-center gap-6 text-[8px] text-white/30 font-sans tracking-[0.3em] uppercase">
-                          <div className="flex items-center gap-2">
-                             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
-                             DATA_STREAM: ACTIVE
-                          </div>
-                          <div className="flex items-center gap-2">
-                             <Activity size={10} className="text-brand-400" />
-                             RECORDS: {allEvents.length}
-                          </div>
-                          <div className="hidden sm:block ml-auto border-l border-white/10 pl-6 h-3 leading-3 italic">
-                             Southern Cone Operational Network
-                          </div>
                        </div>
                     </div>
 
@@ -508,15 +493,12 @@ export default function EventMap() {
                    </div>
 
                    {/* Footer Info */}
-                    <div className="p-6 bg-[#050505] border-t border-white/5 flex items-center justify-between text-[7px] text-white/20 uppercase tracking-[0.4em] font-bold">
+                    <div className="p-6 bg-[#050505] border-t border-white/5 flex items-center justify-between text-[8px] text-white/20 uppercase tracking-[0.5em] font-bold">
                        <div className="flex items-center gap-4">
-                          <span>SECURE ARCHIVE ACCESS</span>
-                          <span className="w-1 h-1 bg-white/5 rounded-full" />
-                          <span>STATION: CMD_TERM_01</span>
+                          <span>SOUTHERN CONE OPERATIONS</span>
                        </div>
                        <div className="flex items-center gap-4">
-                          <span className="w-1 h-1 bg-white/5 rounded-full" />
-                          <span>RECORDS ATTESTED</span>
+                          <span>OPERATIONAL RECORD</span>
                        </div>
                     </div>
                 </div>
