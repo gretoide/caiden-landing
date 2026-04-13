@@ -4,7 +4,7 @@ export const ARGENTINA_LOCATIONS: LocationItem[] = [
   {
     id: 'entre-rios',
     name: 'Entre Ríos',
-    provinceName: 'Entre Ríos', 
+    provinceName: 'Entre Ríos',
     country: 'Argentina',
     lat: -31.7747,
     lng: -60.4956,
@@ -17,7 +17,6 @@ export const ARGENTINA_LOCATIONS: LocationItem[] = [
       { city: 'Concordia', name: 'Gamer Fest', logoId: '2023_May_2_m6mzrr', years: ['2023'], type: 'GAMING EXHIBITION', lat: -31.3927, lng: -58.0202 },
       { city: 'Concordia', name: 'Asia Fest', logoId: '2016_Jul_wddizo', years: ['2015', '2016', '2017', '2018', '2019'], type: 'FESTIVAL', lat: -31.3927, lng: -58.0202 },
       { city: 'Paraná', name: 'Ein B-Pop', logoId: '2023_May_1_mq94dr', years: ['2023'], type: 'EVENT', lat: -31.7444, lng: -60.5175 },
-      { city: 'Paraná', name: 'Anicubic', logoId: '2024_Anicubic_placeholder', years: ['2024'], type: 'FESTIVAL', lat: -31.7444, lng: -60.5175 },
       { city: 'Paraná', name: 'Ani Chan', logoId: '2015_Ago_uuwjtc', years: ['2015'], type: 'CONVENTION', lat: -31.7444, lng: -60.5175 },
       { city: 'Villaguay', name: 'Neko Fest', logoId: '2017_May_kcz85v', years: ['2017', '2018'], type: 'FAN EVENT', lat: -31.8653, lng: -59.0269 },
       { city: 'Colón', name: 'Kyubi Fest', logoId: '2018_Abril_2_yo6cug', years: ['2018'], type: 'FESTIVAL', lat: -32.2217, lng: -58.1439 },
