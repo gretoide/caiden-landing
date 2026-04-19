@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import SkillCarousel from './SkillCarousel';
 import { SKILLS_CONTENT } from './data';
+import Image from '../../shared/ui/Image';
 
 type Props = {
   activeTab: string;
@@ -58,6 +59,13 @@ export default function SkillDetails({
               onClick={() => { setSelectedSkillId(skill.id); setExpertiseBgTick(0); setIsAutoPlayDisabled(false); }}
               className={`group relative shrink-0 w-32 md:w-40 aspect-video overflow-hidden border transition-all duration-500 ${isActive ? 'border-brand-400 ring-1 ring-brand-400/50' : 'border-white/10 hover:border-brand-400/50'}`}
             >
+              <Image 
+                publicId={skill.publicId} 
+                alt={skill.title} 
+                variant="thumb" 
+                fill 
+                imgClassName={`object-cover transition-transform duration-700 ${isActive ? 'opacity-100 scale-110' : 'opacity-40 group-hover:opacity-70 group-hover:scale-105'}`}
+              />
               <div className={`absolute inset-0 bg-black/20 ${isActive ? 'bg-transparent' : ''}`} />
               <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black to-transparent">
                 <span className={`text-[8px] font-sans uppercase tracking-[0.2em] font-bold block truncate ${isActive ? 'text-brand-400' : 'text-white/60'}`}>
