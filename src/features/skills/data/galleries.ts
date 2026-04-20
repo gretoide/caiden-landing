@@ -64,12 +64,12 @@ export const SKILL_GALLERIES: Record<string, GalleryItem[]> = {
     { type: 'image', publicId: '2.1_-_Fabrics_Sewing_-_2_mwx8dc' },
   ],
   'tex-2': [
-    { type: 'image', publicId: '2.2_-_Design_-_0_mvtqap' },
     { type: 'image', publicId: '2.2_-_Design_-_1_eq9qix' },
-    { type: 'image', publicId: '2.2_-_Design_-_2_aoj6qm' },
+    { type: 'image', publicId: '2_hukhxv' },
+    { type: 'image', publicId: '3_eqqlnm' },
   ],
   'tex-3': [
-    { type: 'image', publicId: '2.3_-_Embroidery_-_0_zfqdhq' },
+    { type: 'image', publicId: '4_y2xgef' },
     { type: 'image', publicId: '2.3_-_Embroidery_-_1_v1qdow' },
     { type: 'image', publicId: '2.3_-_Embroidery_-_2_ctdvmi' },
   ],
