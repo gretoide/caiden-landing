@@ -69,8 +69,8 @@ export const SKILL_GALLERIES: Record<string, GalleryItem[]> = {
     { type: 'image', publicId: '3_eqqlnm' },
   ],
   'tex-3': [
-    { type: 'image', publicId: '4_y2xgef' },
     { type: 'image', publicId: '2.3_-_Embroidery_-_1_v1qdow' },
+    { type: 'image', publicId: '4_y2xgef' },
     { type: 'image', publicId: '2.3_-_Embroidery_-_2_ctdvmi' },
   ],
 

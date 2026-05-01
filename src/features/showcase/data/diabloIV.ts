@@ -12,6 +12,6 @@ export const diabloIVData = {
     'diablo_iv_3_yuwkeo', // Large Left
     'diablo_iv_5_k4ddrg', // Center
     'D1_ocz8io', // Right Small Top
-    'D2_anudld', // Right Small Bottom
+    '2_qsee4y', // Right Small Bottom
   ]
 } as const;
