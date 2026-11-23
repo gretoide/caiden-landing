@@ -76,7 +76,9 @@ export const SKILL_GALLERIES: Record<string, GalleryItem[]> = {
 
   // Electronics & Arduino (lights-work)
   'elec-1': [
-    { type: 'video', publicId: '2.2_LEDs_jw4wlo' }
+    // The source file is black from ~14.5s to ~30s: play only the first 14s so the loop is seamless.
+    // 3.84–6.04s (measured frame by frame) is a clip edited tilted 22.5°: removed from playback.
+    { type: 'video', publicId: '2.2_LEDs_jw4wlo', endOffset: 14, skip: [[3.84, 6.04]] }
   ],
   'elec-2': [
     { type: 'image', publicId: '2.3_-_Arduino_-_0_w4xd5z' },

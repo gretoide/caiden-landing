@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   cloudinaryPlaceholderUrl,
   cloudinaryUrl,
   type CloudinaryVariant,
   variantSrcSet,
 } from '../lib/cloudinary';
+import MediaLoader from './MediaLoader';
 
 type Props = {
   publicId: string;
@@ -64,6 +65,11 @@ export default function Image({
   zoom = 1,
 }: Props) {
   const [loaded, setLoaded] = useState(false);
+  const [failed, setFailed] = useState(false);
+  // A cached image can finish before React attaches onLoad: check once the element is mounted.
+  const imgRef = useCallback((img: HTMLImageElement | null) => {
+    if (img?.complete && img.naturalWidth > 0) setLoaded(true);
+  }, []);
 
   const widths = useMemo(() => {
     const baseWidths = widthsFor(variant);
@@ -83,7 +89,7 @@ export default function Image({
     className,
     'bg-center bg-cover',
     overflowHidden ? 'overflow-hidden' : undefined,
-    fill ? 'absolute inset-0' : undefined,
+    fill ? 'absolute inset-0' : 'relative',
   ]
     .filter(Boolean)
     .join(' ');
@@ -100,6 +106,7 @@ export default function Image({
   return (
     <div className={wrapperClass} style={loaded ? undefined : { backgroundImage: `url(${placeholder})` }}>
       <img
+        ref={imgRef}
         src={src}
         srcSet={srcSet}
         sizes={sizes}
@@ -117,6 +124,7 @@ export default function Image({
         decoding={decoding}
         fetchPriority={fetchPriority}
         onLoad={() => setLoaded(true)}
+        onError={() => setFailed(true)}
         onClick={onClick}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
@@ -124,6 +132,7 @@ export default function Image({
         onTouchStart={onTouchStart}
         draggable={false}
       />
+      <MediaLoader active={!loaded} error={failed} />
     </div>
   );
 }

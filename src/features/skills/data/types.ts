@@ -1,6 +1,10 @@
 export type GalleryItem = {
   type: 'image' | 'video';
   publicId: string;
+  /** Videos only: cut the clip at this second (e.g. to drop dead/black footage so it loops cleanly). */
+  endOffset?: number;
+  /** Videos only: [start, end] ranges (seconds) the player jumps over, e.g. a badly edited clip. */
+  skip?: [number, number][];
 };
 
 export type SubSkill = {

@@ -61,10 +61,19 @@ export function cloudinaryUrl(publicId: string, options: CloudinaryUrlOptions): 
   return `${baseUrl()}/${transformsFor(options)}/${pid}`;
 }
 
-export function cloudinaryVideoUrl(publicId: string): string {
+export function cloudinaryVideoUrl(publicId: string, options: { endOffset?: number } = {}): string {
   if (!isCloudinaryConfigured()) return '';
   const pid = encodePublicIdForUrl(cloudinaryPublicId(publicId));
-  return `https://res.cloudinary.com/${cloudName}/video/upload/${pid}.mp4`;
+  // eo_<s>: Cloudinary trims the video server-side (shorter file, clean loop point).
+  const trim = options.endOffset ? `eo_${options.endOffset}/` : '';
+  return `https://res.cloudinary.com/${cloudName}/video/upload/${trim}${pid}.mp4`;
+}
+
+/** First frame of a Cloudinary video as an image, for `<video poster>`. */
+export function cloudinaryVideoPosterUrl(publicId: string, width = 800): string {
+  if (!isCloudinaryConfigured()) return '';
+  const pid = encodePublicIdForUrl(cloudinaryPublicId(publicId));
+  return `https://res.cloudinary.com/${cloudName}/video/upload/so_0,f_auto,q_auto,w_${width}/${pid}.jpg`;
 }
 
 export function cloudinaryPlaceholderUrl(publicId: string): string {

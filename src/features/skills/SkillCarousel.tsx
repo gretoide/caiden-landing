@@ -1,8 +1,9 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import Image from '../../shared/ui/Image';
+import MediaLoader from '../../shared/ui/MediaLoader';
 import type { GalleryItem } from './data';
-import { cloudinaryVideoUrl } from '../../shared/lib/cloudinary';
+import { cloudinaryVideoPosterUrl, cloudinaryVideoUrl } from '../../shared/lib/cloudinary';
 
 type Props = {
   items: GalleryItem[];
@@ -12,11 +13,22 @@ type Props = {
 };
 
 // Looping muted video that only plays while it is the active slide and visible on screen
-function CarouselVideo({ publicId, isActive }: { publicId: string; isActive: boolean }) {
+type CarouselVideoProps = {
+  publicId: string;
+  endOffset?: number;
+  skip?: [number, number][];
+  isActive: boolean;
+};
+
+function CarouselVideo({ publicId, endOffset, skip, isActive }: CarouselVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   // Assume visible when IntersectionObserver is unavailable
   const isVisibleRef = useRef(typeof IntersectionObserver === 'undefined');
   const isActiveRef = useRef(isActive);
+  const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const src = cloudinaryVideoUrl(publicId, { endOffset });
+  const poster = cloudinaryVideoPosterUrl(publicId) || undefined;
 
   const syncPlayback = () => {
     const video = videoRef.current;
@@ -47,18 +59,73 @@ function CarouselVideo({ publicId, isActive }: { publicId: string; isActive: boo
     syncPlayback();
   }, [isActive]);
 
+  // Jump over removed clips. requestVideoFrameCallback checks every presented frame, so no frame of a
+  // skipped range is shown; browsers without it fall back to timeupdate with a wider look-ahead.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !skip?.length) return;
+    // Land a bit past the range end: seeks snap to a frame, and the one just before `end` is still inside.
+    const LANDING_MARGIN = 0.06;
+    let seeking = false;
+    const reveal = () => {
+      seeking = false;
+      video.style.opacity = '';
+    };
+    video.addEventListener('seeked', reveal);
+    const jump = (time: number, lookAhead: number) => {
+      if (seeking) return;
+      const range = skip.find(([start, end]) => time + lookAhead >= start && time < end);
+      if (!range) return;
+      seeking = true;
+      // Hide while seeking so no in-between frame of the removed clip can flash.
+      video.style.opacity = '0';
+      video.currentTime = range[1] + LANDING_MARGIN;
+    };
+    const supportsFrameCallback = 'requestVideoFrameCallback' in HTMLVideoElement.prototype;
+    if (supportsFrameCallback) {
+      let handle = 0;
+      const onFrame: VideoFrameRequestCallback = (_now, meta) => {
+        jump(meta.mediaTime, 0.05);
+        handle = video.requestVideoFrameCallback(onFrame);
+      };
+      handle = video.requestVideoFrameCallback(onFrame);
+      return () => {
+        video.cancelVideoFrameCallback(handle);
+        video.removeEventListener('seeked', reveal);
+        video.style.opacity = '';
+      };
+    }
+    const onTime = () => jump(video.currentTime, 0.3);
+    video.addEventListener('timeupdate', onTime);
+    return () => {
+      video.removeEventListener('timeupdate', onTime);
+      video.removeEventListener('seeked', reveal);
+      video.style.opacity = '';
+    };
+  }, [skip]);
+
   return (
-    <video
-      ref={videoRef}
-      src={cloudinaryVideoUrl(publicId)}
-      autoPlay
-      loop
-      muted
-      playsInline
-      preload="metadata"
-      className="w-full h-full object-cover"
-      poster={`https://res.cloudinary.com/dmhfkaovp/image/upload/f_auto,q_auto,w_800/${publicId}.jpg`}
-    />
+    <>
+      <video
+        ref={videoRef}
+        src={src}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        className="w-full h-full object-cover"
+        poster={poster}
+        onLoadedData={() => setReady(true)}
+        // Safety net for browsers that ignore `loop` on some MP4s: restart instead of freezing on the last frame.
+        onEnded={(e) => {
+          e.currentTarget.currentTime = 0;
+          if (isActiveRef.current && isVisibleRef.current) e.currentTarget.play().catch(() => {});
+        }}
+        onError={() => setFailed(true)}
+      />
+      <MediaLoader active={!ready} error={failed} />
+    </>
   );
 }
 
@@ -103,7 +170,7 @@ export default function SkillCarousel({ items, activeIndex, onNext, onPrev }: Pr
             }`}
           >
             {item.type === 'video' ? (
-              <CarouselVideo publicId={item.publicId} isActive={isActive} />
+              <CarouselVideo publicId={item.publicId} endOffset={item.endOffset} skip={item.skip} isActive={isActive} />
             ) : (
               <Image
                 publicId={item.publicId}

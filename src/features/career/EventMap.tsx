@@ -1,12 +1,15 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
-import Map, { Marker, Source, Layer } from 'react-map-gl';
+import { useState, useCallback, useMemo, useEffect, lazy, Suspense } from 'react';
 import { Star, X, ChevronRight, MapPin } from 'lucide-react';
-import type { LineLayer } from 'react-map-gl';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from '../../shared/ui/Image';
 import { LOCATIONS } from './data';
 import { useScrollLock } from '../../shared/hooks/useScrollLock';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import MediaLoader from '../../shared/ui/MediaLoader';
+import type { CityMarker } from './InteractiveMap';
+
+// mapbox-gl only downloads when the modal opens (or on hover/focus of a CTA, as a head start).
+const loadInteractiveMap = () => import('./InteractiveMap');
+const InteractiveMap = lazy(loadInteractiveMap);
 
 // Configuration
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
@@ -21,14 +24,31 @@ function buildStaticMapUrl(markers: { lng: number; lat: number }[], size: number
   const center = `${DEFAULT_CENTER.longitude},${DEFAULT_CENTER.latitude},3.1,0`;
   return `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${pins}/${center}/${size}x${size}@2x?access_token=${MAPBOX_TOKEN}&attribution=false&logo=false`;
 }
+// Decorative flight routes behind the Career section (viewBox 0..1000). Fixed timings keep render pure.
+const FLIGHT_ROUTES: {
+  d: string;
+  width: number;
+  dash: string;
+  opacity: number;
+  pulse: number;
+  flow: number;
+  plane?: { dur: number; delay: number };
+}[] = [
+  { d: 'M-100,200 Q300,400 500,100', width: 3.5, dash: '12 18', opacity: 0.8, pulse: 7, flow: 38, plane: { dur: 14, delay: 0 } },
+  { d: 'M1100,800 Q700,600 500,900', width: 3.5, dash: '12 18', opacity: 0.8, pulse: 8, flow: 42, plane: { dur: 16, delay: 3 } },
+  { d: 'M-50,700 Q400,500 200,950', width: 3, dash: '8 15', opacity: 0.7, pulse: 6, flow: 34 },
+  { d: 'M1050,100 Q600,300 800,-50', width: 3, dash: '8 15', opacity: 0.7, pulse: 9, flow: 46, plane: { dur: 12, delay: 6 } },
+  { d: 'M-80,480 Q350,300 700,520 T1080,420', width: 3, dash: '10 16', opacity: 0.65, pulse: 7.5, flow: 40, plane: { dur: 20, delay: 1.5 } },
+  { d: 'M300,1080 Q450,650 980,600', width: 2.5, dash: '6 14', opacity: 0.6, pulse: 6.5, flow: 36 },
+  { d: 'M620,-60 Q520,350 1080,300', width: 2.5, dash: '6 14', opacity: 0.6, pulse: 8.5, flow: 44, plane: { dur: 15, delay: 8 } },
+  { d: 'M-60,940 Q500,780 760,1060', width: 2.5, dash: '8 15', opacity: 0.55, pulse: 7, flow: 39 },
+];
+
 // Custom Styles
 const CUSTOM_STYLES = `
   .custom-scrollbar::-webkit-scrollbar { width: 3px; }
   .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
   .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
-  .mapboxgl-ctrl-logo, .mapboxgl-ctrl-attrib { display: none !important; }
-  .mapboxgl-ctrl-group { background: rgba(10, 10, 10, 0.7) !important; backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.05) !important; border-radius: 4px !important; }
-  .mapboxgl-ctrl-icon { filter: invert(1) brightness(2) opacity(0.5); }
 `;
 
 export default function EventMap() {
@@ -43,6 +63,7 @@ export default function EventMap() {
   });
 
   const [previewFailed, setPreviewFailed] = useState(false);
+  const [previewLoaded, setPreviewLoaded] = useState(false);
 
   // Handle ESC key to close modal
   useEffect(() => {
@@ -106,7 +127,7 @@ export default function EventMap() {
     return Object.values(groups);
   }, []);
 
-  const onMarkerClick = useCallback((marker: any) => {
+  const onMarkerClick = useCallback((marker: CityMarker) => {
     setSelectedCityId(marker.id);
     setViewState(prev => ({
       ...prev,
@@ -138,13 +159,6 @@ export default function EventMap() {
   const selectedCityMetadata = useMemo(() => cityMarkers.find(m => m.id === selectedCityId), [selectedCityId, cityMarkers]);
   const displayedEvents = useMemo(() => selectedCityId ? allEvents.filter(e => e.cityId === selectedCityId) : allEvents, [selectedCityId, allEvents]);
 
-  const lineLayer: LineLayer = {
-    id: 'provinces-outline',
-    type: 'line',
-    source: 'provinces',
-    paint: { 'line-color': 'rgba(255,255,255,0.03)', 'line-width': 0.5 }
-  };
-
   const renderPreview = () => {
     if (!staticMap.src || previewFailed) {
       return (
@@ -163,74 +177,32 @@ export default function EventMap() {
         alt="Map of event participations across Argentina and the Southern Cone"
         loading="lazy"
         decoding="async"
+        onLoad={() => setPreviewLoaded(true)}
         onError={() => setPreviewFailed(true)}
         className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/preview:scale-[1.03]"
       />
     );
   };
 
-  const renderMap = () => {
-    return (
-      <div className="w-full h-full relative">
-        <Map
-          {...viewState}
-          onMove={evt => setViewState(evt.viewState)}
-          onClick={resetView}
-          maxBounds={[[-95, -65], [-35, -5]] as any}
-          minZoom={3}
-          onLoad={(e) => {
-            const map = e.target;
-            const layers = map.getStyle().layers;
-            if (layers) {
-              layers.forEach((layer: any) => {
-                if (layer.id.includes('label')) {
-                  try {
-                    map.setLayoutProperty(layer.id, 'text-field', ['get', 'name_en']);
-                    map.setPaintProperty(layer.id, 'text-color', 'rgba(255,255,255,0.2)');
-                  } catch (err) { /* ignore */ }
-                }
-              });
-            }
-            if (map.getLayer('water')) map.setPaintProperty('water', 'fill-color', '#000000');
-            if (map.getLayer('background')) map.setPaintProperty('background', 'background-color', '#000000');
-            if (map.getLayer('land')) map.setPaintProperty('land', 'fill-color', '#050505');
-            if (map.getLayer('admin-0-boundary')) map.setPaintProperty('admin-0-boundary', 'line-color', 'rgba(255,255,255,0.05)');
-          }}
-          style={{ width: '100%', height: '100%' }}
-          mapStyle="mapbox://styles/mapbox/dark-v11"
-          mapboxAccessToken={MAPBOX_TOKEN}
-          attributionControl={false}
-        >
-          <Source id="provinces" type="geojson" data="https://raw.githubusercontent.com/mgubels/argentina-geojson/master/provincias.json">
-              <Layer {...lineLayer} />
-          </Source>
-
-          {cityMarkers.map((marker) => {
-            const isSelected = selectedCityId === marker.id;
-            return (
-              <Marker key={marker.id} longitude={marker.lng} latitude={marker.lat} anchor="bottom" onClick={e => { e.originalEvent.stopPropagation(); onMarkerClick(marker); }}>
-                {/* Outer touch target div (44px min for mobile accessibility) */}
-                <div className="relative w-12 h-12 flex items-center justify-center cursor-pointer touch-manipulation group/marker">
-                  <div className={`transition-all duration-300 group-hover/marker:scale-110`}>
-                    <div className={`relative rounded-full rounded-br-none bg-brand-400 rotate-[45deg] flex items-center justify-center border border-white/20 transition-all duration-500 ${isSelected ? 'w-9 h-9 scale-110 shadow-[0_0_20px_rgba(96,165,250,0.6)] z-10' : 'w-6 h-6 opacity-80'}`}>
-                        <div className="w-[30%] h-[30%] bg-[#050505] rounded-full rotate-[-45deg]" />
-                        {marker.eventCount > 1 && !isSelected && <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-white text-black text-[7px] font-bold rounded-full flex items-center justify-center rotate-[-45deg] shadow-lg">{marker.eventCount}</div>}
-                    </div>
-                  </div>
-
-                  {/* Tooltip on Mobile (hidden until touch) */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover/marker:opacity-100 group-active/marker:opacity-100 transition-opacity pointer-events-none z-50">
-                     <div className="bg-black/80 backdrop-blur-md border border-white/10 px-3 py-1 rounded text-[8px] text-white uppercase tracking-[0.2em] whitespace-nowrap">{marker.city}</div>
-                  </div>
-                </div>
-              </Marker>
-            );
-          })}
-        </Map>
-      </div>
-    );
-  };
-   
+  const renderMap = () => (
+    <Suspense
+      fallback={
+        <div className="w-full h-full flex items-center justify-center bg-[#050505]">
+          <div className="w-8 h-8 border border-white/20 border-t-brand-400 rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <InteractiveMap
+        token={MAPBOX_TOKEN}
+        viewState={viewState}
+        onViewStateChange={(vs) => setViewState(vs)}
+        onBackgroundClick={resetView}
+        markers={cityMarkers}
+        selectedCityId={selectedCityId}
+        onMarkerClick={onMarkerClick}
+      />
+    </Suspense>
+  );
 
   const openFullMap = () => {
     setIsModalOpen(true);
@@ -241,19 +213,45 @@ export default function EventMap() {
       <div className="absolute bottom-0 left-0 w-full h-[40%] bg-gradient-to-t from-brand-400/10 to-transparent z-[1] pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(circle,rgba(96,165,250,0.08)_0%,transparent_60%)] z-0 pointer-events-none" />
 
-      <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden opacity-100">
-        <svg className="w-full h-full opacity-40" viewBox="0 0 1000 1000" fill="none" preserveAspectRatio="xMidYMid slice">
+      <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
+        <svg className="w-full h-full opacity-60" viewBox="0 0 1000 1000" fill="none" preserveAspectRatio="xMidYMid slice" aria-hidden>
           <defs>
             <marker id="arrowhead" markerWidth="12" markerHeight="9" refX="0" refY="4.5" orient="auto"><polygon points="0 0, 12 4.5, 0 9" fill="#93c5fd" /></marker>
+            {/* Plane silhouette pointing along +x so animateMotion's rotate="auto" follows the route */}
+            <path id="career-plane" d="M14,0 L4,-2 L-2,-10 L-6,-10 L-2,-2 L-10,-2 L-13,-6 L-15,-6 L-13,0 L-15,6 L-13,6 L-10,2 L-2,2 L-6,10 L-2,10 L4,2 Z" />
           </defs>
-          {[
-            { d: "M-100,200 Q300,400 500,100", strokeWidth: "3.5", dash: "12 18", opacity: 0.7 },
-            { d: "M1100,800 Q700,600 500,900", strokeWidth: "3.5", dash: "12 18", opacity: 0.7 },
-            { d: "M-50,700 Q400,500 200,950", strokeWidth: "3", dash: "8 15", opacity: 0.6 },
-            { d: "M1050,100 Q600,300 800,-50", strokeWidth: "3", dash: "8 15", opacity: 0.6 },
-          ].map((path, i) => (
-            <motion.path key={`p-${i}`} d={path.d} stroke="#60a5fa" strokeWidth={path.strokeWidth} strokeDasharray={path.dash} markerEnd="url(#arrowhead)" vectorEffect="non-scaling-stroke" initial={{ opacity: path.opacity * 0.4, strokeDashoffset: 0 }} animate={{ opacity: [path.opacity * 0.3, path.opacity, path.opacity * 0.3], strokeDashoffset: [0, -120] }} transition={{ opacity: { duration: 5 + Math.random() * 5, repeat: Infinity, ease: "easeInOut" }, strokeDashoffset: { duration: 30 + Math.random() * 20, repeat: Infinity, ease: "linear" }}} />
+          {FLIGHT_ROUTES.map((route, i) => (
+            <motion.path
+              key={`route-${i}`}
+              id={`career-route-${i}`}
+              d={route.d}
+              stroke="#60a5fa"
+              strokeWidth={route.width}
+              strokeDasharray={route.dash}
+              strokeLinecap="round"
+              markerEnd="url(#arrowhead)"
+              vectorEffect="non-scaling-stroke"
+              initial={{ opacity: route.opacity * 0.4, strokeDashoffset: 0 }}
+              animate={{ opacity: [route.opacity * 0.45, route.opacity, route.opacity * 0.45], strokeDashoffset: [0, -120] }}
+              transition={{
+                opacity: { duration: route.pulse, repeat: Infinity, ease: 'easeInOut' },
+                strokeDashoffset: { duration: route.flow, repeat: Infinity, ease: 'linear' },
+              }}
+            />
           ))}
+          {/* Planes travelling the routes (hidden for users who prefer reduced motion) */}
+          <g className="motion-reduce:hidden">
+            {FLIGHT_ROUTES.map((route, i) =>
+              route.plane ? (
+                <use key={`plane-${i}`} href="#career-plane" fill="#bfdbfe" opacity={0.9} className="drop-shadow-[0_0_6px_rgba(96,165,250,0.9)]">
+                  <animateMotion dur={`${route.plane.dur}s`} begin={`${route.plane.delay}s`} repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+                    <mpath href={`#career-route-${i}`} />
+                  </animateMotion>
+                  <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.1;0.85;1" dur={`${route.plane.dur}s`} begin={`${route.plane.delay}s`} repeatCount="indefinite" />
+                </use>
+              ) : null
+            )}
+          </g>
         </svg>
       </div>
 
@@ -272,13 +270,18 @@ export default function EventMap() {
                     <div className="absolute bottom-3 left-3 w-6 h-6 border-b border-l border-brand-400/30" />
                     <div className="absolute bottom-3 right-3 w-6 h-6 border-b border-r border-brand-400/30" />
                   </div>
-                  <div className="absolute inset-0">{renderPreview()}</div>
+                  <div className="absolute inset-0">
+                    {renderPreview()}
+                    <MediaLoader active={!!staticMap.src && !previewLoaded && !previewFailed} />
+                  </div>
                   {/* Soft vignette to blend the static map with the section */}
                   <div className="absolute inset-0 z-[5] pointer-events-none bg-[radial-gradient(circle_at_center,transparent_45%,rgba(5,5,5,0.85)_100%)]" />
 
                   <button
                     type="button"
                     onClick={openFullMap}
+                    onPointerEnter={loadInteractiveMap}
+                    onFocus={loadInteractiveMap}
                     aria-label="Explore interactive map"
                     className="absolute inset-0 z-30 flex flex-col items-center justify-end sm:justify-center gap-3 sm:gap-4 p-4 sm:p-6 cursor-pointer"
                   >
@@ -305,7 +308,7 @@ export default function EventMap() {
               <div className="space-y-8">
                  <p className="text-white/40 font-sans text-sm md:text-base leading-relaxed tracking-wide max-w-sm border-l border-brand-400/20 pl-6 italic">A comprehensive operational chronicle of creative visualizations across the Southern Cone.</p>
                  <div className="flex flex-col gap-6">
-                    <button onClick={openFullMap} className="group relative px-10 py-5 bg-brand-400/5 hover:bg-brand-400 text-brand-400 hover:text-black font-sans text-[10px] uppercase font-bold tracking-[0.4em] border border-brand-400/20 hover:border-brand-400 transition-all duration-500 rounded-none">
+                    <button onClick={openFullMap} onPointerEnter={loadInteractiveMap} onFocus={loadInteractiveMap} className="group relative px-10 py-5 bg-brand-400/5 hover:bg-brand-400 text-brand-400 hover:text-black font-sans text-[10px] uppercase font-bold tracking-[0.4em] border border-brand-400/20 hover:border-brand-400 transition-all duration-500 rounded-none">
                        <span className="relative z-10 flex items-center gap-3"><MapPin size={14} /> Explore the map</span>
                     </button>
                     <div className="flex items-center gap-4 text-white/20 text-[9px] font-mono tracking-[0.2em] font-bold">

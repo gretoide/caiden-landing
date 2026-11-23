@@ -24,11 +24,18 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
+          // Vite/Rollup runtime helpers are imported by the entry. Pin them to `vendor`, otherwise
+          // Rollup may place them inside a heavy lazy chunk (it once landed in `mapbox`, which made
+          // the whole Mapbox library a modulepreload of index.html).
+          if (id.includes('vite/preload-helper') || id.includes('commonjsHelpers')) {
+            return 'vendor';
+          }
           if (id.includes('node_modules')) {
-            if (id.includes('mapbox-gl') || id.includes('react-map-gl')) {
+            // Only reachable from the lazy InteractiveMap module, so it loads when the map opens.
+            if (/[\\/]node_modules[\\/](mapbox-gl|react-map-gl|@mapbox|@vis\.gl)[\\/]/.test(id)) {
               return 'mapbox';
             }
-            if (id.includes('framer-motion') || id.includes('motion-dom')) {
+            if (id.includes('framer-motion') || id.includes('motion-dom') || id.includes('motion-utils')) {
               return 'motion';
             }
             if (id.includes('gsap')) {
@@ -37,7 +44,7 @@ export default defineConfig({
             if (id.includes('lucide')) {
               return 'icons';
             }
-            if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
+            if (/[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)) {
               return 'vendor';
             }
             return 'libs';
