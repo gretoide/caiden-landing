@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from '../../shared/ui/Image';
 import type { GalleryItem } from './data';
 import { cloudinaryVideoUrl } from '../../shared/lib/cloudinary';
@@ -10,6 +10,57 @@ type Props = {
   onNext?: () => void;
   onPrev?: () => void;
 };
+
+// Looping muted video that only plays while it is the active slide and visible on screen
+function CarouselVideo({ publicId, isActive }: { publicId: string; isActive: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  // Assume visible when IntersectionObserver is unavailable
+  const isVisibleRef = useRef(typeof IntersectionObserver === 'undefined');
+  const isActiveRef = useRef(isActive);
+
+  const syncPlayback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (isActiveRef.current && isVisibleRef.current) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  };
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+        syncPlayback();
+      },
+      { threshold: 0.25 }
+    );
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    isActiveRef.current = isActive;
+    syncPlayback();
+  }, [isActive]);
+
+  return (
+    <video
+      ref={videoRef}
+      src={cloudinaryVideoUrl(publicId)}
+      autoPlay
+      loop
+      muted
+      playsInline
+      preload="metadata"
+      className="w-full h-full object-cover"
+      poster={`https://res.cloudinary.com/dmhfkaovp/image/upload/f_auto,q_auto,w_800/${publicId}.jpg`}
+    />
+  );
+}
 
 export default function SkillCarousel({ items, activeIndex, onNext, onPrev }: Props) {
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -52,15 +103,7 @@ export default function SkillCarousel({ items, activeIndex, onNext, onPrev }: Pr
             }`}
           >
             {item.type === 'video' ? (
-              <video
-                src={cloudinaryVideoUrl(item.publicId)}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover"
-                poster={`https://res.cloudinary.com/dmhfkaovp/image/upload/f_auto,q_auto,w_800/${item.publicId}.jpg`}
-              />
+              <CarouselVideo publicId={item.publicId} isActive={isActive} />
             ) : (
               <Image
                 publicId={item.publicId}

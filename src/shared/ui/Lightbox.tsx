@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { X, ZoomIn } from 'lucide-react';
 import { cloudinaryUrl } from '../lib/cloudinary';
+import { useScrollLock } from '../hooks/useScrollLock';
 
 export default function Lightbox({ publicId, onClose }: { publicId: string; onClose: () => void }) {
   const [scale, setScale] = useState(1);
@@ -8,12 +9,13 @@ export default function Lightbox({ publicId, onClose }: { publicId: string; onCl
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
+  useScrollLock(true);
+
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, []);
+    const handleEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [onClose]);
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
@@ -59,7 +61,7 @@ export default function Lightbox({ publicId, onClose }: { publicId: string; onCl
 
   return (
     <div
-      className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center cursor-default backdrop-blur-md transition-opacity duration-300 overflow-hidden"
+      className="fixed inset-0 z-[200] bg-black/95 overscroll-contain flex items-center justify-center cursor-default backdrop-blur-md transition-opacity duration-300 overflow-hidden"
       onClick={onClose}
       onWheel={handleWheel}
     >

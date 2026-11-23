@@ -1,9 +1,10 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LazyBg from '../../../shared/ui/LazyBg';
 import Image from '../../../shared/ui/Image';
+import CollapsibleGallery from '../CollapsibleGallery';
 import { skyrimData as data } from '../data/skyrim';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -14,6 +15,9 @@ type Props = {
 
 export default function Skyrim({ onOpen }: Props) {
   const containerRef = useRef<HTMLElement>(null);
+
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const [galleryOpen, setGalleryOpen] = useState(false);
 
   useGSAP(() => {
     const elements = gsap.utils.toArray('.skyrim-header-anim', containerRef.current);
@@ -31,7 +35,12 @@ export default function Skyrim({ onOpen }: Props) {
       }
     });
 
-    const items = gsap.utils.toArray('.skyrim-item-anim', containerRef.current);
+  }, { scope: containerRef });
+
+  // Gallery items only exist once the collapsible is opened: rebuild their animation on each toggle.
+  useGSAP(() => {
+    if (!galleryOpen || !galleryRef.current) return;
+    const items = gsap.utils.toArray('.skyrim-item-anim', galleryRef.current);
     gsap.from(items, {
       y: 50,
       opacity: 0,
@@ -39,15 +48,15 @@ export default function Skyrim({ onOpen }: Props) {
       stagger: 0.15,
       ease: 'power3.out',
       scrollTrigger: {
-        trigger: containerRef.current,
+        trigger: galleryRef.current,
         start: 'top 85%',
         toggleActions: 'play none none reverse',
       }
     });
-  }, { scope: containerRef });
+  }, { scope: containerRef, dependencies: [galleryOpen], revertOnUpdate: true });
 
   return (
-    <section ref={containerRef} className="relative w-full min-h-screen bg-black overflow-hidden py-24 md:py-32 border-t border-white/5">
+    <section ref={containerRef} className="relative w-full bg-black overflow-hidden py-16 md:py-24 border-t border-white/5">
       <LazyBg
         publicId={data.bg}
         className={`absolute inset-0 z-0 opacity-20 bg-cover bg-center pointer-events-none ${data.blurClassName || 'blur-md'} scale-105`}
@@ -64,7 +73,7 @@ export default function Skyrim({ onOpen }: Props) {
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-1"></div>
 
       <div className="relative z-10 container mx-auto px-6">
-        <div className="mb-16 md:mb-24 max-w-4xl">
+        <div className="mb-8 md:mb-12 max-w-4xl">
            <h2 className="skyrim-header-anim text-6xl md:text-[10rem] font-serif text-white leading-none drop-shadow-2xl">
              {data.title}
            </h2>
@@ -81,10 +90,17 @@ export default function Skyrim({ onOpen }: Props) {
            )}
         </div>
 
+        <CollapsibleGallery
+          previewIds={data.gallery}
+          count={data.gallery.length}
+          accentClassName={data.subtitleClassName || 'text-[#9ca3af]'}
+          onOpenChange={setGalleryOpen}
+        >
+        <div ref={galleryRef}>
         {/* 3-Grid Layout (3 Columns) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 h-auto md:h-[90vh]">
           {/* Column 1 */}
-          <div className="skyrim-item-anim relative group overflow-hidden border border-white/5 h-[60vh] md:h-full">
+          <div data-zoom-src={data.gallery[0]} className="skyrim-item-anim relative group overflow-hidden border border-white/5 h-[60vh] md:h-full">
             <Image
               publicId={data.gallery[0]}
               alt="Skyrim Detail 1"
@@ -100,7 +116,7 @@ export default function Skyrim({ onOpen }: Props) {
           </div>
 
           {/* Column 2 - Main View */}
-          <div className="skyrim-item-anim relative group overflow-hidden border border-white/5 h-[60vh] md:h-full">
+          <div data-zoom-src={data.gallery[1]} className="skyrim-item-anim relative group overflow-hidden border border-white/5 h-[60vh] md:h-full">
             <Image
               publicId={data.gallery[1]}
               alt="Skyrim Main View"
@@ -117,7 +133,7 @@ export default function Skyrim({ onOpen }: Props) {
           </div>
 
           {/* Column 3 */}
-          <div className="skyrim-item-anim relative group overflow-hidden border border-white/5 h-[60vh] md:h-full">
+          <div data-zoom-src={data.gallery[2]} className="skyrim-item-anim relative group overflow-hidden border border-white/5 h-[60vh] md:h-full">
             <Image
               publicId={data.gallery[2]}
               alt="Skyrim Detail 2"
@@ -132,6 +148,8 @@ export default function Skyrim({ onOpen }: Props) {
             </div>
           </div>
         </div>
+        </div>
+        </CollapsibleGallery>
       </div>
     </section>
   );

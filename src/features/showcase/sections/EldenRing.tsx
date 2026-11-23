@@ -1,9 +1,10 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LazyBg from '../../../shared/ui/LazyBg';
 import Image from '../../../shared/ui/Image';
+import CollapsibleGallery from '../CollapsibleGallery';
 import { eldenRingData as data } from '../data/eldenRing';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -14,6 +15,9 @@ type Props = {
 
 export default function EldenRing({ onOpen }: Props) {
   const containerRef = useRef<HTMLElement>(null);
+
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const [galleryOpen, setGalleryOpen] = useState(false);
 
   useGSAP(() => {
     const headerElements = gsap.utils.toArray('.elden-header-anim', containerRef.current);
@@ -31,12 +35,10 @@ export default function EldenRing({ onOpen }: Props) {
       }
     });
 
-    const items = gsap.utils.toArray('.elden-item-anim', containerRef.current);
-    gsap.from(items, {
+    gsap.from('.elden-banner-anim', {
       y: 20,
       opacity: 0,
       duration: 1,
-      stagger: 0.1,
       ease: 'power3.out',
       scrollTrigger: {
         trigger: containerRef.current,
@@ -45,6 +47,24 @@ export default function EldenRing({ onOpen }: Props) {
       }
     });
   }, { scope: containerRef });
+
+  // Gallery items only exist once the collapsible is opened: rebuild their animation on each toggle.
+  useGSAP(() => {
+    if (!galleryOpen || !galleryRef.current) return;
+    const items = gsap.utils.toArray('.elden-item-anim', galleryRef.current);
+    gsap.from(items, {
+      y: 20,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: galleryRef.current,
+        start: 'top 85%',
+        toggleActions: 'play none none reverse',
+      }
+    });
+  }, { scope: containerRef, dependencies: [galleryOpen], revertOnUpdate: true });
 
   return (
     <section ref={containerRef} className="relative w-full min-h-screen bg-[#0a0202] overflow-hidden py-24 md:py-32 border-t border-white/5">
@@ -67,7 +87,7 @@ export default function EldenRing({ onOpen }: Props) {
       <div className="relative z-10 container mx-auto px-6">
         {/* Header Section */}
         <div className="mb-16 md:mb-24 max-w-none relative z-20">
-           <h2 className="elden-header-anim text-6xl md:text-[10rem] font-serif text-white leading-none drop-shadow-2xl whitespace-nowrap">
+           <h2 className="elden-header-anim text-5xl sm:text-6xl md:text-[10rem] font-serif text-white leading-none drop-shadow-2xl sm:whitespace-nowrap">
              {data.title}
            </h2>
            <div className="elden-header-anim flex flex-col md:flex-row md:items-end gap-6 mt-6">
@@ -84,7 +104,7 @@ export default function EldenRing({ onOpen }: Props) {
         </div>
 
         {/* Banner - Gallery[0] */}
-        <div className="elden-item-anim w-full aspect-video mb-12 relative group overflow-hidden border border-[#4a0a0a]/40 shadow-2xl bg-[#250707]">
+        <div data-zoom-src={data.gallery[0]} className="elden-banner-anim w-full aspect-video mb-6 md:mb-8 relative group overflow-hidden border border-[#4a0a0a]/40 shadow-2xl bg-[#250707]">
           <Image
             publicId={data.gallery[0]}
             alt="Elden Ring Featured Banner"
@@ -103,10 +123,17 @@ export default function EldenRing({ onOpen }: Props) {
           </div>
         </div>
 
+        <CollapsibleGallery
+          previewIds={data.gallery.slice(1, 6)}
+          count={data.gallery.length - 1}
+          accentClassName={data.subtitleClassName || 'text-brand-400'}
+          onOpenChange={setGalleryOpen}
+        >
+        <div ref={galleryRef}>
         {/* Mosaic Gallery - Gallery[1-4] */}
         <div className="grid grid-cols-12 auto-rows-[25vh] md:auto-rows-[30vh] gap-3 mb-12">
           {/* Shot 1 */}
-          <div className="elden-item-anim col-span-6 md:col-span-3 row-span-1 relative group overflow-hidden bg-[#250707] border border-[#4a0a0a]/50">
+          <div data-zoom-src={data.gallery[1]} className="elden-item-anim col-span-6 md:col-span-3 row-span-1 relative group overflow-hidden bg-[#250707] border border-[#4a0a0a]/50">
             <Image
               publicId={data.gallery[1]}
               alt="Showcase Shot 1"
@@ -120,7 +147,7 @@ export default function EldenRing({ onOpen }: Props) {
             </div>
           </div>
           {/* Shot 2 */}
-          <div className="elden-item-anim col-span-6 md:col-span-5 row-span-1 relative group overflow-hidden bg-[#250707] border border-[#4a0a0a]/50">
+          <div data-zoom-src={data.gallery[2]} className="elden-item-anim col-span-6 md:col-span-5 row-span-1 relative group overflow-hidden bg-[#250707] border border-[#4a0a0a]/50">
             <Image
               publicId={data.gallery[2]}
               alt="Showcase Shot 2"
@@ -135,7 +162,7 @@ export default function EldenRing({ onOpen }: Props) {
             </div>
           </div>
           {/* Shot 3 */}
-          <div className="elden-item-anim col-span-7 md:col-span-4 row-span-1 md:row-span-2 relative group overflow-hidden bg-[#250707] border border-[#4a0a0a]/60">
+          <div data-zoom-src={data.gallery[3]} className="elden-item-anim col-span-7 md:col-span-4 row-span-1 md:row-span-2 relative group overflow-hidden bg-[#250707] border border-[#4a0a0a]/60">
             <Image
               publicId={data.gallery[3]}
               alt="Showcase Shot 3"
@@ -149,7 +176,7 @@ export default function EldenRing({ onOpen }: Props) {
             </div>
           </div>
           {/* Shot 4 */}
-          <div className="elden-item-anim col-span-5 md:col-span-8 row-span-1 relative group overflow-hidden bg-[#250707] border border-[#4a0a0a]/50">
+          <div data-zoom-src={data.gallery[4]} className="elden-item-anim col-span-5 md:col-span-8 row-span-1 relative group overflow-hidden bg-[#250707] border border-[#4a0a0a]/50">
             <Image
               publicId={data.gallery[4]}
               alt="Showcase Shot 4"
@@ -168,7 +195,7 @@ export default function EldenRing({ onOpen }: Props) {
         {/* Focus Grid - Gallery[5-8] */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 h-auto">
           {/* Main View */}
-          <div className="elden-item-anim md:col-span-7 aspect-[4/5] md:aspect-auto md:h-full relative group shadow-2xl overflow-hidden border border-[#4a0a0a]/40">
+          <div data-zoom-src={data.gallery[5]} className="elden-item-anim md:col-span-7 aspect-[4/5] md:aspect-auto md:h-full relative group shadow-2xl overflow-hidden border border-[#4a0a0a]/40">
             <Image
               publicId={data.gallery[5]}
               alt="Main Showcase View"
@@ -187,7 +214,7 @@ export default function EldenRing({ onOpen }: Props) {
           {/* Details Column */}
           <div className="md:col-span-5 grid grid-cols-1 gap-2 md:gap-4 h-auto">
             {/* Top Detail */}
-            <div className="elden-item-anim aspect-square relative group overflow-hidden border border-[#4a0a0a]/30 bg-[#250707] shadow-xl">
+            <div data-zoom-src={data.gallery[6]} className="elden-item-anim aspect-square relative group overflow-hidden border border-[#4a0a0a]/30 bg-[#250707] shadow-xl">
               <Image
                 publicId={data.gallery[6]}
                 alt="Focus Detail 1"
@@ -204,7 +231,7 @@ export default function EldenRing({ onOpen }: Props) {
 
             {/* Bottom Grid */}
             <div className="grid grid-cols-2 gap-2 md:gap-4 aspect-[2/1]">
-              <div className="elden-item-anim relative group overflow-hidden border border-[#4a0a0a]/30 bg-[#250707] shadow-lg">
+              <div data-zoom-src={data.gallery[7]} className="elden-item-anim relative group overflow-hidden border border-[#4a0a0a]/30 bg-[#250707] shadow-lg">
                 <Image
                   publicId={data.gallery[7]}
                   alt="Focus Detail 2"
@@ -217,7 +244,7 @@ export default function EldenRing({ onOpen }: Props) {
                   FOCUS // 02
                 </div>
               </div>
-              <div className="elden-item-anim relative group overflow-hidden border border-[#4a0a0a]/30 bg-[#250707] shadow-lg">
+              <div data-zoom-src={data.gallery[8]} className="elden-item-anim relative group overflow-hidden border border-[#4a0a0a]/30 bg-[#250707] shadow-lg">
                 <Image
                   publicId={data.gallery[8]}
                   alt="Focus Detail 3"
@@ -233,6 +260,8 @@ export default function EldenRing({ onOpen }: Props) {
             </div>
           </div>
         </div>
+        </div>
+        </CollapsibleGallery>
       </div>
     </section>
   );

@@ -36,6 +36,7 @@ function App() {
     const preload = () => {
       import('./features/showcase/Showcase');
       import('./features/skills/Skills');
+      import('./features/skills/SkillDetails');
       // Deferred slightly more for high-performance sections
       setTimeout(() => {
         import('./features/career/EventMap');

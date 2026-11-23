@@ -8,21 +8,34 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Default landing view: Lighting → LEDs (detail view with looping video)
+const DEFAULT_TAB_ID = 'lights-work';
+const DEFAULT_SKILL_ID = 'elec-1';
+const defaultCategory =
+  SKILLS_CONTENT.categories.find((c) => c.id === DEFAULT_TAB_ID) || SKILLS_CONTENT.categories[0];
+const defaultSkillId = defaultCategory.subSkills.some((s) => s.id === DEFAULT_SKILL_ID)
+  ? DEFAULT_SKILL_ID
+  : null;
+const defaultGallery = defaultCategory.subSkills.find((s) => s.id === defaultSkillId)?.gallery ?? [];
+// Avoid ticking before SkillDetails mounts when the default gallery is a single item / video
+const defaultAutoPlayDisabled =
+  defaultSkillId !== null && (defaultGallery.length <= 1 || defaultGallery[0]?.type === 'video');
+
 // Lazy Details Component
 const SkillDetails = lazy(() => import('./SkillDetails'));
 
 export default function Skills() {
   const detailsRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [activeTab, setActiveTab] = useState(SKILLS_CONTENT.categories[0].id);
+  const [activeTab, setActiveTab] = useState(defaultCategory.id);
   
   const activeMetadata = useMemo(() => 
     SKILLS_CONTENT.categories.find((c) => c.id === activeTab) || SKILLS_CONTENT.categories[0],
   [activeTab]);
 
   const [expandedPublicId, setExpandedPublicId] = useState<string | null>(null);
-  const [selectedSkillId, setSelectedSkillId] = useState<string | null>(null);
-  const [isAutoPlayDisabled, setIsAutoPlayDisabled] = useState(false);
+  const [selectedSkillId, setSelectedSkillId] = useState<string | null>(defaultSkillId);
+  const [isAutoPlayDisabled, setIsAutoPlayDisabled] = useState(defaultAutoPlayDisabled);
   const [expertiseBgTick, setExpertiseBgTick] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   
@@ -195,7 +208,7 @@ export default function Skills() {
             /* --- VIEW A: SKILL GRID --- */
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full animate-in fade-in slide-in-from-bottom-4 duration-700">
               {activeMetadata.subSkills.map((skill) => (
-                <div key={skill.id} onClick={() => setSelectedSkillId(skill.id)} className="group relative aspect-[4/5] overflow-hidden bg-[#020b1a] border border-white/5 cursor-pointer hover:border-brand-400/30 active:scale-[0.98] transition-all duration-500">
+                <div key={skill.id} onClick={() => { setSelectedSkillId(skill.id); setExpertiseBgTick(0); setIsAutoPlayDisabled(false); }} className="group relative aspect-[4/5] overflow-hidden bg-[#020b1a] border border-white/5 cursor-pointer hover:border-brand-400/30 active:scale-[0.98] transition-all duration-500">
                   {skill.publicId && <Image publicId={skill.publicId} alt={skill.title} variant="thumb" fill imgClassName="object-cover opacity-60 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-110" sizes="(max-width: 768px) 100vw, 33vw" />}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
                   <div className="absolute inset-0 p-6 flex flex-col justify-end z-20">

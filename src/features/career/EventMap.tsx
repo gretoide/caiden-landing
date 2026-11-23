@@ -1,14 +1,26 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import Map, { Marker, Source, Layer } from 'react-map-gl';
-import { Star, X, ChevronRight } from 'lucide-react';
+import { Star, X, ChevronRight, MapPin } from 'lucide-react';
 import type { LineLayer } from 'react-map-gl';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from '../../shared/ui/Image';
 import { LOCATIONS } from './data';
+import { useScrollLock } from '../../shared/hooks/useScrollLock';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 // Configuration
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+const DEFAULT_CENTER = { longitude: -63.6167, latitude: -38.4161 };
+
+// Static preview via Mapbox Static Images API (max 1280px per side, so 640@2x).
+function buildStaticMapUrl(markers: { lng: number; lat: number }[], size: number) {
+  if (!MAPBOX_TOKEN) return '';
+  const pins = markers
+    .map(m => `pin-s+60a5fa(${m.lng.toFixed(4)},${m.lat.toFixed(4)})`)
+    .join(',');
+  const center = `${DEFAULT_CENTER.longitude},${DEFAULT_CENTER.latitude},3.1,0`;
+  return `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${pins}/${center}/${size}x${size}@2x?access_token=${MAPBOX_TOKEN}&attribution=false&logo=false`;
+}
 // Custom Styles
 const CUSTOM_STYLES = `
   .custom-scrollbar::-webkit-scrollbar { width: 3px; }
@@ -20,7 +32,6 @@ const CUSTOM_STYLES = `
 `;
 
 export default function EventMap() {
-  const [isActivated, setIsActivated] = useState(false);
   const [selectedCityId, setSelectedCityId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewState, setViewState] = useState({
@@ -31,6 +42,8 @@ export default function EventMap() {
     bearing: 0
   });
 
+  const [previewFailed, setPreviewFailed] = useState(false);
+
   // Handle ESC key to close modal
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -40,22 +53,13 @@ export default function EventMap() {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isModalOpen]);
 
-  // Lock body scroll when modal is open
-  useEffect(() => {
-    if (isModalOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => { document.body.style.overflow = 'unset'; };
-  }, [isModalOpen]);
+  // Lock page scroll (html + body) while the modal is open
+  useScrollLock(isModalOpen);
 
-  // Handle external activation (hash change)
+  // Navigating to another section (hash change) closes the modal
   useEffect(() => {
     const handleHash = () => {
-      if (window.location.hash === '#events') {
-        setIsActivated(true);
-      }
+      if (window.location.hash !== '#events') setIsModalOpen(false);
     };
     window.addEventListener('hashchange', handleHash);
     handleHash();
@@ -124,6 +128,13 @@ export default function EventMap() {
     }));
   }, []);
 
+  const staticMap = useMemo(() => ({
+    src: buildStaticMapUrl(cityMarkers, 640),
+    srcSet: MAPBOX_TOKEN
+      ? `${buildStaticMapUrl(cityMarkers, 400)} 800w, ${buildStaticMapUrl(cityMarkers, 640)} 1280w`
+      : '',
+  }), [cityMarkers]);
+
   const selectedCityMetadata = useMemo(() => cityMarkers.find(m => m.id === selectedCityId), [selectedCityId, cityMarkers]);
   const displayedEvents = useMemo(() => selectedCityId ? allEvents.filter(e => e.cityId === selectedCityId) : allEvents, [selectedCityId, allEvents]);
 
@@ -134,27 +145,37 @@ export default function EventMap() {
     paint: { 'line-color': 'rgba(255,255,255,0.03)', 'line-width': 0.5 }
   };
 
-  const renderMap = (interactive = false, variant: 'preview' | 'full' = 'full') => {
-    if (!isActivated && variant === 'preview') {
-       return (
-         <div className="w-full h-full bg-[#050505] flex items-center justify-center grayscale opacity-40">
-           <svg className="w-full h-full opacity-60" viewBox="0 0 400 600" fill="none" stroke="currentColor" strokeWidth="0.5">
-             <path d="M100,50 L300,50 L350,150 L200,550 L50,150 Z" stroke="rgba(96,165,250,0.2)" />
-           </svg>
-         </div>
-       );
+  const renderPreview = () => {
+    if (!staticMap.src || previewFailed) {
+      return (
+        <div className="w-full h-full bg-[#050505] flex items-center justify-center opacity-40">
+          <svg className="w-full h-full opacity-60" viewBox="0 0 400 600" fill="none" stroke="currentColor" strokeWidth="0.5">
+            <path d="M100,50 L300,50 L350,150 L200,550 L50,150 Z" stroke="rgba(96,165,250,0.2)" />
+          </svg>
+        </div>
+      );
     }
-
     return (
-      <div className={`w-full h-full relative ${variant === 'preview' ? 'grayscale opacity-80 brightness-[0.7] contrast-125' : ''}`}>
+      <img
+        src={staticMap.src}
+        srcSet={staticMap.srcSet}
+        sizes="(min-width: 1024px) 650px, 100vw"
+        alt="Map of event participations across Argentina and the Southern Cone"
+        loading="lazy"
+        decoding="async"
+        onError={() => setPreviewFailed(true)}
+        className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/preview:scale-[1.03]"
+      />
+    );
+  };
+
+  const renderMap = () => {
+    return (
+      <div className="w-full h-full relative">
         <Map
           {...viewState}
-          onMove={evt => interactive && setViewState(evt.viewState)}
+          onMove={evt => setViewState(evt.viewState)}
           onClick={resetView}
-          scrollZoom={interactive}
-          dragPan={interactive}
-          dragRotate={interactive}
-          touchZoomRotate={interactive}
           maxBounds={[[-95, -65], [-35, -5]] as any}
           minZoom={3}
           onLoad={(e) => {
@@ -190,7 +211,7 @@ export default function EventMap() {
               <Marker key={marker.id} longitude={marker.lng} latitude={marker.lat} anchor="bottom" onClick={e => { e.originalEvent.stopPropagation(); onMarkerClick(marker); }}>
                 {/* Outer touch target div (44px min for mobile accessibility) */}
                 <div className="relative w-12 h-12 flex items-center justify-center cursor-pointer touch-manipulation group/marker">
-                  <div className={`transition-all duration-300 ${interactive ? 'group-hover/marker:scale-110' : ''}`}>
+                  <div className={`transition-all duration-300 group-hover/marker:scale-110`}>
                     <div className={`relative rounded-full rounded-br-none bg-brand-400 rotate-[45deg] flex items-center justify-center border border-white/20 transition-all duration-500 ${isSelected ? 'w-9 h-9 scale-110 shadow-[0_0_20px_rgba(96,165,250,0.6)] z-10' : 'w-6 h-6 opacity-80'}`}>
                         <div className="w-[30%] h-[30%] bg-[#050505] rounded-full rotate-[-45deg]" />
                         {marker.eventCount > 1 && !isSelected && <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-white text-black text-[7px] font-bold rounded-full flex items-center justify-center rotate-[-45deg] shadow-lg">{marker.eventCount}</div>}
@@ -212,7 +233,6 @@ export default function EventMap() {
    
 
   const openFullMap = () => {
-    setIsActivated(true);
     setIsModalOpen(true);
   };
 
@@ -241,7 +261,7 @@ export default function EventMap() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
             <div className="order-2 lg:order-1 flex justify-center lg:justify-start relative">
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-brand-400/5 blur-[120px] rounded-full pointer-events-none" />
-               <div className="relative w-full max-w-[650px] aspect-square bg-[#080808] border border-white/10 group/preview overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8)]">
+               <div className="relative w-full max-w-[650px] aspect-square bg-[#080808] border border-white/10 group/preview overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8)] hover:border-brand-400/40 transition-colors duration-500">
                   <div className="absolute inset-0 z-10 pointer-events-none opacity-20">
                      <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(96,165,250,0.15) 1px, transparent 1px)', backgroundSize: '25px 25px' }} />
                      <motion.div animate={{ y: ['0%', '100%', '0%'] }} transition={{ duration: 10, repeat: Infinity, ease: 'linear' }} className="absolute w-full h-[2px] bg-brand-400/30 z-20" />
@@ -252,14 +272,25 @@ export default function EventMap() {
                     <div className="absolute bottom-3 left-3 w-6 h-6 border-b border-l border-brand-400/30" />
                     <div className="absolute bottom-3 right-3 w-6 h-6 border-b border-r border-brand-400/30" />
                   </div>
-                  <div className="absolute inset-0 scale-105">{renderMap(false, 'preview')}</div>
-                  <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/10 cursor-pointer" onClick={openFullMap}>
-                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="group/btn relative px-8 py-4 bg-brand-400/10 backdrop-blur-md border border-brand-400/30 hover:border-brand-400 transition-all duration-500 shadow-[0_0_30px_rgba(96,165,250,0.2)]">
-                        <div className="relative z-10 flex flex-col items-center gap-2">
-                           <div className="flex items-center gap-3"><Star size={14} className="text-brand-400" /><span className="text-white text-[10px] uppercase font-bold tracking-[0.4em]">View Full History</span></div>
-                        </div>
-                     </motion.div>
-                  </div>
+                  <div className="absolute inset-0">{renderPreview()}</div>
+                  {/* Soft vignette to blend the static map with the section */}
+                  <div className="absolute inset-0 z-[5] pointer-events-none bg-[radial-gradient(circle_at_center,transparent_45%,rgba(5,5,5,0.85)_100%)]" />
+
+                  <button
+                    type="button"
+                    onClick={openFullMap}
+                    aria-label="Explore interactive map"
+                    className="absolute inset-0 z-30 flex flex-col items-center justify-end sm:justify-center gap-3 sm:gap-4 p-4 sm:p-6 cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2 sm:gap-3 px-5 sm:px-8 py-3 sm:py-4 bg-black/50 backdrop-blur-md border border-brand-400/40 group-hover/preview:border-brand-400 group-hover/preview:bg-brand-400/15 transition-all duration-500 shadow-[0_0_30px_rgba(96,165,250,0.25)]">
+                      <MapPin size={16} className="text-brand-400 shrink-0" />
+                      <span className="text-white text-[10px] sm:text-[11px] uppercase font-bold tracking-[0.3em] sm:tracking-[0.4em]">Explore interactive map</span>
+                    </span>
+                    <span className="flex flex-wrap justify-center gap-2">
+                      <span className="px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-[9px] sm:text-[10px] text-white/70 uppercase tracking-[0.25em]">{allEvents.length} events</span>
+                      <span className="px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-[9px] sm:text-[10px] text-white/70 uppercase tracking-[0.25em]">{cityMarkers.length} cities</span>
+                    </span>
+                  </button>
                </div>
             </div>
 
@@ -275,7 +306,7 @@ export default function EventMap() {
                  <p className="text-white/40 font-sans text-sm md:text-base leading-relaxed tracking-wide max-w-sm border-l border-brand-400/20 pl-6 italic">A comprehensive operational chronicle of creative visualizations across the Southern Cone.</p>
                  <div className="flex flex-col gap-6">
                     <button onClick={openFullMap} className="group relative px-10 py-5 bg-brand-400/5 hover:bg-brand-400 text-brand-400 hover:text-black font-sans text-[10px] uppercase font-bold tracking-[0.4em] border border-brand-400/20 hover:border-brand-400 transition-all duration-500 rounded-none">
-                       <span className="relative z-10 flex items-center gap-3"><Star size={14} /> View full History</span>
+                       <span className="relative z-10 flex items-center gap-3"><MapPin size={14} /> Explore the map</span>
                     </button>
                     <div className="flex items-center gap-4 text-white/20 text-[9px] font-mono tracking-[0.2em] font-bold">
                        <div className="w-2 h-2 rounded-full bg-brand-400/30 animate-pulse" /> REGISTRY // ACTIVE
@@ -288,11 +319,23 @@ export default function EventMap() {
 
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)} className="absolute inset-0 bg-black/90 backdrop-blur-sm" />
-            <motion.div initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 20 }} className="relative w-[95vw] max-w-[1400px] h-[85vh] bg-[#050505] border border-white/10 rounded-none shadow-[0_0_100px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col md:flex-row z-[101]">
+          <div
+            className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4 overscroll-contain"
+            onClick={(e) => { if (e.target === e.currentTarget) setIsModalOpen(false); }}
+          >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)} className="absolute inset-0 bg-black/90 backdrop-blur-sm touch-none" />
+            <motion.div onClick={(e) => e.stopPropagation()} initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 20 }} className="relative w-full max-w-[1400px] h-[85vh] h-[85dvh] bg-[#050505] border border-white/10 rounded-none shadow-[0_0_100px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col md:flex-row z-[101]">
+                {/* Close — top-right corner of the panel, shared by mobile and desktop */}
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  aria-label="Close map"
+                  className="group/close absolute top-3 right-3 md:top-4 md:right-4 z-50 w-10 h-10 md:w-11 md:h-11 flex items-center justify-center bg-black/60 backdrop-blur-md border border-white/10 hover:border-white/30 text-white/60 hover:text-white transition-colors rounded-none"
+                >
+                  <X size={20} className="group-hover/close:rotate-90 transition-transform duration-300" />
+                </button>
                 <div className="w-full md:w-3/5 h-full relative overflow-hidden">
-                   {renderMap(true, 'full')}
+                   {renderMap()}
                    
                    <div className="absolute left-6 bottom-6 z-20 flex flex-col gap-4 pointer-events-none md:flex hidden">
                       <div className="px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-none text-[9px] text-white/40 uppercase tracking-[0.2em]">Scroll to zoom • Click cities to filter</div>
@@ -355,12 +398,11 @@ export default function EventMap() {
                      )}
                    </AnimatePresence>
 
-                   <button onClick={() => setIsModalOpen(false)} className="absolute top-4 right-4 md:hidden w-10 h-10 bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/50 z-30 rounded-none"><X size={20} /></button>
                 </div>
 
                 {/* Sidebar - Desktop Only */}
                 <div className="w-full md:w-2/5 h-full hidden md:flex flex-col bg-[#0a0a0a] border-l border-white/10 overflow-hidden rounded-none">
-                    <div className="p-10 border-b border-white/5 bg-gradient-to-r from-brand-400/5 via-transparent to-transparent">
+                    <div className="p-10 pr-20 border-b border-white/5 bg-gradient-to-r from-brand-400/5 via-transparent to-transparent">
                        <div className="flex items-center justify-between mb-2">
                           <div className="flex flex-col gap-4">
                              <div className="flex items-center gap-4 text-brand-400 font-sans text-[9px] uppercase tracking-[0.5em] font-bold">
@@ -370,7 +412,6 @@ export default function EventMap() {
                                {selectedCityId ? `${selectedCityMetadata?.city.toUpperCase()}` : 'GLOBAL LOG'}
                              </h3>
                           </div>
-                          <button onClick={() => setIsModalOpen(false)} className="hidden md:flex p-3 text-white/40 hover:text-white transition-colors border border-white/10 hover:border-white/30 rounded-none group/close"><X size={20} className="group-hover/close:rotate-90 transition-transform duration-300" /></button>
                        </div>
                     </div>
                    <div className="flex-1 overflow-y-auto p-8 pt-6 custom-scrollbar bg-black/10 text-white/40 font-sans text-xs">

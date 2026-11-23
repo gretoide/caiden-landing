@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import SkillCarousel from './SkillCarousel';
 import { SKILLS_CONTENT } from './data';
 import Image from '../../shared/ui/Image';
@@ -36,6 +36,13 @@ export default function SkillDetails({
       ? activeMetadata.gallery 
       : [{ type: 'image', publicId: activeMetadata.publicId } as const];
   }, [activeMetadata, selectedSubSkill]);
+
+  // No autoplay for single-item galleries or while a video is showing (it loops on its own)
+  const activeItem = items[((expertiseBgTick % items.length) + items.length) % items.length];
+  const shouldDisableAutoPlay = items.length <= 1 || activeItem?.type === 'video';
+  useEffect(() => {
+    if (shouldDisableAutoPlay) setIsAutoPlayDisabled(true);
+  }, [shouldDisableAutoPlay, setIsAutoPlayDisabled]);
 
   const handleNext = () => {
     setExpertiseBgTick(t => t + 1);
