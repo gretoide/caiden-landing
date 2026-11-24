@@ -6,6 +6,8 @@ export type CloudinaryUrlOptions = {
   variant: CloudinaryVariant;
   width: number;
   quality?: CloudinaryQuality;
+  /** Extra Cloudinary transformation applied first (e.g. a crop: 'c_crop,x_680,y_95,w_350,h_430'). */
+  transformation?: string;
 };
 
 const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME as string | undefined;
@@ -47,7 +49,7 @@ function transformsFor(options: CloudinaryUrlOptions): string {
   // c_limit preserves aspect ratio and never upscales.
   // dpr_auto + f_auto lets Cloudinary pick the best format per client.
   const common = ['f_auto', `q_${quality}`, 'dpr_auto', 'c_limit', `w_${options.width}`];
-  return common.join(',');
+  return options.transformation ? `${options.transformation}/${common.join(',')}` : common.join(',');
 }
 
 export function cloudinaryUrl(publicId: string, options: CloudinaryUrlOptions): string {
@@ -76,7 +78,7 @@ export function cloudinaryVideoPosterUrl(publicId: string, width = 800): string 
   return `https://res.cloudinary.com/${cloudName}/video/upload/so_0,f_auto,q_auto,w_${width}/${pid}.jpg`;
 }
 
-export function cloudinaryPlaceholderUrl(publicId: string): string {
+export function cloudinaryPlaceholderUrl(publicId: string, transformation?: string): string {
   if (!isCloudinaryConfigured()) {
     if (import.meta.env.PROD) {
       throw new Error('Missing VITE_CLOUDINARY_CLOUD_NAME. Set it in Vercel env vars before deploying.');
@@ -85,16 +87,18 @@ export function cloudinaryPlaceholderUrl(publicId: string): string {
   }
   const pid = encodePublicIdForUrl(cloudinaryPublicId(publicId));
   // Tiny blurred preview used as background while the real image loads.
-  return `${baseUrl()}/f_auto,q_1,w_24,e_blur:1000/${pid}`;
+  const pre = transformation ? `${transformation}/` : '';
+  return `${baseUrl()}/${pre}f_auto,q_1,w_24,e_blur:1000/${pid}`;
 }
 
 export function variantSrcSet(
   publicId: string,
   variant: CloudinaryVariant,
   widths: number[],
-  quality?: CloudinaryQuality
+  quality?: CloudinaryQuality,
+  transformation?: string
 ): string {
   return widths
-    .map((w) => `${cloudinaryUrl(publicId, { variant, width: w, quality })} ${w}w`)
+    .map((w) => `${cloudinaryUrl(publicId, { variant, width: w, quality, transformation })} ${w}w`)
     .join(', ');
 }

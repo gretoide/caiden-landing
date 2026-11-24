@@ -6,8 +6,14 @@ import EldenRing from '../showcase/sections/EldenRing';
 import DiabloIV from '../showcase/sections/DiabloIV';
 import Skyrim from '../showcase/sections/Skyrim';
 import ChainsawMan from '../showcase/sections/ChainsawMan';
-// Hipo (How to Train Your Dragon) is restored in code but hidden: its photos are missing from Cloudinary.
-// import Hipo from '../showcase/sections/Hipo';
+import Hipo from '../showcase/sections/Hipo';
+import AttackOnTitan from '../showcase/sections/AttackOnTitan';
+import Gojo from '../showcase/sections/Gojo';
+import Hippolyta from '../showcase/sections/Hippolyta';
+import Leon from '../showcase/sections/Leon';
+import Nero from '../showcase/sections/Nero';
+import SpyFamily from '../showcase/sections/SpyFamily';
+import StarWars from '../showcase/sections/StarWars';
 import { SCROLL_TO_SKILLS_MESSAGE } from '../../shared/lib/scrollToSkills';
 
 const SUITS = [
@@ -15,7 +21,14 @@ const SUITS = [
   { id: 'diablo-iv', label: 'Diablo IV' },
   { id: 'skyrim', label: 'Skyrim' },
   { id: 'chainsaw-man', label: 'Chainsaw Man' },
-  // { id: 'hipo', label: 'Hiccup' },
+  { id: 'hipo', label: 'Hiccup' },
+  { id: 'attack-on-titan', label: 'Attack on Titan' },
+  { id: 'gojo', label: 'Gojo' },
+  { id: 'hippolyta', label: 'Hippolyta' },
+  { id: 'leon', label: 'Leon' },
+  { id: 'nero', label: 'Nero' },
+  { id: 'spy-family', label: 'Spy x Family' },
+  { id: 'star-wars', label: 'Star Wars' },
 ];
 
 // Set when one of the "back" links already decided where the landing tab should be.
@@ -144,7 +157,14 @@ export default function GalleryPage() {
         <DiabloIV onOpen={setExpandedPublicId} />
         <Skyrim onOpen={setExpandedPublicId} />
         <ChainsawMan onOpen={setExpandedPublicId} />
-        {/* <Hipo onOpen={setExpandedPublicId} /> */}
+        <Hipo onOpen={setExpandedPublicId} />
+        <AttackOnTitan onOpen={setExpandedPublicId} />
+        <Gojo onOpen={setExpandedPublicId} />
+        <Hippolyta onOpen={setExpandedPublicId} />
+        <Leon onOpen={setExpandedPublicId} />
+        <Nero onOpen={setExpandedPublicId} />
+        <SpyFamily onOpen={setExpandedPublicId} />
+        <StarWars onOpen={setExpandedPublicId} />
       </div>
 
       <section className="bg-black border-t border-white/5 py-20 md:py-28">

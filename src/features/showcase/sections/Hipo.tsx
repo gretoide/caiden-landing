@@ -6,11 +6,11 @@ type Props = {
   onOpen: (publicId: string) => void;
 };
 
-// Suit shown on the /gallery page: header + two context photos + two zoom studies.
+// Suit shown on the /gallery page: header + Context 01 | Study | Context 02.
 export default function Hipo({ onOpen }: Props) {
   return (
     <ProjectSection id="hipo" data={data} onOpen={onOpen}>
-      <DetailGrid imageIds={[...data.gallery]} details={data.zoomDetails.map((d) => ({ ...d }))} onOpen={onOpen} />
+      <DetailGrid studies={1} studyInMiddle imageIds={[...data.gallery]} details={data.zoomDetails.map((d) => ({ ...d }))} onOpen={onOpen} />
     </ProjectSection>
   );
 }

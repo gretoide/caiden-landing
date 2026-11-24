@@ -22,9 +22,12 @@ type Props = {
   studies?: 1 | 2;
   /** Put the study column between the two context photos (Context 01 | Study | Context 02). */
   studyInMiddle?: boolean;
+  /** object-position for the context photos (e.g. '70% 50%' to center a subject that is off to one side). */
+  context1Position?: string;
+  context2Position?: string;
 };
 
-export default function DetailGrid({ imageIds, details, onOpen, reversed = false, studies = 2, studyInMiddle = false }: Props) {
+export default function DetailGrid({ imageIds, details, onOpen, reversed = false, studies = 2, studyInMiddle = false, context1Position, context2Position }: Props) {
   const [img1, img2, zoomImg] = imageIds;
   const containerRef = useRef<HTMLDivElement>(null);
   const studyDetails = (() => {
@@ -93,6 +96,7 @@ export default function DetailGrid({ imageIds, details, onOpen, reversed = false
            publicId={img1}
            alt="Compact View 1"
            variant="full"
+           objectPosition={context1Position}
            className="w-full h-full"
            imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 cursor-pointer object-cover"
            onClick={() => onOpen(img1)}
@@ -109,6 +113,7 @@ export default function DetailGrid({ imageIds, details, onOpen, reversed = false
            publicId={img2}
            alt="Compact View 2"
            variant="full"
+           objectPosition={context2Position}
            className="w-full h-full"
            imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 cursor-pointer object-cover"
            onClick={() => onOpen(img2)}

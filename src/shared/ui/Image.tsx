@@ -27,6 +27,8 @@ type Props = {
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   overflowHidden?: boolean;
   zoom?: number;
+  /** Extra Cloudinary transformation applied before resizing (e.g. a crop of a detail). */
+  transformation?: string;
 };
 
 const POSITION_CLASS = /(^|\s)(absolute|fixed|relative|sticky)(\s|$)/;
@@ -68,6 +70,7 @@ export default function Image({
   objectFit = 'cover',
   overflowHidden = true,
   zoom = 1,
+  transformation,
 }: Props) {
   const [loaded, setLoaded] = useState(false);
   // Eager (above-the-fold / LCP) images are painted right away instead of fading in from opacity 0,
@@ -89,9 +92,15 @@ export default function Image({
 
   // Si hay zoom, nos saltamos la primera resolución (pequeña) para el src inicial
   const srcWidth = zoom > 1.2 && widths.length > 1 ? widths[1] : widths[0];
-  const src = useMemo(() => cloudinaryUrl(publicId, { variant, width: srcWidth }), [publicId, variant, srcWidth]);
-  const srcSet = useMemo(() => variantSrcSet(publicId, variant, widths), [publicId, variant, widths]);
-  const placeholder = useMemo(() => cloudinaryPlaceholderUrl(publicId), [publicId]);
+  const src = useMemo(
+    () => cloudinaryUrl(publicId, { variant, width: srcWidth, transformation }),
+    [publicId, variant, srcWidth, transformation]
+  );
+  const srcSet = useMemo(
+    () => variantSrcSet(publicId, variant, widths, undefined, transformation),
+    [publicId, variant, widths, transformation]
+  );
+  const placeholder = useMemo(() => cloudinaryPlaceholderUrl(publicId, transformation), [publicId, transformation]);
 
   const wrapperClass = [
     className,
