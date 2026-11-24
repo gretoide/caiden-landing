@@ -1,37 +1,9 @@
 import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { cloudinaryUrl } from '../lib/cloudinary';
 
 const RING_SIZE = 32; // w-8
-const LENS_SIZE = 176; // w-44 — bubble magnifier diameter
-// Magnification inside the bubble. Kept moderate so the hi-res source stays sharp.
-const IMAGE_ZOOM = 1.8;
-const ZOOM_SOURCE_WIDTH = 2000;
 const POINTER_SELECTOR = 'a, button, [role="button"], [data-cursor="pointer"], .cursor-pointer';
-
-/** Size and viewport offset of the image inside `el` as actually drawn (object-fit: cover + object-position). */
-function renderedImageBox(el: HTMLElement) {
-  const rect = el.getBoundingClientRect();
-  const img = el.querySelector('img');
-  const nw = img?.naturalWidth || 0;
-  const nh = img?.naturalHeight || 0;
-  if (!img || !nw || !nh) {
-    return { w: rect.width, h: rect.height, left: rect.left, top: rect.top };
-  }
-  const imgRect = img.getBoundingClientRect();
-  const scale = Math.max(imgRect.width / nw, imgRect.height / nh);
-  const w = nw * scale;
-  const h = nh * scale;
-  const [posX = '50%', posY = '50%'] = getComputedStyle(img).objectPosition.split(' ');
-  const frac = (v: string) => (v.endsWith('%') ? parseFloat(v) / 100 : 0.5);
-  return {
-    w,
-    h,
-    left: imgRect.left + (imgRect.width - w) * frac(posX),
-    top: imgRect.top + (imgRect.height - h) * frac(posY),
-  };
-}
 
 export default function Cursor() {
   const cursorDotRef = useRef<HTMLDivElement>(null);
@@ -43,8 +15,6 @@ export default function Cursor() {
     const cursorOutline = cursorOutlineRef.current;
     const spotlight = spotlightRef.current;
     if (!cursorDot || !cursorOutline || !spotlight) return;
-
-    const canZoom = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
     const dotX = gsap.quickTo(cursorDot, 'x', { duration: 0.15, ease: 'power2.out' });
     const dotY = gsap.quickTo(cursorDot, 'y', { duration: 0.15, ease: 'power2.out' });
@@ -70,12 +40,11 @@ export default function Cursor() {
       if (!visible) return;
       visible = false;
       gsap.to([cursorDot, cursorOutline, spotlight], { opacity: 0, duration: 0.2, overwrite: 'auto' });
-      exitZoom();
       setMode('default');
     };
 
-    // ---------- Modes: default (dot + small ring), pointer (glowing dot), zoom (ring with "+") ----------
-    type Mode = 'default' | 'pointer' | 'zoom';
+    // ---------- Modes: default (dot + small ring), pointer (glowing dot) ----------
+    type Mode = 'default' | 'pointer';
     let mode: Mode | null = null;
     let pressed = false;
 
@@ -91,19 +60,6 @@ export default function Cursor() {
           overwrite: 'auto',
         });
         cursorDot.classList.add('animate-pulse');
-      } else if (mode === 'zoom') {
-        cursorDot.classList.remove('animate-pulse');
-        gsap.to(cursorDot, { scale: 0, boxShadow: '0 0 0 rgba(96,165,250,0)', duration: 0.2, overwrite: 'auto' });
-        gsap.to(cursorOutline, {
-          width: LENS_SIZE,
-          height: LENS_SIZE,
-          scale: 1,
-          borderColor: 'rgba(255,255,255,0.4)',
-          boxShadow: '0 12px 40px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.08)',
-          duration: 0.35,
-          ease: 'power3.out',
-          overwrite: 'auto',
-        });
       } else {
         cursorDot.classList.remove('animate-pulse');
         gsap.to(cursorDot, {
@@ -132,38 +88,6 @@ export default function Cursor() {
       applyMode();
     };
 
-    // ---------- Bubble magnifier (the ring becomes a lens over images) ----------
-    let zoomId: string | null = null;
-
-    const enterZoom = (el: HTMLElement, publicId: string) => {
-      zoomId = publicId;
-      const img = el.querySelector('img');
-      // Show the already-loaded image right away, then swap to the hi-res one when ready.
-      if (img?.currentSrc) cursorOutline.style.backgroundImage = `url("${img.currentSrc}")`;
-      const hiRes = cloudinaryUrl(publicId, { variant: 'full', width: ZOOM_SOURCE_WIDTH });
-      const loader = new globalThis.Image();
-      loader.onload = () => {
-        if (zoomId === publicId) cursorOutline.style.backgroundImage = `url("${hiRes}")`;
-      };
-      loader.src = hiRes;
-    };
-
-    const updateLens = (el: HTMLElement, x: number, y: number) => {
-      const box = renderedImageBox(el);
-      const half = LENS_SIZE / 2;
-      // Point under the pointer, in the coordinates of the image as rendered (object-fit: cover).
-      const ix = x - box.left;
-      const iy = y - box.top;
-      cursorOutline.style.backgroundSize = `${box.w * IMAGE_ZOOM}px ${box.h * IMAGE_ZOOM}px`;
-      cursorOutline.style.backgroundPosition = `${half - ix * IMAGE_ZOOM}px ${half - iy * IMAGE_ZOOM}px`;
-    };
-
-    const exitZoom = () => {
-      if (!zoomId) return;
-      zoomId = null;
-      cursorOutline.style.backgroundImage = 'none';
-    };
-
     // ---------- Events ----------
     const handleMove = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return;
@@ -176,17 +100,6 @@ export default function Cursor() {
       spotlightX(x); spotlightY(y);
 
       const target = e.target as HTMLElement | null;
-      const el = canZoom ? target?.closest<HTMLElement>('[data-zoom-src]') : null;
-      const publicId = el?.dataset.zoomSrc;
-
-      if (el && publicId) {
-        if (publicId !== zoomId) enterZoom(el, publicId);
-        updateLens(el, x, y);
-        setMode('zoom');
-        return;
-      }
-
-      exitZoom();
       setMode(target?.closest(POINTER_SELECTOR) ? 'pointer' : 'default');
     };
 
@@ -212,23 +125,14 @@ export default function Cursor() {
       hide();
     };
 
-    // The page moved under a still pointer: re-evaluate what is under it so no state (lens, glowing
-    // pointer dot) stays stuck on an element that scrolled away.
+    // The page moved under a still pointer: re-evaluate what is under it so the glowing pointer dot
+    // never stays stuck on an element that scrolled away.
     let scrollFrame = 0;
     const handleScroll = () => {
       if (!visible || scrollFrame) return;
       scrollFrame = requestAnimationFrame(() => {
         scrollFrame = 0;
         const under = document.elementFromPoint(lastX, lastY) as HTMLElement | null;
-        const el = canZoom ? under?.closest<HTMLElement>('[data-zoom-src]') : null;
-        const publicId = el?.dataset.zoomSrc;
-        if (el && publicId) {
-          if (publicId !== zoomId) enterZoom(el, publicId);
-          updateLens(el, lastX, lastY);
-          setMode('zoom');
-          return;
-        }
-        exitZoom();
         setMode(under?.closest(POINTER_SELECTOR) ? 'pointer' : 'default');
       });
     };
@@ -271,7 +175,7 @@ export default function Cursor() {
 
       <div
         ref={cursorOutlineRef}
-        className="fixed top-0 left-0 w-8 h-8 border border-white/50 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 opacity-0 hidden md:block overflow-hidden bg-no-repeat"
+        className="fixed top-0 left-0 w-8 h-8 border border-white/50 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 opacity-0 hidden md:block"
       />
     </>
   );

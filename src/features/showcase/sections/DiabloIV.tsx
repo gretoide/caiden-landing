@@ -59,7 +59,7 @@ export default function DiabloIV({ onOpen }: Props) {
         {/* 4-Image Layout */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 h-auto md:h-[100vh]">
           {/* Shot 1 - Large Left */}
-          <div data-zoom-src={data.gallery[0]} className="diablo-item-anim md:col-span-3 h-[40vh] md:h-full relative group overflow-hidden border border-white/5 shadow-xl">
+          <div className="diablo-item-anim md:col-span-3 h-[40vh] md:h-full relative group overflow-hidden border border-white/5 shadow-xl">
             <Image
               publicId={data.gallery[0]}
               alt="Diablo IV View 01"
@@ -74,7 +74,7 @@ export default function DiabloIV({ onOpen }: Props) {
           </div>
 
           {/* Shot 2 - Main View Center */}
-          <div data-zoom-src={data.gallery[1]} className="diablo-item-anim md:col-span-6 h-[60vh] md:h-full relative group overflow-hidden border border-white/5 shadow-2xl">
+          <div className="diablo-item-anim md:col-span-6 h-[60vh] md:h-full relative group overflow-hidden border border-white/5 shadow-2xl">
             <Image
               publicId={data.gallery[1]}
               alt="Diablo IV View 02"
@@ -91,7 +91,7 @@ export default function DiabloIV({ onOpen }: Props) {
 
           {/* Right Column - Shots 3 & 4 */}
           <div className="md:col-span-3 grid grid-cols-1 gap-2 md:gap-4 h-auto md:h-full">
-            <div data-zoom-src={data.gallery[2]} className="diablo-item-anim relative group overflow-hidden border border-white/5 aspect-square md:aspect-auto md:h-full">
+            <div className="diablo-item-anim relative group overflow-hidden border border-white/5 aspect-square md:aspect-auto md:h-full">
               <Image
                 publicId={data.gallery[2]}
                 alt="Diablo IV View 03"
@@ -104,7 +104,7 @@ export default function DiabloIV({ onOpen }: Props) {
                 FOCUS // 01
               </div>
             </div>
-            <div data-zoom-src={data.gallery[3]} className="diablo-item-anim relative group overflow-hidden border border-white/5 aspect-square md:aspect-auto md:h-full">
+            <div className="diablo-item-anim relative group overflow-hidden border border-white/5 aspect-square md:aspect-auto md:h-full">
               <Image
                 publicId={data.gallery[3]}
                 alt="Diablo IV View 04"

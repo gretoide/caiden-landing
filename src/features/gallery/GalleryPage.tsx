@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Layout from '../layout/Layout';
 import Lightbox from '../../shared/ui/Lightbox';
 import EldenRing from '../showcase/sections/EldenRing';
@@ -109,22 +109,25 @@ export default function GalleryPage() {
       </div>
 
       <section className="bg-black border-t border-white/5 py-20 md:py-28">
-        <div className="container mx-auto px-6 flex flex-col items-center text-center gap-8">
-          <h2 className="text-4xl md:text-6xl font-serif text-white tracking-wide">Have a build in mind?</h2>
-          <div className="flex flex-col sm:flex-row gap-3">
+        <div className="container mx-auto px-6 flex flex-col items-center text-center gap-4">
+          <h2 className="text-4xl md:text-6xl font-serif text-white tracking-wide">There&apos;s more behind the armour</h2>
+          <p className="text-white/50 font-sans max-w-md leading-relaxed">The skills and career behind every build.</p>
+          {/* Keep exploring first (primary, left); contact stays available on the right */}
+          <div className="flex flex-col sm:flex-row gap-3 mt-4 w-full sm:w-auto">
+            <a
+              href="/#skills"
+              onClick={(e) => returnToSite(e, 'skills')}
+              className="group inline-flex items-center justify-center gap-3 px-8 md:px-10 py-4 bg-white text-black font-sans font-bold text-xs uppercase tracking-[0.3em] hover:bg-brand-400 transition-colors"
+            >
+              Check my skills
+              <ArrowRight size={16} aria-hidden className="transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
             <a
               href="/#contact"
               onClick={(e) => returnToSite(e, 'contact')}
-              className="px-8 py-4 bg-white text-black font-sans font-bold text-xs uppercase tracking-[0.3em] hover:bg-brand-400 transition-colors"
+              className="inline-flex items-center justify-center px-8 py-4 bg-white/[0.03] backdrop-blur-md border border-white/15 hover:border-white/40 text-white/80 hover:text-white font-sans font-bold text-xs uppercase tracking-[0.3em] transition-colors"
             >
               Get in touch
-            </a>
-            <a
-              href="/#work"
-              onClick={(e) => returnToSite(e)}
-              className="px-8 py-4 bg-white/[0.03] backdrop-blur-md border border-white/15 hover:border-white/40 text-white font-sans font-bold text-xs uppercase tracking-[0.3em] transition-colors"
-            >
-              Back to site
             </a>
           </div>
         </div>

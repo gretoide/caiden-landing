@@ -119,16 +119,18 @@ export default function Skills() {
 
   return (
     <section ref={containerRef} className="w-full bg-black relative flex flex-col justify-center overflow-hidden py-12 md:py-24">
-      <div className="max-w-[1600px] mx-auto w-full px-0 md:px-6 flex flex-col gap-12 lg:gap-16">
-        {/* Section Header */}
-        <div className="px-6 md:px-0 flex flex-col items-start text-left gap-3">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-[1px] bg-brand-400/80" />
-          </div>
-          <h2 className="text-white font-serif tracking-[0.18em] text-4xl sm:text-5xl md:text-6xl leading-none drop-shadow-2xl">
-            {SKILLS_CONTENT.mainHeader.title}
-          </h2>
+      {/* Section header: same style and container as the Armour section, so both titles line up */}
+      <div className="container mx-auto px-6 mb-12 lg:mb-16 flex flex-col items-start text-left gap-4">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-[1px] bg-brand-400/80" />
+          <span className="text-brand-400 font-sans text-[10px] md:text-xs tracking-[0.5em] uppercase font-bold">Expertise</span>
         </div>
+        <h2 className="text-6xl md:text-8xl font-serif text-white tracking-wide leading-none">
+          {SKILLS_CONTENT.mainHeader.title}
+        </h2>
+      </div>
+
+      <div className="max-w-[1600px] mx-auto w-full px-0 md:px-6 flex flex-col gap-12 lg:gap-16">
 
         {/* Top visual section: Tabs Banner */}
         <div className="relative w-[100vw] ml-[calc(50%-50vw)] overflow-hidden bg-black border-y border-white/5">

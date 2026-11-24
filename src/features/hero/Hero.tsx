@@ -21,7 +21,7 @@ export default function Hero() {
         {/* Main transition to black at the bottom */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
         {/* Extra bottom vignette for seamless cut */}
-        <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-black to-transparent"></div>
+        <div className="absolute -bottom-1 left-0 right-0 h-96 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
       </div>
 
       {/* Content */}

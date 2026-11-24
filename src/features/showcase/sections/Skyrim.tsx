@@ -59,7 +59,7 @@ export default function Skyrim({ onOpen }: Props) {
         {/* 3-Grid Layout (3 Columns) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 h-auto md:h-[90vh]">
           {/* Column 1 */}
-          <div data-zoom-src={data.gallery[0]} className="skyrim-item-anim relative group overflow-hidden border border-white/5 h-[60vh] md:h-full">
+          <div className="skyrim-item-anim relative group overflow-hidden border border-white/5 h-[60vh] md:h-full">
             <Image
               publicId={data.gallery[0]}
               alt="Skyrim Detail 1"
@@ -75,7 +75,7 @@ export default function Skyrim({ onOpen }: Props) {
           </div>
 
           {/* Column 2 - Main View */}
-          <div data-zoom-src={data.gallery[1]} className="skyrim-item-anim relative group overflow-hidden border border-white/5 h-[60vh] md:h-full">
+          <div className="skyrim-item-anim relative group overflow-hidden border border-white/5 h-[60vh] md:h-full">
             <Image
               publicId={data.gallery[1]}
               alt="Skyrim Main View"
@@ -92,7 +92,7 @@ export default function Skyrim({ onOpen }: Props) {
           </div>
 
           {/* Column 3 */}
-          <div data-zoom-src={data.gallery[2]} className="skyrim-item-anim relative group overflow-hidden border border-white/5 h-[60vh] md:h-full">
+          <div className="skyrim-item-anim relative group overflow-hidden border border-white/5 h-[60vh] md:h-full">
             <Image
               publicId={data.gallery[2]}
               alt="Skyrim Detail 2"

@@ -216,7 +216,6 @@ export default function EventMap() {
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
         <svg className="w-full h-full opacity-60" viewBox="0 0 1000 1000" fill="none" preserveAspectRatio="xMidYMid slice" aria-hidden>
           <defs>
-            <marker id="arrowhead" markerWidth="12" markerHeight="9" refX="0" refY="4.5" orient="auto"><polygon points="0 0, 12 4.5, 0 9" fill="#93c5fd" /></marker>
             {/* Plane silhouette pointing along +x so animateMotion's rotate="auto" follows the route */}
             <path id="career-plane" d="M14,0 L4,-2 L-2,-10 L-6,-10 L-2,-2 L-10,-2 L-13,-6 L-15,-6 L-13,0 L-15,6 L-13,6 L-10,2 L-2,2 L-6,10 L-2,10 L4,2 Z" />
           </defs>
@@ -229,7 +228,6 @@ export default function EventMap() {
               strokeWidth={route.width}
               strokeDasharray={route.dash}
               strokeLinecap="round"
-              markerEnd="url(#arrowhead)"
               vectorEffect="non-scaling-stroke"
               initial={{ opacity: route.opacity * 0.4, strokeDashoffset: 0 }}
               animate={{ opacity: [route.opacity * 0.45, route.opacity, route.opacity * 0.45], strokeDashoffset: [0, -120] }}
