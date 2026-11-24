@@ -2,16 +2,63 @@ import { useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 
 import Cursor from '../../shared/ui/Cursor';
+import { NAV_LOCK_ATTR } from '../../shared/lib/scrollToSkills';
 
-export default function Layout({ children }: { children: ReactNode }) {
+/** Default: below this scroll position (px) the navbar is always shown. */
+const HIDE_AFTER = 96;
+/** Ignore scroll changes smaller than this (px) so the navbar does not flicker. */
+const SCROLL_DELTA = 8;
+/** If a mobile menu is ever added, mark it open with this attribute on <html> to keep the navbar shown. */
+const MENU_OPEN_ATTR = 'data-menu-open';
+
+type LayoutProps = {
+  children: ReactNode;
+  /**
+   * Scroll position below which the navbar never hides: px, or 'half-screen' (50% of the viewport
+   * height, measured on every scroll/resize). Defaults to HIDE_AFTER.
+   */
+  navHideAfter?: number | 'half-screen';
+};
+
+export default function Layout({ children, navHideAfter = HIDE_AFTER }: LayoutProps) {
   const [scrolled, setScrolled] = useState(false);
+  // Hidden while scrolling down past HIDE_AFTER, shown again as soon as the user scrolls up.
+  const [hidden, setHidden] = useState(false);
+  const [reducedMotion] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    handleScroll();
+    let lastY = window.scrollY;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const y = Math.max(0, window.scrollY);
+      setScrolled(y > 50);
+      const root = document.documentElement;
+      const hideAfter = navHideAfter === 'half-screen' ? window.innerHeight * 0.5 : navHideAfter;
+      if (y <= hideAfter || root.hasAttribute(NAV_LOCK_ATTR) || root.hasAttribute(MENU_OPEN_ATTR)) {
+        setHidden(false);
+        lastY = y;
+        return;
+      }
+      const delta = y - lastY;
+      if (Math.abs(delta) < SCROLL_DELTA) return;
+      setHidden(delta > 0);
+      lastY = y;
+    };
+    const handleScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    window.addEventListener('resize', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [navHideAfter]);
 
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
@@ -19,7 +66,15 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       {/* Navigation — transparent gradient bar: brand + contact only */}
       <nav
-        className={`fixed top-0 inset-x-0 z-[100] pointer-events-none transition-all duration-500 ${
+        // Keyboard users tabbing into the navbar always get it back on screen.
+        onFocusCapture={() => setHidden(false)}
+        style={{
+          transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+          transition: reducedMotion
+            ? 'none'
+            : 'transform 280ms ease-out, padding 500ms ease, box-shadow 500ms ease, background-color 500ms ease',
+        }}
+        className={`fixed top-0 inset-x-0 z-[100] pointer-events-none will-change-transform ${
           scrolled
             ? 'py-3 md:py-4 bg-gradient-to-b from-[#0b1a33]/75 to-[#081226]/55 backdrop-blur-xl backdrop-saturate-150 shadow-[0_10px_30px_-10px_rgba(96,165,250,0.25)]'
             : 'py-5 md:py-8 bg-gradient-to-b from-black/80 via-black/40 to-transparent'

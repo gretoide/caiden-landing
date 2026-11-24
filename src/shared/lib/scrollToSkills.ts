@@ -14,15 +14,29 @@ const GAP_BELOW_NAV = 16;
  */
 export const SCROLL_TO_SKILLS_MESSAGE = 'caiden:scroll-to-skills';
 
+/**
+ * While this attribute is on <html>, the navbar stays visible even when the page scrolls down
+ * (it normally hides on scroll down). Used during this programmatic scroll, so the heading lands
+ * right under a visible navbar.
+ */
+export const NAV_LOCK_ATTR = 'data-nav-lock';
+
 export function scrollToSkills(doc: Document = document, behavior: ScrollBehavior = 'smooth', refine = true): boolean {
   const win = doc.defaultView;
   const heading = doc.querySelector('[data-skills-heading]');
   if (!win || !heading) return false;
+  const root = doc.documentElement;
+  root.setAttribute(NAV_LOCK_ATTR, '');
+  // The navbar is fixed at the top: use its layout height, so a hide/show transform does not count.
   const nav = doc.querySelector('nav');
-  const navBottom = nav ? Math.max(0, nav.getBoundingClientRect().bottom) : 0;
+  const navBottom = nav ? nav.offsetHeight : 0;
   const top = Math.max(0, win.scrollY + heading.getBoundingClientRect().top - navBottom - GAP_BELOW_NAV);
   if (Math.abs(top - win.scrollY) >= 1) win.scrollTo({ top, behavior });
-  if (!refine) return true;
+  if (!refine) {
+    // Last pass: give the (smooth) correction time to finish, then let the navbar hide again on scroll.
+    win.setTimeout(() => root.removeAttribute(NAV_LOCK_ATTR), 900);
+    return true;
+  }
 
   let done = false;
   const settle = () => {

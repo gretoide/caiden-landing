@@ -95,8 +95,9 @@ function App() {
     };
   }, []);
 
+  // Home: the navbar stays until about half a screen has been scrolled.
   return (
-    <Layout>
+    <Layout navHideAfter="half-screen">
       {/* HERO — Critical, renders immediately */}
       <Hero />
  
