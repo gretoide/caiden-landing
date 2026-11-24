@@ -12,10 +12,10 @@ const SLIDE_MS = 5000;
 
 // Background photos, in order. Starts with cool colours to contrast with the red hero above.
 const SLIDES = [
-  { id: 'skyrim_6_b9efrf', alt: 'Skyrim Daedric armour', position: 'object-[center_30%]' },
-  { id: 'diablo_iv_5_k4ddrg', alt: 'Diablo IV armour', position: 'object-[center_25%]' },
-  { id: 'skyrim_7_yqhwyx', alt: 'Skyrim Daedric armour detail', position: 'object-[center_30%]' },
-  { id: 'elden_ring_6_k5z39c', alt: 'Elden Ring armour', position: 'object-[center_30%]' },
+  { id: 'skyrim_6_b9efrf', alt: 'Skyrim Daedric armour', position: 'object-[center_30%]', desktopFrame: 'lg:left-[30%]' },
+  { id: 'diablo_iv_5_k4ddrg', alt: 'Diablo IV armour', position: 'object-[center_25%]', desktopFrame: 'lg:left-[30%]' },
+  { id: 'skyrim_7_yqhwyx', alt: 'Skyrim Daedric armour detail', position: 'object-[center_30%]', desktopFrame: 'lg:left-[30%]' },
+  { id: 'elden_ring_9_gccxgg', alt: 'Elden Ring armour', position: 'object-[center_30%] lg:object-[center_0%]', desktopFrame: 'lg:left-[33.25%] lg:-right-[3.25%]' },
 ];
 
 /**
@@ -151,7 +151,7 @@ export default function ArmourShowcase() {
             ref={(el) => {
               innerRefs.current[i] = el;
             }}
-            className="absolute inset-0 lg:left-[30%] lg:mask-l-from-30% lg:mask-l-to-100% will-change-transform"
+            className={`absolute inset-0 ${slide.desktopFrame} lg:mask-l-from-30% lg:mask-l-to-100% will-change-transform`}
           >
             <Image
               publicId={slide.id}
