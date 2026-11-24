@@ -117,6 +117,8 @@ function CarouselVideo({ publicId, endOffset, skip, isActive }: CarouselVideoPro
         className="w-full h-full object-cover"
         poster={poster}
         onLoadedData={() => setReady(true)}
+        onCanPlay={() => setReady(true)}
+        onPlaying={() => setReady(true)}
         // Safety net for browsers that ignore `loop` on some MP4s: restart instead of freezing on the last frame.
         onEnded={(e) => {
           e.currentTarget.currentTime = 0;

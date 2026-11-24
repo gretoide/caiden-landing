@@ -1,6 +1,8 @@
 import { lazy, Suspense, useEffect } from 'react';
 import Layout from './features/layout/Layout';
 import Hero from './features/hero/Hero';
+import LoadingSpinner from './shared/ui/LoadingSpinner';
+import { scrollToSkills, SCROLL_TO_SKILLS_MESSAGE } from './shared/lib/scrollToSkills';
 
 // --- Robust Lazy Loading Utility ---
 const lazyWithRetry = (importFn: () => Promise<any>) => {
@@ -27,7 +29,7 @@ const Brands = lazyWithRetry(() => import('./features/brands/Brands'));
 const Contact = lazyWithRetry(() => import('./features/contact/Contact'));
 
 function SectionPlaceholder() {
-  return <div className="w-full h-[30vh] bg-black" />;
+  return <LoadingSpinner className="w-full h-[30vh] bg-black" />;
 }
 
 function App() {
@@ -53,6 +55,16 @@ function App() {
     }
   }, []);
 
+  // The /gallery tab asks us to show the Skills section ("Check my skills", or when it is closed).
+  useEffect(() => {
+    const onMessage = (e: MessageEvent) => {
+      if (e.origin !== window.location.origin || e.data?.type !== SCROLL_TO_SKILLS_MESSAGE) return;
+      scrollToSkills(document, e.data.behavior === 'instant' ? 'instant' : 'smooth');
+    };
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, []);
+
   // Deep links (/#contact, e.g. from the gallery page): the browser jumps to the anchor while the lazy
   // sections above are still placeholders, then they grow and push it down. Keep the target aligned
   // while the page settles, and stop as soon as the user scrolls on their own.
@@ -60,7 +72,11 @@ function App() {
     const id = window.location.hash.slice(1);
     const target = id ? document.getElementById(id) : null;
     if (!target) return;
-    const align = () => target.scrollIntoView({ behavior: 'instant', block: 'start' });
+    // /#skills (e.g. "Check my skills" from the gallery): heading under the navbar, slides in view.
+    const align = () => {
+      if (id === 'skills' && scrollToSkills(document, 'instant')) return;
+      target.scrollIntoView({ behavior: 'instant', block: 'start' });
+    };
     const observer = new ResizeObserver(align);
     observer.observe(document.body);
     const stop = () => {

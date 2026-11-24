@@ -5,6 +5,7 @@ import Image from '../../shared/ui/Image';
 import { LOCATIONS } from './data';
 import { useScrollLock } from '../../shared/hooks/useScrollLock';
 import MediaLoader from '../../shared/ui/MediaLoader';
+import LoadingSpinner from '../../shared/ui/LoadingSpinner';
 import type { CityMarker } from './InteractiveMap';
 
 // mapbox-gl only downloads when the modal opens (or on hover/focus of a CTA, as a head start).
@@ -177,6 +178,10 @@ export default function EventMap() {
         alt="Map of event participations across Argentina and the Southern Cone"
         loading="lazy"
         decoding="async"
+        // A cached image can finish before React attaches onLoad.
+        ref={(img) => {
+          if (img?.complete && img.naturalWidth > 0) setPreviewLoaded(true);
+        }}
         onLoad={() => setPreviewLoaded(true)}
         onError={() => setPreviewFailed(true)}
         className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/preview:scale-[1.03]"
@@ -187,8 +192,8 @@ export default function EventMap() {
   const renderMap = () => (
     <Suspense
       fallback={
-        <div className="w-full h-full flex items-center justify-center bg-[#050505]">
-          <div className="w-8 h-8 border border-white/20 border-t-brand-400 rounded-full animate-spin" />
+        <div className="w-full h-full bg-[#050505]">
+          <LoadingSpinner className="w-full h-full" delay={300} />
         </div>
       }
     >

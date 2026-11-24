@@ -70,6 +70,9 @@ export default function Image({
   zoom = 1,
 }: Props) {
   const [loaded, setLoaded] = useState(false);
+  // Eager (above-the-fold / LCP) images are painted right away instead of fading in from opacity 0,
+  // so the browser (and Lighthouse) can count them as soon as they arrive.
+  const instant = loading === 'eager';
   const [failed, setFailed] = useState(false);
   // A cached image can finish before React attaches onLoad: check once the element is mounted.
   const imgRef = useCallback((img: HTMLImageElement | null) => {
@@ -105,7 +108,7 @@ export default function Image({
     imgClassName,
     fill ? 'absolute inset-0 w-full h-full' : 'block w-full h-full text-transparent',
     'transition-all duration-700 will-change-transform',
-    loaded ? 'opacity-100 blur-0' : 'opacity-0 blur-md',
+    instant || loaded ? 'opacity-100 blur-0' : 'opacity-0 blur-md',
   ]
     .filter(Boolean)
     .join(' ');

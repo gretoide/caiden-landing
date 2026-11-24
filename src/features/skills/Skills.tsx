@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react';
 import { SKILLS_CONTENT } from './data';
 import Image from '../../shared/ui/Image';
 import Lightbox from '../../shared/ui/Lightbox';
+import LoadingSpinner from '../../shared/ui/LoadingSpinner';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -120,7 +121,7 @@ export default function Skills() {
   return (
     <section ref={containerRef} className="w-full bg-black relative flex flex-col justify-center overflow-hidden py-12 md:py-24">
       {/* Section header: same style and container as the Armour section, so both titles line up */}
-      <div className="container mx-auto px-6 mb-12 lg:mb-16 flex flex-col items-start text-left gap-4">
+      <div data-skills-heading className="container mx-auto px-6 mb-12 lg:mb-16 flex flex-col items-start text-left gap-4">
         <div className="flex items-center gap-4">
           <div className="w-10 h-[1px] bg-brand-400/80" />
           <span className="text-brand-400 font-sans text-[10px] md:text-xs tracking-[0.5em] uppercase font-bold">Expertise</span>
@@ -224,7 +225,7 @@ export default function Skills() {
             </div>
           ) : (
             /* --- VIEW B: SKILL SPLIT (LAZY) --- */
-            <Suspense fallback={<div className="w-full h-[600px] flex items-center justify-center opacity-20"><div className="w-8 h-8 border border-white/20 border-t-brand-400 rounded-full animate-spin" /></div>}>
+            <Suspense fallback={<LoadingSpinner className="w-full h-[600px]" />}>
               <SkillDetails 
                  activeTab={activeTab} 
                  selectedSkillId={selectedSkillId} 

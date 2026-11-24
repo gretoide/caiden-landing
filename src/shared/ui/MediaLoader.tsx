@@ -1,33 +1,36 @@
 import { ImageOff } from 'lucide-react';
+import LoadingSpinner from './LoadingSpinner';
 
 type Props = {
-  /** Show the loader (usually `!loaded`). It fades out when false. */
+  /** The media is still loading (usually `!loaded`). */
   active: boolean;
-  /** Replaces the shimmer with a quiet "unavailable" state. */
+  /** The media failed: show a quiet "unavailable" icon instead of the spinner. */
   error?: boolean;
   className?: string;
 };
 
 /**
- * Reusable loading overlay for images and videos: a soft brand-tinted shimmer that sits on top of
- * the media (and its blurred placeholder) until it finishes loading. The parent must be positioned.
+ * Loading state for images and videos. While the media loads normally nothing is shown (the blurred
+ * placeholder / poster is enough); only if it is still missing after a short delay while on screen
+ * does the classic spinner with "Loading" appear (see LoadingSpinner). It disappears as soon as the
+ * media loads, fails, or after a timeout, so it can never stay stuck. The parent must be positioned.
  */
 export default function MediaLoader({ active, error = false, className = '' }: Props) {
-  const visible = active || error;
+  if (error) {
+    return (
+      <div
+        data-media-loader
+        aria-hidden
+        className={`pointer-events-none absolute inset-0 z-[1] flex items-center justify-center bg-white/[0.02] ${className}`}
+      >
+        <ImageOff className="w-5 h-5 text-white/25" strokeWidth={1.5} />
+      </div>
+    );
+  }
+  if (!active) return null;
   return (
-    <div
-      aria-hidden
-      className={`pointer-events-none absolute inset-0 z-[1] overflow-hidden transition-opacity duration-500 ${
-        visible ? 'opacity-100' : 'opacity-0'
-      } ${className}`}
-    >
-      {error ? (
-        <div className="absolute inset-0 flex items-center justify-center bg-white/[0.02]">
-          <ImageOff className="w-5 h-5 text-white/25" strokeWidth={1.5} />
-        </div>
-      ) : (
-        <div className="absolute inset-0 bg-white/[0.02] bg-[linear-gradient(110deg,transparent_30%,rgba(96,165,250,0.10)_45%,rgba(255,255,255,0.10)_50%,rgba(96,165,250,0.10)_55%,transparent_70%)] bg-[length:250%_100%] animate-shimmer motion-reduce:animate-none" />
-      )}
+    <div data-media-loader className={`pointer-events-none absolute inset-0 z-[1] ${className}`}>
+      <LoadingSpinner className="absolute inset-0" />
     </div>
   );
 }

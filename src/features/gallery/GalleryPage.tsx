@@ -5,12 +5,31 @@ import Lightbox from '../../shared/ui/Lightbox';
 import EldenRing from '../showcase/sections/EldenRing';
 import DiabloIV from '../showcase/sections/DiabloIV';
 import Skyrim from '../showcase/sections/Skyrim';
+import { SCROLL_TO_SKILLS_MESSAGE } from '../../shared/lib/scrollToSkills';
 
 const SUITS = [
   { id: 'elden-ring', label: 'Elden Ring' },
   { id: 'diablo-iv', label: 'Diablo IV' },
   { id: 'skyrim', label: 'Skyrim' },
 ];
+
+// Set when one of the "back" links already decided where the landing tab should be.
+let returnHandled = false;
+
+/** Ask the landing tab to show the Skills section (heading under the navbar, slides in view). */
+function showSkillsInLanding(opener: Window, behavior: 'smooth' | 'instant') {
+  opener.postMessage({ type: SCROLL_TO_SKILLS_MESSAGE, behavior }, window.location.origin);
+}
+
+/** The landing tab that opened this one, if it is still there and same-origin. */
+function landingOpener(): Window | null {
+  const opener = window.opener as Window | null;
+  try {
+    return opener && !opener.closed && opener.location.origin === window.location.origin ? opener : null;
+  } catch {
+    return null; // cross-origin opener: not ours
+  }
+}
 
 /**
  * Go back to the landing. When this tab was opened from the landing (it keeps `window.opener` thanks
@@ -32,9 +51,11 @@ function returnToSite(e: React.MouseEvent<HTMLAnchorElement>, sectionId?: string
   e.preventDefault();
   const href = e.currentTarget.href;
   if (sectionId) {
-    opener.document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (sectionId === 'skills') showSkillsInLanding(opener, 'smooth');
+    else opener.document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     opener.history.replaceState(null, '', `#${sectionId}`);
   }
+  returnHandled = true;
   opener.focus();
   window.close();
   // Some browsers refuse to close a tab; if we are still here, just navigate in this tab.
@@ -52,6 +73,17 @@ export default function GalleryPage() {
 
   useEffect(() => {
     document.title = 'Full Gallery | CAIDEN DRI';
+  }, []);
+
+  // Closing this tab (not via one of the links above) leaves the landing tab on the Skills section.
+  useEffect(() => {
+    const onClose = () => {
+      if (returnHandled) return;
+      const opener = landingOpener();
+      if (opener) showSkillsInLanding(opener, 'instant');
+    };
+    window.addEventListener('pagehide', onClose);
+    return () => window.removeEventListener('pagehide', onClose);
   }, []);
 
   // Opened as /gallery#skyrim: jump to that suit once the sections are on the page.
