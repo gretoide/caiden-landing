@@ -1,10 +1,9 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LazyBg from '../../../shared/ui/LazyBg';
 import Image from '../../../shared/ui/Image';
-import CollapsibleGallery from '../CollapsibleGallery';
 import { diabloIVData as data } from '../data/diabloIV';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,11 +12,11 @@ type Props = {
   onOpen: (publicId: string) => void;
 };
 
+// Full-screen suit layout, shown on the /gallery page.
 export default function DiabloIV({ onOpen }: Props) {
   const containerRef = useRef<HTMLElement>(null);
 
   const galleryRef = useRef<HTMLDivElement>(null);
-  const [galleryOpen, setGalleryOpen] = useState(false);
 
   useGSAP(() => {
     const elements = gsap.utils.toArray('.diablo-header-anim', containerRef.current);
@@ -37,9 +36,8 @@ export default function DiabloIV({ onOpen }: Props) {
 
   }, { scope: containerRef });
 
-  // Gallery items only exist once the collapsible is opened: rebuild their animation on each toggle.
   useGSAP(() => {
-    if (!galleryOpen || !galleryRef.current) return;
+    if (!galleryRef.current) return;
     const items = gsap.utils.toArray('.diablo-item-anim', galleryRef.current);
     gsap.from(items, {
       y: 50,
@@ -53,49 +51,10 @@ export default function DiabloIV({ onOpen }: Props) {
         toggleActions: 'play none none reverse',
       }
     });
-  }, { scope: containerRef, dependencies: [galleryOpen], revertOnUpdate: true });
+  }, { scope: containerRef });
 
-  return (
-    <section ref={containerRef} className="relative w-full bg-black overflow-hidden py-16 md:py-24 border-t border-white/5">
-      <LazyBg
-        publicId={data.bg}
-        className={`absolute inset-0 z-0 opacity-20 bg-cover bg-center pointer-events-none ${data.blurClassName || 'blur-md'} scale-105`}
-        style={{ backgroundAttachment: 'fixed' }}
-        width={1024}
-        rootMargin="1200px"
-      />
-      
-      {data.bgOverlayClassName && (
-        <div className={`absolute inset-0 z-[1] pointer-events-none ${data.bgOverlayClassName}`}></div>
-      )}
-      
-      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent z-1"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-1"></div>
-
-      <div className="relative z-10 container mx-auto px-6">
-        <div className="mb-8 md:mb-12 max-w-4xl">
-           <h2 className="diablo-header-anim text-6xl md:text-[10rem] font-serif text-white leading-none drop-shadow-2xl">
-             {data.title}
-           </h2>
-           <div className="diablo-header-anim flex flex-col md:flex-row md:items-end gap-6 mt-6">
-             <p className={`text-xl md:text-3xl font-sans tracking-widest font-bold uppercase drop-shadow-md ${data.subtitleClassName || 'text-[#dc2626]'}`}>
-               {data.subtitle}
-             </p>
-             <div className="h-[1px] flex-grow bg-gradient-to-r from-[#dc2626] to-transparent mb-4 opacity-30 hidden md:block"></div>
-           </div>
-           {data.description && (
-             <p className="diablo-header-anim text-white/50 font-sans mt-8 max-w-sm tracking-wide leading-relaxed pl-4 border-l-2 border-[#dc2626]">
-               {data.description}
-             </p>
-           )}
-        </div>
-
-        <CollapsibleGallery
-          previewIds={data.gallery}
-          count={data.gallery.length}
-          accentClassName={data.subtitleClassName || 'text-[#dc2626]'}
-          onOpenChange={setGalleryOpen}
-        >
+  const galleryContent = (
+    <>
         <div ref={galleryRef}>
         {/* 4-Image Layout */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 h-auto md:h-[100vh]">
@@ -161,7 +120,45 @@ export default function DiabloIV({ onOpen }: Props) {
           </div>
         </div>
         </div>
-        </CollapsibleGallery>
+    </>
+  );
+
+  return (
+    <section ref={containerRef} id="diablo-iv" className={`relative w-full bg-black overflow-hidden border-t border-white/5 min-h-screen py-24 md:py-32`}>
+      <LazyBg
+        publicId={data.bg}
+        className={`absolute inset-0 z-0 opacity-20 bg-cover bg-center pointer-events-none ${data.blurClassName || 'blur-md'} scale-105`}
+        style={{ backgroundAttachment: 'fixed' }}
+        width={1024}
+        rootMargin="1200px"
+      />
+      
+      {data.bgOverlayClassName && (
+        <div className={`absolute inset-0 z-[1] pointer-events-none ${data.bgOverlayClassName}`}></div>
+      )}
+      
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent z-1"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-1"></div>
+
+      <div className="relative z-10 container mx-auto px-6">
+        <div className={`max-w-4xl mb-16 md:mb-24`}>
+           <h2 className="diablo-header-anim text-6xl md:text-[10rem] font-serif text-white leading-none drop-shadow-2xl">
+             {data.title}
+           </h2>
+           <div className="diablo-header-anim flex flex-col md:flex-row md:items-end gap-6 mt-6">
+             <p className={`text-xl md:text-3xl font-sans tracking-widest font-bold uppercase drop-shadow-md ${data.subtitleClassName || 'text-[#dc2626]'}`}>
+               {data.subtitle}
+             </p>
+             <div className="h-[1px] flex-grow bg-gradient-to-r from-[#dc2626] to-transparent mb-4 opacity-30 hidden md:block"></div>
+           </div>
+           {data.description && (
+             <p className="diablo-header-anim text-white/50 font-sans mt-8 max-w-sm tracking-wide leading-relaxed pl-4 border-l-2 border-[#dc2626]">
+               {data.description}
+             </p>
+           )}
+        </div>
+
+        {galleryContent}
       </div>
     </section>
   );

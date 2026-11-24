@@ -20,7 +20,7 @@ const lazyWithRetry = (importFn: () => Promise<any>) => {
   );
 };
 
-const Showcase = lazyWithRetry(() => import('./features/showcase/Showcase'));
+const ArmourShowcase = lazyWithRetry(() => import('./features/showcase/ArmourShowcase'));
 const Skills = lazyWithRetry(() => import('./features/skills/Skills'));
 const EventMap = lazyWithRetry(() => import('./features/career/EventMap'));
 const Brands = lazyWithRetry(() => import('./features/brands/Brands'));
@@ -34,7 +34,7 @@ function App() {
   // Proactive loading: Start fetching chunks once basic shell is ready
   useEffect(() => {
     const preload = () => {
-      import('./features/showcase/Showcase');
+      import('./features/showcase/ArmourShowcase');
       import('./features/skills/Skills');
       import('./features/skills/SkillDetails');
       // Deferred slightly more for high-performance sections
@@ -53,6 +53,32 @@ function App() {
     }
   }, []);
 
+  // Deep links (/#contact, e.g. from the gallery page): the browser jumps to the anchor while the lazy
+  // sections above are still placeholders, then they grow and push it down. Keep the target aligned
+  // while the page settles, and stop as soon as the user scrolls on their own.
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    const target = id ? document.getElementById(id) : null;
+    if (!target) return;
+    const align = () => target.scrollIntoView({ behavior: 'instant', block: 'start' });
+    const observer = new ResizeObserver(align);
+    observer.observe(document.body);
+    const stop = () => {
+      observer.disconnect();
+      window.removeEventListener('wheel', stop);
+      window.removeEventListener('touchstart', stop);
+      window.removeEventListener('keydown', stop);
+    };
+    window.addEventListener('wheel', stop, { passive: true });
+    window.addEventListener('touchstart', stop, { passive: true });
+    window.addEventListener('keydown', stop);
+    const timeout = window.setTimeout(stop, 6000);
+    return () => {
+      window.clearTimeout(timeout);
+      stop();
+    };
+  }, []);
+
   return (
     <Layout>
       {/* HERO — Critical, renders immediately */}
@@ -61,7 +87,7 @@ function App() {
       {/* SHOWCASE — High priority but lazy loaded. */}
       <section id="work" className="scroll-mt-[100px]">
         <Suspense fallback={<SectionPlaceholder />}>
-          <Showcase />
+          <ArmourShowcase />
         </Suspense>
       </section>
  

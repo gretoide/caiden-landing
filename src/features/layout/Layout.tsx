@@ -26,7 +26,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center gap-4">
-          <a href="#" className="pointer-events-auto flex flex-col min-w-0">
+          <a href="/" className="pointer-events-auto flex flex-col min-w-0">
             <span className="text-xl sm:text-2xl font-serif text-white tracking-[0.2em] uppercase leading-none">
               CMD
             </span>
@@ -36,10 +36,19 @@ export default function Layout({ children }: { children: ReactNode }) {
           </a>
 
           <a
-            href="#contact"
-            className="pointer-events-auto group relative shrink-0 overflow-hidden px-5 sm:px-6 py-2 sm:py-2.5 bg-white/5 backdrop-blur-md border border-white/15 hover:border-brand-400/60 text-white text-[10px] font-sans tracking-[0.3em] uppercase transition-colors duration-500"
+            href="/#contact"
+            className="pointer-events-auto group relative shrink-0 px-5 sm:px-6 py-2 sm:py-2.5 text-white/80 hover:text-white focus-visible:text-white text-[10px] font-sans tracking-[0.3em] uppercase transition-colors duration-500 outline-none"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-brand-400/30 via-brand-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            {/* Soft glass + blue glow, only on hover/focus */}
+            <span
+              aria-hidden
+              className="absolute inset-0 bg-gradient-to-r from-brand-400/25 via-brand-400/10 to-transparent backdrop-blur-md opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-500"
+            />
+            {/* Frame drawn from the centre of each side on hover/focus (no border at rest) */}
+            <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-brand-400/70 scale-x-0 group-hover:scale-x-100 group-focus-visible:scale-x-100 transition-transform duration-500 ease-out" />
+            <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-brand-400/70 scale-x-0 group-hover:scale-x-100 group-focus-visible:scale-x-100 transition-transform duration-500 ease-out" />
+            <span aria-hidden className="absolute inset-y-0 left-0 w-px bg-brand-400/70 scale-y-0 group-hover:scale-y-100 group-focus-visible:scale-y-100 transition-transform duration-300 ease-out delay-150" />
+            <span aria-hidden className="absolute inset-y-0 right-0 w-px bg-brand-400/70 scale-y-0 group-hover:scale-y-100 group-focus-visible:scale-y-100 transition-transform duration-300 ease-out delay-150" />
             <span className="relative">Contact</span>
           </a>
         </div>

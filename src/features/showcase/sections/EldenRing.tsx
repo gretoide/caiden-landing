@@ -1,10 +1,9 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LazyBg from '../../../shared/ui/LazyBg';
 import Image from '../../../shared/ui/Image';
-import CollapsibleGallery from '../CollapsibleGallery';
 import { eldenRingData as data } from '../data/eldenRing';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,11 +12,11 @@ type Props = {
   onOpen: (publicId: string) => void;
 };
 
+// Full-screen suit layout, shown on the /gallery page.
 export default function EldenRing({ onOpen }: Props) {
   const containerRef = useRef<HTMLElement>(null);
 
   const galleryRef = useRef<HTMLDivElement>(null);
-  const [galleryOpen, setGalleryOpen] = useState(false);
 
   useGSAP(() => {
     const headerElements = gsap.utils.toArray('.elden-header-anim', containerRef.current);
@@ -48,9 +47,8 @@ export default function EldenRing({ onOpen }: Props) {
     });
   }, { scope: containerRef });
 
-  // Gallery items only exist once the collapsible is opened: rebuild their animation on each toggle.
   useGSAP(() => {
-    if (!galleryOpen || !galleryRef.current) return;
+    if (!galleryRef.current) return;
     const items = gsap.utils.toArray('.elden-item-anim', galleryRef.current);
     gsap.from(items, {
       y: 20,
@@ -64,71 +62,10 @@ export default function EldenRing({ onOpen }: Props) {
         toggleActions: 'play none none reverse',
       }
     });
-  }, { scope: containerRef, dependencies: [galleryOpen], revertOnUpdate: true });
+  }, { scope: containerRef });
 
-  return (
-    <section ref={containerRef} className="relative w-full min-h-screen bg-[#0a0202] overflow-hidden py-24 md:py-32 border-t border-white/5">
-      {/* Background Container */}
-      <div className="absolute inset-x-0 top-0 h-[80vh] z-0 pointer-events-none overflow-hidden">
-        <LazyBg
-          publicId={data.bg}
-          className={`absolute inset-0 opacity-20 bg-cover bg-[center_15%] ${data.blurClassName || 'blur-sm'}`}
-          style={{ backgroundAttachment: 'scroll' }}
-          width={1400}
-          rootMargin="1200px"
-        />
-        <div className="absolute inset-x-0 bottom-0 top-[65%] bg-gradient-to-b from-transparent via-[#3d0808]/70 to-[#0a0202] z-[1]"></div>
-        <div className="absolute inset-0 bg-[#0a0202]/30 mix-blend-multiply z-[1] pointer-events-none"></div>
-      </div>
-      
-      <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-black to-transparent z-[5]"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black to-transparent z-[5]"></div>
-
-      <div className="relative z-10 container mx-auto px-6">
-        {/* Header Section */}
-        <div className="mb-16 md:mb-24 max-w-none relative z-20">
-           <h2 className="elden-header-anim text-5xl sm:text-6xl md:text-[10rem] font-serif text-white leading-none drop-shadow-2xl sm:whitespace-nowrap">
-             {data.title}
-           </h2>
-           <div className="elden-header-anim flex flex-col md:flex-row md:items-end gap-6 mt-6">
-             <p className={`text-xl md:text-3xl font-sans tracking-widest font-bold uppercase drop-shadow-md ${data.subtitleClassName || 'text-brand-400'}`}>
-               {data.subtitle}
-             </p>
-             <div className={`h-[1px] flex-grow bg-gradient-to-r ${data.subtitleClassName ? 'from-current' : 'from-brand-400'} to-transparent mb-4 opacity-30 hidden md:block`}></div>
-           </div>
-           {data.description && (
-             <p className={`elden-header-anim text-white/50 font-sans mt-8 max-w-sm tracking-wide leading-relaxed pl-4 border-l-2 ${data.descBorderClassName || 'border-brand-400'}`}>
-               {data.description}
-             </p>
-           )}
-        </div>
-
-        {/* Banner - Gallery[0] */}
-        <div data-zoom-src={data.gallery[0]} className="elden-banner-anim w-full aspect-video mb-6 md:mb-8 relative group overflow-hidden border border-[#4a0a0a]/40 shadow-2xl bg-[#250707]">
-          <Image
-            publicId={data.gallery[0]}
-            alt="Elden Ring Featured Banner"
-            variant="full"
-            className="w-full h-full"
-            imgClassName="grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000 cursor-pointer object-cover md:object-[center_35%]"
-            sizes="100vw"
-            onClick={() => onOpen(data.gallery[0])}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-          <div className="absolute top-4 left-4 flex gap-2 overflow-hidden pointer-events-none">
-            <span className="text-[7px] md:text-[10px] text-white/80 font-bold uppercase tracking-[0.3em]">Warrior of the lands</span>
-          </div>
-          <div className="absolute bottom-4 left-4 text-[7px] md:text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
-            CROSSED BUILD SETS
-          </div>
-        </div>
-
-        <CollapsibleGallery
-          previewIds={data.gallery.slice(1, 6)}
-          count={data.gallery.length - 1}
-          accentClassName={data.subtitleClassName || 'text-brand-400'}
-          onOpenChange={setGalleryOpen}
-        >
+  const galleryContent = (
+    <>
         <div ref={galleryRef}>
         {/* Mosaic Gallery - Gallery[1-4] */}
         <div className="grid grid-cols-12 auto-rows-[25vh] md:auto-rows-[30vh] gap-3 mb-12">
@@ -261,7 +198,67 @@ export default function EldenRing({ onOpen }: Props) {
           </div>
         </div>
         </div>
-        </CollapsibleGallery>
+    </>
+  );
+
+  return (
+    <section ref={containerRef} id="elden-ring" className="relative w-full min-h-screen bg-[#0a0202] overflow-hidden py-24 md:py-32 border-t border-white/5">
+      {/* Background Container */}
+      <div className="absolute inset-x-0 top-0 h-[80vh] z-0 pointer-events-none overflow-hidden">
+        <LazyBg
+          publicId={data.bg}
+          className={`absolute inset-0 opacity-20 bg-cover bg-[center_15%] ${data.blurClassName || 'blur-sm'}`}
+          style={{ backgroundAttachment: 'scroll' }}
+          width={1400}
+          rootMargin="1200px"
+        />
+        <div className="absolute inset-x-0 bottom-0 top-[65%] bg-gradient-to-b from-transparent via-[#3d0808]/70 to-[#0a0202] z-[1]"></div>
+        <div className="absolute inset-0 bg-[#0a0202]/30 mix-blend-multiply z-[1] pointer-events-none"></div>
+      </div>
+      
+      <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-black to-transparent z-[5]"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black to-transparent z-[5]"></div>
+
+      <div className="relative z-10 container mx-auto px-6">
+        {/* Header Section */}
+        <div className="mb-16 md:mb-24 max-w-none relative z-20">
+           <h2 className="elden-header-anim text-5xl sm:text-6xl md:text-[10rem] font-serif text-white leading-none drop-shadow-2xl sm:whitespace-nowrap">
+             {data.title}
+           </h2>
+           <div className="elden-header-anim flex flex-col md:flex-row md:items-end gap-6 mt-6">
+             <p className={`text-xl md:text-3xl font-sans tracking-widest font-bold uppercase drop-shadow-md ${data.subtitleClassName || 'text-brand-400'}`}>
+               {data.subtitle}
+             </p>
+             <div className={`h-[1px] flex-grow bg-gradient-to-r ${data.subtitleClassName ? 'from-current' : 'from-brand-400'} to-transparent mb-4 opacity-30 hidden md:block`}></div>
+           </div>
+           {data.description && (
+             <p className={`elden-header-anim text-white/50 font-sans mt-8 max-w-sm tracking-wide leading-relaxed pl-4 border-l-2 ${data.descBorderClassName || 'border-brand-400'}`}>
+               {data.description}
+             </p>
+           )}
+        </div>
+
+        {/* Banner - Gallery[0] */}
+        <div data-zoom-src={data.gallery[0]} className={`elden-banner-anim w-full aspect-video mb-12 relative group overflow-hidden border border-[#4a0a0a]/40 shadow-2xl bg-[#250707]`}>
+          <Image
+            publicId={data.gallery[0]}
+            alt="Elden Ring Featured Banner"
+            variant="full"
+            className="w-full h-full"
+            imgClassName="grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000 cursor-pointer object-cover md:object-[center_35%]"
+            sizes="100vw"
+            onClick={() => onOpen(data.gallery[0])}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+          <div className="absolute top-4 left-4 flex gap-2 overflow-hidden pointer-events-none">
+            <span className="text-[7px] md:text-[10px] text-white/80 font-bold uppercase tracking-[0.3em]">Warrior of the lands</span>
+          </div>
+          <div className="absolute bottom-4 left-4 text-[7px] md:text-[10px] text-white/30 tracking-[0.3em] uppercase z-20">
+            CROSSED BUILD SETS
+          </div>
+        </div>
+
+        {galleryContent}
       </div>
     </section>
   );

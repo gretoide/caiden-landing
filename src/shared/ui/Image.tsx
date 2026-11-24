@@ -29,6 +29,11 @@ type Props = {
   zoom?: number;
 };
 
+const POSITION_CLASS = /(^|\s)(absolute|fixed|relative|sticky)(\s|$)/;
+function hasPosition(className?: string) {
+  return !!className && POSITION_CLASS.test(className);
+}
+
 function widthsFor(variant: CloudinaryVariant): number[] {
   switch (variant) {
     case 'thumb':
@@ -89,7 +94,9 @@ export default function Image({
     className,
     'bg-center bg-cover',
     overflowHidden ? 'overflow-hidden' : undefined,
-    fill ? 'absolute inset-0' : 'relative',
+    // The loader overlay needs a positioned wrapper, but never override a position the caller set
+    // (e.g. the hero passes `absolute inset-0`; adding `relative` would win in the CSS and shrink it).
+    fill ? 'absolute inset-0' : hasPosition(className) ? undefined : 'relative',
   ]
     .filter(Boolean)
     .join(' ');
