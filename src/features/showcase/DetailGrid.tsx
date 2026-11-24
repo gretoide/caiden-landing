@@ -18,9 +18,13 @@ type Props = {
   details: ZoomDetail[];
   onOpen: (publicId: string) => void;
   reversed?: boolean;
+  /** How many zoom studies to stack in the study column (1 = a single full-height view). */
+  studies?: 1 | 2;
+  /** Put the study column between the two context photos (Context 01 | Study | Context 02). */
+  studyInMiddle?: boolean;
 };
 
-export default function DetailGrid({ imageIds, details, onOpen, reversed = false }: Props) {
+export default function DetailGrid({ imageIds, details, onOpen, reversed = false, studies = 2, studyInMiddle = false }: Props) {
   const [img1, img2, zoomImg] = imageIds;
   const containerRef = useRef<HTMLDivElement>(null);
   const studyDetails = (() => {
@@ -62,8 +66,8 @@ export default function DetailGrid({ imageIds, details, onOpen, reversed = false
   return (
     <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-3 h-auto md:h-[70vh]">
       {/* Zoom Study Column (Ordered first or last) */}
-      <div className={`compact-item-anim md:col-span-4 grid grid-rows-2 gap-2 md:gap-3 h-[60vh] md:h-full ${reversed ? 'md:order-last' : 'md:order-first'}`}>
-        {orderedStudyDetails.map((detail, idx) => (
+      <div className={`compact-item-anim md:col-span-4 grid ${studies === 1 ? 'grid-rows-1' : 'grid-rows-2'} gap-2 md:gap-3 h-[60vh] md:h-full ${studyInMiddle ? 'order-2' : reversed ? 'md:order-last' : 'md:order-first'}`}>
+        {orderedStudyDetails.slice(0, studies).map((detail, idx) => (
           <div key={detail.id} className="relative group overflow-hidden border border-white/5 h-full">
             <Image
               publicId={zoomImg}
@@ -84,7 +88,7 @@ export default function DetailGrid({ imageIds, details, onOpen, reversed = false
       </div>
 
        {/* Static View 1 */}
-       <div className="compact-item-anim md:col-span-4 h-[40vh] md:h-full relative group overflow-hidden border border-white/5">
+       <div className={`${studyInMiddle ? 'order-1 ' : ''}compact-item-anim md:col-span-4 h-[40vh] md:h-full relative group overflow-hidden border border-white/5`}>
          <Image
            publicId={img1}
            alt="Compact View 1"
@@ -100,7 +104,7 @@ export default function DetailGrid({ imageIds, details, onOpen, reversed = false
        </div>
 
        {/* Static View 2 */}
-       <div className="compact-item-anim md:col-span-4 h-[40vh] md:h-full relative group overflow-hidden border border-white/5">
+       <div className={`${studyInMiddle ? 'order-3 ' : ''}compact-item-anim md:col-span-4 h-[40vh] md:h-full relative group overflow-hidden border border-white/5`}>
          <Image
            publicId={img2}
            alt="Compact View 2"

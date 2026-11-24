@@ -22,12 +22,14 @@ export type ProjectSectionData = {
 export type ShowcaseData = ProjectSectionData;
 
 type Props = {
+  /** Anchor id (e.g. /gallery#chainsaw-man). */
+  id?: string;
   data: ShowcaseData;
   onOpen: (publicId: string) => void;
   children: ReactNode;
 };
 
-export default function ProjectSection({ data, children }: Props) {
+export default function ProjectSection({ id, data, children }: Props) {
   const containerRef = useRef<HTMLElement>(null);
 
   useGSAP(() => {
@@ -48,7 +50,7 @@ export default function ProjectSection({ data, children }: Props) {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative w-full min-h-screen bg-black overflow-hidden py-16 md:py-32 border-t border-white/5">
+    <section ref={containerRef} id={id} className="relative w-full min-h-screen bg-black overflow-hidden py-16 md:py-32 border-t border-white/5">
       <LazyBg
         publicId={data.bg}
         className={`absolute inset-0 z-0 opacity-20 bg-cover bg-center pointer-events-none ${data.blurClassName || 'blur-md'} scale-105`}

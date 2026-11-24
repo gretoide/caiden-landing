@@ -5,12 +5,17 @@ import Lightbox from '../../shared/ui/Lightbox';
 import EldenRing from '../showcase/sections/EldenRing';
 import DiabloIV from '../showcase/sections/DiabloIV';
 import Skyrim from '../showcase/sections/Skyrim';
+import ChainsawMan from '../showcase/sections/ChainsawMan';
+// Hipo (How to Train Your Dragon) is restored in code but hidden: its photos are missing from Cloudinary.
+// import Hipo from '../showcase/sections/Hipo';
 import { SCROLL_TO_SKILLS_MESSAGE } from '../../shared/lib/scrollToSkills';
 
 const SUITS = [
   { id: 'elden-ring', label: 'Elden Ring' },
   { id: 'diablo-iv', label: 'Diablo IV' },
   { id: 'skyrim', label: 'Skyrim' },
+  { id: 'chainsaw-man', label: 'Chainsaw Man' },
+  // { id: 'hipo', label: 'Hiccup' },
 ];
 
 // Set when one of the "back" links already decided where the landing tab should be.
@@ -138,6 +143,8 @@ export default function GalleryPage() {
         <EldenRing onOpen={setExpandedPublicId} />
         <DiabloIV onOpen={setExpandedPublicId} />
         <Skyrim onOpen={setExpandedPublicId} />
+        <ChainsawMan onOpen={setExpandedPublicId} />
+        {/* <Hipo onOpen={setExpandedPublicId} /> */}
       </div>
 
       <section className="bg-black border-t border-white/5 py-20 md:py-28">
