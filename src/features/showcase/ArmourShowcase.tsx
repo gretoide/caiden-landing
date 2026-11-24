@@ -1,182 +1,144 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight } from 'lucide-react';
 import Image from '../../shared/ui/Image';
-import { eldenRingData } from './data/eldenRing';
-import { diabloIVData } from './data/diabloIV';
-import { skyrimData } from './data/skyrim';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const GALLERY_HREF = '/gallery';
+const SLIDE_MS = 5000;
 
-// Side column: one photo strip per armour (people look, they don't read).
-const STRIPS = [
-  { id: 'elden_ring_6_k5z39c', alt: eldenRingData.subtitle, position: 'object-[center_25%]' },
-  { id: 'diablo_iv_5_k4ddrg', alt: diabloIVData.subtitle, position: 'object-[center_20%]' },
-  { id: 'skyrim_6_b9efrf', alt: skyrimData.subtitle, position: 'object-[center_25%]' },
+// Background photos, in order. Starts with cool colours to contrast with the red hero above.
+const SLIDES = [
+  { id: 'skyrim_6_b9efrf', alt: 'Skyrim Daedric armour', position: 'object-[center_30%]' },
+  { id: 'diablo_iv_5_k4ddrg', alt: 'Diablo IV armour', position: 'object-[center_25%]' },
+  { id: 'skyrim_7_yqhwyx', alt: 'Skyrim Daedric armour detail', position: 'object-[center_30%]' },
+  { id: 'elden_ring_6_k5z39c', alt: 'Elden Ring armour', position: 'object-[center_30%]' },
 ];
 
-/** Blue frame drawn from the centre of each side on hover/focus (same effect as the navbar Contact). */
-function HoverFrame() {
-  return (
-    <>
-      <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-brand-400/80 scale-x-0 group-hover:scale-x-100 group-focus-visible:scale-x-100 transition-transform duration-500 ease-out" />
-      <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-brand-400/80 scale-x-0 group-hover:scale-x-100 group-focus-visible:scale-x-100 transition-transform duration-500 ease-out" />
-      <span aria-hidden className="absolute inset-y-0 left-0 w-px bg-brand-400/80 scale-y-0 group-hover:scale-y-100 group-focus-visible:scale-y-100 transition-transform duration-300 ease-out delay-150" />
-      <span aria-hidden className="absolute inset-y-0 right-0 w-px bg-brand-400/80 scale-y-0 group-hover:scale-y-100 group-focus-visible:scale-y-100 transition-transform duration-300 ease-out delay-150" />
-    </>
-  );
-}
-
 /**
- * "Explore the gallery" pill. Visual only: the whole featured photo is the link (hover = the photo's).
- * No position/display class here: callers pass them (`relative`/`absolute`, `inline-flex`/`hidden`),
- * since two of the same kind clash and the one later in the CSS wins.
- */
-function ExploreCta({ className = '' }: { className?: string }) {
-  return (
-    <span className={`items-center justify-center gap-3 px-5 md:px-6 py-3.5 md:py-4 bg-black/50 backdrop-blur-md text-white text-[11px] md:text-xs font-sans font-bold uppercase tracking-[0.3em] whitespace-nowrap ${className}`}>
-      {/* Pulsing glow that draws the eye to the button */}
-      <span aria-hidden className="absolute -inset-2 bg-brand-400/20 blur-xl animate-pulse pointer-events-none" />
-      <span aria-hidden className="absolute inset-0 ring-1 ring-inset ring-white/25 group-hover:ring-transparent transition-[box-shadow] duration-300" />
-      <span aria-hidden className="absolute inset-0 bg-gradient-to-r from-brand-400/30 via-brand-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      <HoverFrame />
-      <span className="relative">Explore the gallery</span>
-      <ArrowUpRight size={16} aria-hidden className="relative transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-    </span>
-  );
-}
-
-/**
- * Landing "Work" section: the Elden Ring photo plus a side column describing the full gallery, both
- * opening /gallery in a new tab. The warrior points right, towards the column.
+ * Landing "Portfolio" banner, below the hero and styled like it (but quieter): rotating background
+ * photos, a centred serif title and a "View full gallery" button. The whole banner opens /gallery
+ * in a new tab.
  */
 export default function ArmourShowcase() {
-  const containerRef = useRef<HTMLElement>(null);
-  const photoRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [active, setActive] = useState(0);
+  const [inView, setInView] = useState(false);
+  const [reducedMotion] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
 
+  // Only rotate while the banner is on screen.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.2 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!inView || reducedMotion) return;
+    const timer = window.setInterval(() => setActive((i) => (i + 1) % SLIDES.length), SLIDE_MS);
+    return () => window.clearInterval(timer);
+  }, [inView, reducedMotion, active]);
+
+  // Slow push-in on the photo that is showing.
+  useEffect(() => {
+    const slide = slideRefs.current[active];
+    if (!slide || reducedMotion) return;
+    const tween = gsap.fromTo(slide, { scale: 1.06 }, { scale: 1, duration: SLIDE_MS / 1000 + 1.5, ease: 'none' });
+    return () => {
+      tween.kill();
+    };
+  }, [active, reducedMotion]);
+
+  // Content reveal when the banner scrolls into view.
   useGSAP(() => {
-    gsap.from('.armour-reveal', {
-      y: 40,
+    gsap.from('.portfolio-reveal', {
+      y: 30,
       opacity: 0,
       duration: 1,
       stagger: 0.15,
       ease: 'power3.out',
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: 'top 80%',
-        toggleActions: 'play none none reverse',
-      },
+      scrollTrigger: { trigger: sectionRef.current, start: 'top 70%', toggleActions: 'play none none reverse' },
     });
-
-    // Slow push-in while the photo scrolls into view (no colour filters: the photo shows as shot).
-    gsap.fromTo(
-      photoRef.current,
-      { scale: 1.08 },
-      {
-        scale: 1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: photoRef.current,
-          start: 'top bottom',
-          end: 'center center',
-          scrub: 0.6,
-        },
-      }
-    );
-  }, { scope: containerRef });
+  }, { scope: sectionRef });
 
   return (
-    <section ref={containerRef} className="relative w-full bg-black overflow-hidden py-20 md:py-32">
-      {/* Starts pure black so it blends with the end of the hero, then a faint red tint */}
-      <div className="absolute inset-x-0 top-0 h-[70%] bg-gradient-to-b from-transparent via-red-900/10 to-transparent pointer-events-none" />
-
-      <div className="relative container mx-auto px-6">
-        <div className="armour-reveal mb-10 md:mb-14 flex flex-col gap-4 max-w-3xl">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-[1px] bg-brand-400/80" />
-            <span className="text-brand-400 font-sans text-[10px] md:text-xs tracking-[0.5em] uppercase font-bold">Featured work</span>
-          </div>
-          <h2 className="text-6xl md:text-8xl font-serif text-white tracking-wide leading-none">Armour</h2>
-        </div>
-
-        <a
-          href={GALLERY_HREF}
-          target="_blank"
-          // `opener` (not noopener): the gallery tab uses window.opener to scroll this tab and close itself.
-          rel="opener"
-          aria-label="Explore the full armour gallery (opens in a new tab)"
-          className="armour-reveal group grid lg:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)] gap-2 lg:gap-3 outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
+    <section ref={sectionRef} className="relative w-full min-h-[70vh] lg:min-h-[80vh] overflow-hidden bg-black">
+      {/* Rotating background photos (crossfade) */}
+      {SLIDES.map((slide, i) => (
+        <div
+          key={slide.id}
+          ref={(el) => {
+            slideRefs.current[i] = el;
+          }}
+          aria-hidden={i !== active}
+          className={`absolute inset-0 transition-opacity duration-[1500ms] ease-in-out ${i === active ? 'opacity-100' : 'opacity-0'}`}
         >
-          {/* Photo (2/3 of the width, rule of thirds) with a caption bottom-left */}
-          <div className="relative aspect-[4/5] sm:aspect-[4/3] lg:aspect-[16/10] overflow-hidden border border-[#4a0a0a]/50 bg-black shadow-2xl">
-            <div ref={photoRef} className="absolute inset-0 will-change-transform">
-              <Image
-                publicId={eldenRingData.gallery[0]}
-                alt="Elden Ring armour by Caiden Dri"
-                variant="full"
-                fill
-                sizes="(min-width: 1024px) 80vw, 100vw"
-                imgClassName="object-cover object-[30%_center] lg:object-[100%_35%]"
-              />
-            </div>
-            {/* Short caption in the magazine style: serif title + red tracked line */}
-            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
-            <div className="absolute left-0 bottom-0 p-5 sm:p-8 lg:p-10">
-              <span className="text-white/50 font-sans text-[10px] tracking-[0.4em] uppercase font-bold">Featured build</span>
-              <h3 className="mt-2 text-4xl sm:text-5xl md:text-6xl font-serif text-white leading-none drop-shadow-2xl">Elden Ring</h3>
-              <p className="mt-3 text-xs sm:text-sm font-sans font-bold uppercase tracking-[0.25em] text-red-500">Bandai Namco // 2024</p>
-            </div>
-          </div>
+          <Image
+            publicId={slide.id}
+            alt={slide.alt}
+            variant="hero"
+            fill
+            sizes="100vw"
+            loading={i === 0 ? 'eager' : 'lazy'}
+            imgClassName={`object-cover ${slide.position}`}
+          />
+        </div>
+      ))}
 
-          {/* Side column: a stack of photo strips, one per armour. The title sits on the first one and
-              the button on the last; on desktop the strips share the photo's height. */}
-          <div className="grid grid-rows-3 gap-2 lg:gap-3">
-            {STRIPS.map((strip, i) => {
-              const isFirst = i === 0;
-              const isLast = i === STRIPS.length - 1;
-              return (
-                <div
-                  key={strip.id}
-                  className="relative isolate aspect-[16/7] lg:aspect-auto overflow-hidden border border-white/10 group-hover:border-white/25 bg-black transition-colors duration-300"
-                >
-                  <Image
-                    publicId={strip.id}
-                    alt={strip.alt}
-                    variant="thumb"
-                    fill
-                    sizes="(min-width: 1024px) 28vw, 100vw"
-                    imgClassName={`object-cover ${strip.position} group-hover:scale-[1.05] transition-transform duration-700 ease-out ${['delay-0', 'delay-75', 'delay-150'][i]}`}
-                  />
-                  {isFirst && (
-                    <>
-                      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/55 to-black/20 pointer-events-none" />
-                      <div className="absolute inset-0 p-4 sm:p-5 lg:p-6 flex flex-col justify-center gap-2">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-[1px] bg-brand-400/80" />
-                          <span className="text-brand-400 font-sans text-[10px] tracking-[0.4em] uppercase font-bold">Full gallery</span>
-                        </div>
-                        <h3 className="text-2xl md:text-3xl font-serif text-white leading-tight drop-shadow-lg">Every build, up close</h3>
-                        <p className="text-white/70 font-sans text-xs md:text-sm leading-relaxed">Full armour sets and the craft behind them.</p>
-                      </div>
-                    </>
-                  )}
-                  {isLast && (
-                    <>
-                      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
-                      <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4">
-                        <ExploreCta className="relative inline-flex w-full" />
-                      </div>
-                    </>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </a>
+      {/* Blend with the hero above and Skills below, like the home cover */}
+      <div className="absolute inset-0 bg-black/55 pointer-events-none" />
+      <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none" />
+
+      {/* The whole banner is the link */}
+      <a
+        href={GALLERY_HREF}
+        target="_blank"
+        // `opener` (not noopener): the gallery tab uses window.opener to scroll this tab and close itself.
+        rel="opener"
+        className="group absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-400"
+      >
+        <h2 className="portfolio-reveal text-5xl sm:text-7xl lg:text-8xl font-serif uppercase text-white tracking-[0.12em] leading-none drop-shadow-2xl">
+          Portfolio
+        </h2>
+        {/* Same button style as the rest of the site (glass + blue frame drawn on hover) */}
+        <span className="portfolio-reveal relative mt-8 md:mt-10 inline-flex items-center gap-3 px-8 md:px-10 py-4 bg-black/40 backdrop-blur-md text-white text-xs md:text-sm font-sans font-bold uppercase tracking-[0.35em] whitespace-nowrap">
+          <span aria-hidden className="absolute inset-0 ring-1 ring-inset ring-white/25 group-hover:ring-transparent transition-[box-shadow] duration-300" />
+          <span aria-hidden className="absolute inset-0 bg-gradient-to-r from-brand-400/30 via-brand-400/10 to-transparent opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-500" />
+          <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-brand-400/80 scale-x-0 group-hover:scale-x-100 group-focus-visible:scale-x-100 transition-transform duration-500 ease-out" />
+          <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-brand-400/80 scale-x-0 group-hover:scale-x-100 group-focus-visible:scale-x-100 transition-transform duration-500 ease-out" />
+          <span aria-hidden className="absolute inset-y-0 left-0 w-px bg-brand-400/80 scale-y-0 group-hover:scale-y-100 group-focus-visible:scale-y-100 transition-transform duration-300 ease-out delay-150" />
+          <span aria-hidden className="absolute inset-y-0 right-0 w-px bg-brand-400/80 scale-y-0 group-hover:scale-y-100 group-focus-visible:scale-y-100 transition-transform duration-300 ease-out delay-150" />
+          <span className="relative">View full gallery</span>
+          <ArrowUpRight size={16} aria-hidden className="relative transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </span>
+        <p className="portfolio-reveal mt-6 md:mt-8 max-w-md md:max-w-xl text-white/60 font-serif text-base md:text-xl leading-relaxed">
+          Full armour builds and props for studios and campaigns. Every piece, from concept to camera-ready.
+        </p>
+      </a>
+
+      {/* Slide indicators (selectable on desktop) */}
+      <div className="absolute z-20 bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2">
+        {SLIDES.map((slide, i) => (
+          <button
+            key={slide.id}
+            type="button"
+            onClick={() => setActive(i)}
+            aria-label={`Show photo ${i + 1}`}
+            aria-current={i === active}
+            className="py-3 px-0.5 pointer-events-none md:pointer-events-auto"
+          >
+            <span className={`block h-px transition-all duration-500 ${i === active ? 'w-10 bg-white' : 'w-5 bg-white/30 hover:bg-white/60'}`} />
+          </button>
+        ))}
       </div>
     </section>
   );
