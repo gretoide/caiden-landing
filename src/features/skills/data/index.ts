@@ -7,6 +7,7 @@ import { LIGHTING } from './categories/lighting';
 import { MATERIALS } from './categories/materials';
 import { PAINTING } from './categories/painting';
 import { SCULPTING } from './categories/sculpting';
+import { HAIR } from './categories/hair';
 
 export * from './types';
 
@@ -20,6 +21,7 @@ export const SKILLS_CONTENT = {
   },
   categories: [
     FX_MAKEUP,
+    HAIR,
     WOODWORKING,
     DIGITAL,
     TEXTILES,

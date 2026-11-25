@@ -125,6 +125,14 @@ export const SKILL_GALLERIES: Record<string, GalleryItem[]> = {
     { type: 'image', publicId: '2.3_-_Photomanipulation_-_2_qb6m3t' }
   ],
 
+  // Hair & Wigs (hair)
+  'hair-1': [
+    { type: 'image', publicId: 'caiden_landing_images/gallery/hair/hair_1' },
+    { type: 'image', publicId: 'caiden_landing_images/gallery/hair/hair_2' },
+    { type: 'image', publicId: 'caiden_landing_images/gallery/hair/hair_3' },
+    { type: 'image', publicId: 'caiden_landing_images/gallery/hair/hair_4' },
+  ],
+
   // Sculpting & Modeling (inorganic)
   'scul-1': [
     { type: 'image', publicId: '2.1_-_Patterns_Modeling_-_0_zh7cif' },

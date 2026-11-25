@@ -1,8 +1,8 @@
 export const attackOnTitanData = {
-  title: 'Survey Corps',
+  title: 'MAPPA',
   subtitle: 'Attack on Titan',
   subtitleClassName: 'text-[#a3b18a]',
-  description: '',
+  description: 'Survey Corps uniform and signature ODM gear, built for an advertising campaign with IVREA, the manga publisher.',
   descBorderClassName: 'border-[#a3b18a]',
   bg: 'caiden_landing_images/gallery/aot/aot_3',
   bgOverlayClassName: 'bg-emerald-900/20 mix-blend-overlay',

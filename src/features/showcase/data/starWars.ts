@@ -1,8 +1,8 @@
 export const starWarsData = {
-  title: 'Praetorian Guard',
+  title: 'Lucasfilm',
   subtitle: 'Star Wars',
   subtitleClassName: 'text-[#ef4444]',
-  description: '',
+  description: 'Praetorian Guard armor, the red elite protectors of the Supreme Leader.',
   descBorderClassName: 'border-[#ef4444]',
   bg: 'caiden_landing_images/gallery/star_wars/star_wars_2',
   bgOverlayClassName: 'bg-red-700/20 mix-blend-overlay',

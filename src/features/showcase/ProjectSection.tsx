@@ -77,7 +77,7 @@ export default function ProjectSection({ id, data, children }: Props) {
              <p className={`text-xl md:text-3xl font-sans tracking-widest font-bold uppercase drop-shadow-md ${data.subtitleClassName || 'text-brand-400'}`}>
                {data.subtitle}
              </p>
-             <div className={`h-[1px] flex-grow bg-gradient-to-r ${data.subtitleClassName ? 'from-current' : 'from-brand-400'} to-transparent mb-4 opacity-30 hidden md:block`}></div>
+             <div className={`h-[1px] flex-grow bg-gradient-to-r ${data.subtitleClassName || 'text-brand-400'} from-current to-transparent mb-4 opacity-30 hidden md:block`}></div>
            </div>
            {data.description && (
              <p className={`showcase-header-anim text-white/50 font-sans mt-8 max-w-sm tracking-wide leading-relaxed pl-4 border-l-2 ${data.descBorderClassName || 'border-brand-400'}`}>

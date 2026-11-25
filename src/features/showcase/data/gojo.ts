@@ -1,8 +1,8 @@
 export const gojoData = {
-  title: 'Satoru Gojo',
+  title: 'MAPPA',
   subtitle: 'Jujutsu Kaisen',
   subtitleClassName: 'text-[#a78bfa]',
-  description: '',
+  description: 'Satoru Gojo brought to life for an advertising campaign with IVREA, the manga publisher.',
   descBorderClassName: 'border-[#a78bfa]',
   bg: 'caiden_landing_images/gallery/gojo/gojo_2',
   bgOverlayClassName: 'bg-violet-600/20 mix-blend-overlay',

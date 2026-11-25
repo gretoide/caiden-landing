@@ -94,6 +94,15 @@ export default function Skills() {
     return () => clearInterval(interval);
   }, [isAutoPlayDisabled, selectedSkillId]);
 
+  // A discipline with a single subsection skips the "Explore Work" cards and opens its detail.
+  const selectCategory = (id: string) => {
+    const subSkills = SKILLS_CONTENT.categories.find((c) => c.id === id)?.subSkills ?? [];
+    setActiveTab(id);
+    setExpertiseBgTick(0);
+    setSelectedSkillId(subSkills.length === 1 ? subSkills[0].id : null);
+    setIsAutoPlayDisabled(false);
+  };
+
   const scrollToDetails = () => {
     const target = detailsRef.current;
     if (!target) return;
@@ -107,8 +116,7 @@ export default function Skills() {
         const id = hash.replace('#skills-', '');
         const exists = SKILLS_CONTENT.categories.find(c => c.id === id);
         if (exists) {
-          setActiveTab(id);
-          setSelectedSkillId(null);
+          selectCategory(id);
           setTimeout(scrollToDetails, 100);
         }
       }
@@ -148,9 +156,7 @@ export default function Skills() {
                   key={craft.id}
                   className={`relative h-full cursor-pointer transition-all duration-700 ease-out group border-r border-white/5 last:border-r-0 overflow-hidden ${flexClass}`}
                   onClick={() => {
-                    setActiveTab(craft.id);
-                    setExpertiseBgTick(0);
-                    setSelectedSkillId(null);
+                    selectCategory(craft.id);
                     requestAnimationFrame(() => requestAnimationFrame(scrollToDetails));
                   }}
                 >
@@ -183,7 +189,7 @@ export default function Skills() {
             {SKILLS_CONTENT.categories.map((craft, index) => {
               const isActive = activeTab === craft.id;
               return (
-                <div key={craft.id} className={`mobile-blade-anim relative w-full cursor-pointer transition-colors duration-500 ease-in-out group overflow-hidden border-b border-white/5 last:border-b-0 ${isActive ? 'h-[160px] is-active' : 'h-[60px]'}`} onClick={() => { setActiveTab(craft.id); setExpertiseBgTick(0); setSelectedSkillId(null); requestAnimationFrame(() => requestAnimationFrame(scrollToDetails)); }}>
+                <div key={craft.id} className={`mobile-blade-anim relative w-full cursor-pointer transition-colors duration-500 ease-in-out group overflow-hidden border-b border-white/5 last:border-b-0 ${isActive ? 'h-[160px] is-active' : 'h-[60px]'}`} onClick={() => { selectCategory(craft.id); requestAnimationFrame(() => requestAnimationFrame(scrollToDetails)); }}>
                   <div className="absolute inset-0 mobile-blade-bg">
                     <div className="mobile-blade-img-inner absolute inset-0">
                        <Image publicId={craft.publicId} alt={craft.title} variant="hero" fill imgClassName={`object-cover transition-all duration-1000 ${isActive ? 'opacity-100' : 'opacity-80'}`} sizes="100vw" />
@@ -247,7 +253,7 @@ export default function Skills() {
             </div>
             <div className="flex gap-3 overflow-x-auto pb-2 custom-scrollbar">
               {SKILLS_CONTENT.categories.map((craft) => (
-                <button key={craft.id} onClick={() => { setActiveTab(craft.id); setExpertiseBgTick(0); setSelectedSkillId(null); requestAnimationFrame(() => requestAnimationFrame(scrollToDetails)); }} className={`shrink-0 px-4 py-3 border font-sans uppercase tracking-[0.25em] text-[10px] transition-colors duration-300 ${activeTab === craft.id ? 'border-brand-400/60 text-white bg-brand-400/10' : 'border-white/10 text-white/55 bg-black/30 hover:text-white/80'}`}>{craft.title}</button>
+                <button key={craft.id} onClick={() => { selectCategory(craft.id); requestAnimationFrame(() => requestAnimationFrame(scrollToDetails)); }} className={`shrink-0 px-4 py-3 border font-sans uppercase tracking-[0.25em] text-[10px] transition-colors duration-300 ${activeTab === craft.id ? 'border-brand-400/60 text-white bg-brand-400/10' : 'border-white/10 text-white/55 bg-black/30 hover:text-white/80'}`}>{craft.title}</button>
               ))}
             </div>
           </div>

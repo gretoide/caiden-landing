@@ -1,8 +1,8 @@
 export const hippolytaData = {
-  title: 'Hippolyta',
-  subtitle: 'Queen of the Amazons',
+  title: 'DC Comics',
+  subtitle: 'Wonder Woman',
   subtitleClassName: 'text-[#d4a373]',
-  description: '',
+  description: 'Hippolyta, queen of the Amazons, with armor pieces, fur layers and a crown inspired by Themyscira.',
   descBorderClassName: 'border-[#d4a373]',
   bg: 'caiden_landing_images/gallery/hippolyta/hippolyta_3',
   bgOverlayClassName: 'bg-amber-600/20 mix-blend-overlay',

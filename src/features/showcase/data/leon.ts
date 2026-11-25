@@ -1,8 +1,8 @@
 export const leonData = {
-  title: 'Leon S. Kennedy',
+  title: 'Capcom',
   subtitle: 'Resident Evil 4',
   subtitleClassName: 'text-[#a8a29e]',
-  description: '',
+  description: 'Leon S. Kennedy, recreated with attention to wardrobe, gear and the look of the character.',
   descBorderClassName: 'border-[#a8a29e]',
   bg: 'caiden_landing_images/gallery/leon/leon_3',
   bgOverlayClassName: 'bg-stone-600/20 mix-blend-overlay',

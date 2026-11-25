@@ -54,35 +54,38 @@ export default function SkillDetails({
   };
 
   if (!selectedSubSkill) return null;
+  const hasSiblings = activeMetadata.subSkills.length > 1;
 
   return (
     <div className="flex flex-col gap-8 w-full animate-in fade-in slide-in-from-right-4 duration-700">
-      <div className="flex justify-center gap-4 overflow-x-auto pb-4 custom-scrollbar">
-        {activeMetadata.subSkills.map((skill) => {
-          const isActive = skill.id === selectedSkillId;
-          return (
-            <button
-              key={skill.id}
-              onClick={() => { setSelectedSkillId(skill.id); setExpertiseBgTick(0); setIsAutoPlayDisabled(false); }}
-              className={`group relative shrink-0 w-32 md:w-40 aspect-video overflow-hidden border transition-all duration-500 ${isActive ? 'border-brand-400 ring-1 ring-brand-400/50' : 'border-white/10 hover:border-brand-400/50'}`}
-            >
-              <Image 
-                publicId={skill.publicId} 
-                alt={skill.title} 
-                variant="thumb" 
-                fill 
-                imgClassName={`object-cover transition-transform duration-700 ${isActive ? 'opacity-100 scale-110' : 'opacity-40 group-hover:opacity-70 group-hover:scale-105'}`}
-              />
-              <div className={`absolute inset-0 bg-black/20 ${isActive ? 'bg-transparent' : ''}`} />
-              <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black to-transparent">
-                <span className={`text-[8px] font-sans uppercase tracking-[0.2em] font-bold block truncate ${isActive ? 'text-brand-400' : 'text-white/60'}`}>
-                  {skill.title}
-                </span>
-              </div>
-            </button>
-          );
-        })}
-      </div>
+      {hasSiblings && (
+        <div className="flex justify-center gap-4 overflow-x-auto pb-4 custom-scrollbar">
+          {activeMetadata.subSkills.map((skill) => {
+            const isActive = skill.id === selectedSkillId;
+            return (
+              <button
+                key={skill.id}
+                onClick={() => { setSelectedSkillId(skill.id); setExpertiseBgTick(0); setIsAutoPlayDisabled(false); }}
+                className={`group relative shrink-0 w-32 md:w-40 aspect-video overflow-hidden border transition-all duration-500 ${isActive ? 'border-brand-400 ring-1 ring-brand-400/50' : 'border-white/10 hover:border-brand-400/50'}`}
+              >
+                <Image 
+                  publicId={skill.publicId} 
+                  alt={skill.title} 
+                  variant="thumb" 
+                  fill 
+                  imgClassName={`object-cover transition-transform duration-700 ${isActive ? 'opacity-100 scale-110' : 'opacity-40 group-hover:opacity-70 group-hover:scale-105'}`}
+                />
+                <div className={`absolute inset-0 bg-black/20 ${isActive ? 'bg-transparent' : ''}`} />
+                <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black to-transparent">
+                  <span className={`text-[8px] font-sans uppercase tracking-[0.2em] font-bold block truncate ${isActive ? 'text-brand-400' : 'text-white/60'}`}>
+                    {skill.title}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       <div className="flex flex-col lg:flex-row gap-12">
         <div className="lg:w-[45%] flex flex-col pt-4">
@@ -110,9 +113,11 @@ export default function SkillDetails({
           <p className="text-white/70 font-sans leading-relaxed text-base md:text-lg mb-12 italic border-l-2 border-brand-400/40 pl-6">
             {selectedSubSkill.description}
           </p>
-          <button onClick={() => setSelectedSkillId(null)} className="mt-auto flex items-center gap-3 text-white/30 font-sans text-[10px] tracking-[0.4em] uppercase hover:text-brand-400 transition-all border-t border-white/5 w-fit py-4">
-            {SKILLS_CONTENT.uiLabels.back}
-          </button>
+          {hasSiblings && (
+            <button onClick={() => setSelectedSkillId(null)} className="mt-auto flex items-center gap-3 text-white/30 font-sans text-[10px] tracking-[0.4em] uppercase hover:text-brand-400 transition-all border-t border-white/5 w-fit py-4">
+              {SKILLS_CONTENT.uiLabels.back}
+            </button>
+          )}
         </div>
 
         <div className="lg:w-[55%] aspect-square lg:aspect-auto min-h-[400px] md:min-h-[600px] relative group overflow-hidden bg-[#020b1a] shadow-2xl">

@@ -1,8 +1,8 @@
 export const neroData = {
-  title: 'Nero',
-  subtitle: 'Devil May Cry',
+  title: 'Capcom',
+  subtitle: 'Devil May Cry 5',
   subtitleClassName: 'text-[#38bdf8]',
-  description: '',
+  description: 'Nero, built around the costume, wig styling and signature gear of the demon hunter.',
   descBorderClassName: 'border-[#38bdf8]',
   bg: 'caiden_landing_images/gallery/nero/nero_3',
   bgOverlayClassName: 'bg-sky-600/20 mix-blend-overlay',
