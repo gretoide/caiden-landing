@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -22,21 +22,14 @@ function Letters({ word }: { word: string }) {
 
 /**
  * Same composition as always, now in motion: cinematic intro (photo settles, name rises letter by
- * letter), a slow breathing zoom, mouse depth and a scroll parallax on the way out.
+ * letter), a slow breathing zoom and a scroll parallax on the way out.
  */
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
-  // One transform per layer, so the effects never fight each other: scroll > mouse > zoom.
+  // One transform per layer, so the effects never fight each other: scroll > zoom.
   const bgScrollRef = useRef<HTMLDivElement>(null);
-  const bgMouseRef = useRef<HTMLDivElement>(null);
   const bgZoomRef = useRef<HTMLDivElement>(null);
   const contentScrollRef = useRef<HTMLDivElement>(null);
-  const contentMouseRef = useRef<HTMLDivElement>(null);
-  // Soft area under the pointer where the photo swells and lights up (mouse devices only).
-  const liveRef = useRef<HTMLDivElement>(null);
-  const [hasMouse] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches
-  );
 
   useGSAP(() => {
     const section = sectionRef.current;
@@ -65,49 +58,6 @@ export default function Hero() {
       gsap.to(contentScrollRef.current, { yPercent: -25, opacity: 0, ease: 'none', scrollTrigger: { ...scrollTrigger, end: '70% top' } });
     });
 
-    // Depth with the mouse: photo and text drift in opposite directions.
-    mm.add('(prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine)', () => {
-      const options = { duration: 1.2, ease: 'power3.out' };
-      const bgX = gsap.quickTo(bgMouseRef.current, 'x', options);
-      const bgY = gsap.quickTo(bgMouseRef.current, 'y', options);
-      const textX = gsap.quickTo(contentMouseRef.current, 'x', options);
-      const textY = gsap.quickTo(contentMouseRef.current, 'y', options);
-      const live = liveRef.current;
-      if (live) gsap.set(live, { '--mx': 50, '--my': 50 });
-      const liveX = live ? gsap.quickTo(live, '--mx', { duration: 0.7, ease: 'power3.out' }) : null;
-      const liveY = live ? gsap.quickTo(live, '--my', { duration: 0.7, ease: 'power3.out' }) : null;
-      const showLive = (opacity: number) => {
-        if (live) gsap.to(live, { opacity, duration: 0.6, overwrite: 'auto' });
-      };
-      const move = (e: PointerEvent) => {
-        if (live) {
-          // Percentages of the (transformed) layer, so zoom and parallax don't offset the spot.
-          const rect = live.getBoundingClientRect();
-          liveX?.(((e.clientX - rect.left) / rect.width) * 100);
-          liveY?.(((e.clientY - rect.top) / rect.height) * 100);
-          showLive(1);
-        }
-        const rx = e.clientX / window.innerWidth - 0.5;
-        const ry = e.clientY / window.innerHeight - 0.5;
-        bgX(rx * -36);
-        bgY(ry * -24);
-        textX(rx * 18);
-        textY(ry * 12);
-      };
-      const leave = () => {
-        showLive(0);
-        bgX(0);
-        bgY(0);
-        textX(0);
-        textY(0);
-      };
-      section.addEventListener('pointermove', move, { passive: true });
-      section.addEventListener('pointerleave', leave);
-      return () => {
-        section.removeEventListener('pointermove', move);
-        section.removeEventListener('pointerleave', leave);
-      };
-    });
   }, { scope: sectionRef });
 
   return (
@@ -115,7 +65,6 @@ export default function Hero() {
       {/* Background Image Setup */}
       <div className="absolute inset-0 z-0">
         <div ref={bgScrollRef} className="absolute inset-0">
-          <div ref={bgMouseRef} className="absolute inset-0">
             <div ref={bgZoomRef} className="absolute inset-0">
               <Image
                 publicId={HERO_BG}
@@ -127,25 +76,7 @@ export default function Hero() {
                 imgClassName="w-full h-full object-cover opacity-60 scale-110 md:object-[center_35%]"
                 sizes="100vw"
               />
-              {hasMouse && (
-                <div
-                  ref={liveRef}
-                  aria-hidden
-                  className="absolute inset-0 opacity-0 pointer-events-none mask-[radial-gradient(circle_18rem_at_calc(var(--mx,50)*1%)_calc(var(--my,50)*1%),black_0%,rgba(0,0,0,0.6)_45%,transparent_100%)]"
-                >
-                  <Image
-                    publicId={HERO_BG}
-                    alt=""
-                    variant="hero"
-                    loading="eager"
-                    className="absolute inset-0"
-                    imgClassName="w-full h-full object-cover opacity-90 scale-[1.135] brightness-110 saturate-125 contrast-110 md:object-[center_35%]"
-                    sizes="100vw"
-                  />
-                </div>
-              )}
             </div>
-          </div>
         </div>
         {/* Dark subtle overlay for contrast */}
         <div className="absolute inset-0 bg-black/40 mix-blend-multiply"></div>
@@ -157,7 +88,7 @@ export default function Hero() {
 
       {/* Content */}
       <div ref={contentScrollRef} className="relative z-10">
-        <div ref={contentMouseRef} className="text-center px-6 max-w-6xl mx-auto flex flex-col items-center">
+        <div className="text-center px-6 max-w-6xl mx-auto flex flex-col items-center">
           <div className="flex items-center justify-center w-full mb-8 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_forwards]">
             <span className="text-brand-400 font-sans text-[10px] md:text-xs tracking-[0.6em] -mr-[0.6em] uppercase font-bold text-center">― Asset Crafter ―</span>
           </div>

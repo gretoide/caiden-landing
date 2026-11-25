@@ -9,6 +9,14 @@ import { eldenRingData } from './data/eldenRing';
 import { diabloIVData } from './data/diabloIV';
 import { skyrimData } from './data/skyrim';
 import { chainsawManData } from './data/chainsawMan';
+import { hipoData } from './data/hipo';
+import { attackOnTitanData } from './data/attackOnTitan';
+import { gojoData } from './data/gojo';
+import { hippolytaData } from './data/hippolyta';
+import { leonData } from './data/leon';
+import { neroData } from './data/nero';
+import { spyFamilyData } from './data/spyFamily';
+import { starWarsData } from './data/starWars';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,12 +27,30 @@ const PARALLAX_PX = 60;
 
 type Photo = { id: string; project: string };
 
+// Photos the wall rotates through: the studio builds, Elden Ring to Chainsaw Man (MAPPA).
 const PROJECTS = [
   { project: 'Elden Ring', ids: eldenRingData.gallery },
   { project: 'Diablo IV', ids: diabloIVData.gallery },
   { project: 'Skyrim', ids: skyrimData.gallery },
   { project: 'Chainsaw Man', ids: chainsawManData.gallery },
 ];
+
+// The counter covers everything on /gallery, including builds the wall does not show.
+const ALL_BUILDS = [
+  eldenRingData,
+  diabloIVData,
+  skyrimData,
+  chainsawManData,
+  hipoData,
+  attackOnTitanData,
+  gojoData,
+  hippolytaData,
+  leonData,
+  neroData,
+  spyFamilyData,
+  starWarsData,
+];
+const TOTAL_PHOTOS = ALL_BUILDS.reduce((total, build) => total + build.gallery.length, 0);
 
 // Spread every project evenly along the list, so neighbouring tiles come from different builds.
 const PHOTOS: Photo[] = PROJECTS.flatMap(({ project, ids }, p) =>
@@ -261,7 +287,7 @@ export default function ArmourShowcase() {
             The Gallery
           </h2>
           <p className="portfolio-reveal mt-4 md:mt-6 text-white/80 font-sans text-[10px] md:text-sm font-bold uppercase tracking-[0.3em] leading-relaxed">
-            {PROJECTS.length} builds · {PHOTOS.length} photos
+            {ALL_BUILDS.length} builds · {TOTAL_PHOTOS} photos
           </p>
 
           {/* Site button style (glass + blue frame on hover) with a pulsing glow */}
