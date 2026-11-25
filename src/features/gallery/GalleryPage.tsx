@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Layout from '../layout/Layout';
 import SuitNav, { type Suit } from './SuitNav';
 import Lightbox from '../../shared/ui/Lightbox';
@@ -130,25 +130,13 @@ export default function GalleryPage() {
 
   return (
     <Layout>
-      <header className="relative bg-black pt-28 md:pt-40 pb-12 md:pb-16 border-b border-white/5 overflow-hidden">
+      {/* No visible title: the page opens straight on the builds and the side index. */}
+      <h1 className="sr-only">Full Gallery</h1>
+      {/* Below xl (the side index is hidden there): the list of suits to jump to. */}
+      <header className="relative bg-black pt-24 md:pt-32 pb-8 md:pb-12 border-b border-white/5 overflow-hidden xl:hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(96,165,250,0.12),transparent_60%)] pointer-events-none" />
         <div className="relative container mx-auto px-6">
-          <a
-            href="/#work"
-            onClick={(e) => returnToSite(e)}
-            className="inline-flex items-center gap-2 text-white/50 hover:text-white text-[10px] md:text-xs font-sans uppercase tracking-[0.3em] transition-colors mb-10 md:mb-14"
-          >
-            <ArrowLeft size={14} aria-hidden /> Back to site
-          </a>
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-10 h-[1px] bg-brand-400/80" />
-            <span className="text-brand-400 font-sans text-[10px] md:text-xs tracking-[0.5em] uppercase font-bold">Portfolio</span>
-          </div>
-          <h1 className="text-5xl sm:text-7xl md:text-9xl font-serif text-white tracking-wide leading-none">Full Gallery</h1>
-          <p className="text-white/50 font-sans mt-6 max-w-xl leading-relaxed">
-            Every photo of each build, in detail. Click any image to view it full size.
-          </p>
-          <nav aria-label="Suits overview" className="flex flex-wrap gap-3 mt-10">
+          <nav aria-label="Suits overview" className="flex flex-wrap gap-3">
             {SUITS.map((suit) => (
               <a
                 key={suit.id}
@@ -165,7 +153,8 @@ export default function GalleryPage() {
       {/* Vertical index on the right edge: follows the scroll, opens on hover, click to jump. */}
       <SuitNav suits={SUITS} galleryRef={galleryRef} />
 
-      <div ref={galleryRef} className="bg-black w-full flex flex-col">
+      {/* On xl the content of each build makes room for the side index on the right (backgrounds stay full width). */}
+      <div ref={galleryRef} className="bg-black w-full flex flex-col xl:[&_.container]:pr-56">
         <EldenRing onOpen={setExpandedPublicId} />
         <DiabloIV onOpen={setExpandedPublicId} />
         <Skyrim onOpen={setExpandedPublicId} />

@@ -27,7 +27,7 @@ const siteNav = () => document.querySelector<HTMLElement>('nav[data-site-nav]');
  */
 export default function SuitNav({ suits, galleryRef }: { suits: Suit[]; galleryRef: React.RefObject<HTMLElement | null> }) {
   const [active, setActive] = useState<string | null>(null);
-  // Only shown while the gallery itself is on screen (not over the header or the closing section).
+  // Hidden once the closing section ("There's more behind the armour") takes over.
   const [visible, setVisible] = useState(false);
   // Suit the user just jumped to: it stays highlighted (and the navbar stays shown, so the landing
   // spot is always the same) until they scroll on their own.
@@ -65,7 +65,8 @@ export default function SuitNav({ suits, galleryRef }: { suits: Suit[]; galleryR
       frame = 0;
       const middle = window.innerHeight / 2;
       const gallery = galleryRef.current?.getBoundingClientRect();
-      setVisible(!!gallery && gallery.top < middle && gallery.bottom > middle);
+      // Shown from the page header on (so it is seen on arrival) until the closing section.
+      setVisible(!!gallery && gallery.bottom > middle);
 
       // Active suit: the last one whose top has passed the upper third of the screen. Builds side by
       // side in a grid share a top: the first of that row wins, unless one was clicked.
@@ -174,8 +175,8 @@ export default function SuitNav({ suits, galleryRef }: { suits: Suit[]; galleryR
   return (
     <nav
       aria-label="Suits"
-      // Desktop/tablet only: on phones it covers the photos.
-      className={`group hidden md:block fixed right-0 top-1/2 z-[90] -translate-y-1/2 transition-opacity duration-500 ${
+      // Wide screens only: narrower ones lack room beside the big section titles.
+      className={`group hidden xl:block fixed right-0 top-1/2 z-[90] -translate-y-1/2 transition-opacity duration-500 ${
         visible ? 'opacity-100' : 'pointer-events-none opacity-0'
       }`}
     >
