@@ -1,21 +1,152 @@
+import { useRef, useState } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from '../../shared/ui/Image';
 import { HERO_BG } from './data/images';
 
-export default function Hero() {
+gsap.registerPlugin(ScrollTrigger);
+
+/** A word split into letters so each one can rise in on its own. */
+function Letters({ word }: { word: string }) {
   return (
-    <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-black">
+    <>
+      {Array.from(word).map((letter, i) => (
+        <span key={i} aria-hidden className="hero-letter inline-block">
+          {letter}
+        </span>
+      ))}
+    </>
+  );
+}
+
+/**
+ * Same composition as always, now in motion: cinematic intro (photo settles, name rises letter by
+ * letter), a slow breathing zoom, mouse depth and a scroll parallax on the way out.
+ */
+export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  // One transform per layer, so the effects never fight each other: scroll > mouse > zoom.
+  const bgScrollRef = useRef<HTMLDivElement>(null);
+  const bgMouseRef = useRef<HTMLDivElement>(null);
+  const bgZoomRef = useRef<HTMLDivElement>(null);
+  const contentScrollRef = useRef<HTMLDivElement>(null);
+  const contentMouseRef = useRef<HTMLDivElement>(null);
+  // Soft area under the pointer where the photo swells and lights up (mouse devices only).
+  const liveRef = useRef<HTMLDivElement>(null);
+  const [hasMouse] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  );
+
+  useGSAP(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const mm = gsap.matchMedia();
+
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      // Intro: the photo settles from a close-up while the name rises letter by letter.
+      gsap.fromTo(bgZoomRef.current, { scale: 1.25, opacity: 0 }, { scale: 1, opacity: 1, duration: 2.4, ease: 'power3.out' });
+      gsap.from('.hero-letter', {
+        yPercent: 60,
+        opacity: 0,
+        filter: 'blur(14px)',
+        duration: 1.3,
+        stagger: 0.08,
+        delay: 0.25,
+        ease: 'power4.out',
+        clearProps: 'filter',
+      });
+      // Then it keeps breathing, so the cover never feels static.
+      gsap.to(bgZoomRef.current, { scale: 1.08, duration: 9, delay: 2.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+
+      // On the way out: the photo lags behind and the text lifts and fades.
+      const scrollTrigger = { trigger: section, start: 'top top', end: 'bottom top', scrub: true };
+      gsap.to(bgScrollRef.current, { yPercent: 18, ease: 'none', scrollTrigger });
+      gsap.to(contentScrollRef.current, { yPercent: -25, opacity: 0, ease: 'none', scrollTrigger: { ...scrollTrigger, end: '70% top' } });
+    });
+
+    // Depth with the mouse: photo and text drift in opposite directions.
+    mm.add('(prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine)', () => {
+      const options = { duration: 1.2, ease: 'power3.out' };
+      const bgX = gsap.quickTo(bgMouseRef.current, 'x', options);
+      const bgY = gsap.quickTo(bgMouseRef.current, 'y', options);
+      const textX = gsap.quickTo(contentMouseRef.current, 'x', options);
+      const textY = gsap.quickTo(contentMouseRef.current, 'y', options);
+      const live = liveRef.current;
+      if (live) gsap.set(live, { '--mx': 50, '--my': 50 });
+      const liveX = live ? gsap.quickTo(live, '--mx', { duration: 0.7, ease: 'power3.out' }) : null;
+      const liveY = live ? gsap.quickTo(live, '--my', { duration: 0.7, ease: 'power3.out' }) : null;
+      const showLive = (opacity: number) => {
+        if (live) gsap.to(live, { opacity, duration: 0.6, overwrite: 'auto' });
+      };
+      const move = (e: PointerEvent) => {
+        if (live) {
+          // Percentages of the (transformed) layer, so zoom and parallax don't offset the spot.
+          const rect = live.getBoundingClientRect();
+          liveX?.(((e.clientX - rect.left) / rect.width) * 100);
+          liveY?.(((e.clientY - rect.top) / rect.height) * 100);
+          showLive(1);
+        }
+        const rx = e.clientX / window.innerWidth - 0.5;
+        const ry = e.clientY / window.innerHeight - 0.5;
+        bgX(rx * -36);
+        bgY(ry * -24);
+        textX(rx * 18);
+        textY(ry * 12);
+      };
+      const leave = () => {
+        showLive(0);
+        bgX(0);
+        bgY(0);
+        textX(0);
+        textY(0);
+      };
+      section.addEventListener('pointermove', move, { passive: true });
+      section.addEventListener('pointerleave', leave);
+      return () => {
+        section.removeEventListener('pointermove', move);
+        section.removeEventListener('pointerleave', leave);
+      };
+    });
+  }, { scope: sectionRef });
+
+  return (
+    <section ref={sectionRef} className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-black">
       {/* Background Image Setup */}
       <div className="absolute inset-0 z-0">
-        <Image
-          publicId={HERO_BG}
-          alt="Hero background"
-          variant="hero"
-          loading="eager"
-          fetchPriority="high"
-          className="absolute inset-0"
-          imgClassName="w-full h-full object-cover opacity-60 scale-110 md:object-[center_35%]"
-          sizes="100vw"
-        />
+        <div ref={bgScrollRef} className="absolute inset-0">
+          <div ref={bgMouseRef} className="absolute inset-0">
+            <div ref={bgZoomRef} className="absolute inset-0">
+              <Image
+                publicId={HERO_BG}
+                alt="Hero background"
+                variant="hero"
+                loading="eager"
+                fetchPriority="high"
+                className="absolute inset-0"
+                imgClassName="w-full h-full object-cover opacity-60 scale-110 md:object-[center_35%]"
+                sizes="100vw"
+              />
+              {hasMouse && (
+                <div
+                  ref={liveRef}
+                  aria-hidden
+                  className="absolute inset-0 opacity-0 pointer-events-none mask-[radial-gradient(circle_18rem_at_calc(var(--mx,50)*1%)_calc(var(--my,50)*1%),black_0%,rgba(0,0,0,0.6)_45%,transparent_100%)]"
+                >
+                  <Image
+                    publicId={HERO_BG}
+                    alt=""
+                    variant="hero"
+                    loading="eager"
+                    className="absolute inset-0"
+                    imgClassName="w-full h-full object-cover opacity-90 scale-[1.135] brightness-110 saturate-125 contrast-110 md:object-[center_35%]"
+                    sizes="100vw"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
         {/* Dark subtle overlay for contrast */}
         <div className="absolute inset-0 bg-black/40 mix-blend-multiply"></div>
         {/* Main transition to black at the bottom */}
@@ -25,30 +156,33 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-6xl mx-auto flex flex-col items-center">
-        <div className="flex items-center justify-center w-full mb-8 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_forwards]">
-          <span className="text-brand-400 font-sans text-[10px] md:text-xs tracking-[0.6em] -mr-[0.6em] uppercase font-bold text-center">― Asset Crafter ―</span>
+      <div ref={contentScrollRef} className="relative z-10">
+        <div ref={contentMouseRef} className="text-center px-6 max-w-6xl mx-auto flex flex-col items-center">
+          <div className="flex items-center justify-center w-full mb-8 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_forwards]">
+            <span className="text-brand-400 font-sans text-[10px] md:text-xs tracking-[0.6em] -mr-[0.6em] uppercase font-bold text-center">― Asset Crafter ―</span>
+          </div>
+
+          <h1 aria-label="Caiden Dri" className="text-6xl sm:text-7xl md:text-8xl lg:text-[10rem] font-serif text-white tracking-widest leading-[0.85] mb-4 md:mb-8 italic">
+            <Letters word="CAIDEN" />{' '}
+            <span className="text-white/60 md:text-white/30 block md:inline">
+              <Letters word="DRI" />
+            </span>
+          </h1>
+
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-8 md:mb-12 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.9s_forwards]">
+            <h2 className="text-sm md:text-xl font-sans tracking-[0.5em] -mr-[0.5em] text-white uppercase font-light">
+              PROFESSIONAL <span className="font-bold text-brand-400">PROPMAKER</span>
+            </h2>
+            <span className="hidden md:block text-brand-400/80 font-sans text-sm tracking-widest font-bold">//</span>
+            <h2 className="text-sm md:text-xl font-sans tracking-[0.5em] -mr-[0.5em] text-white uppercase font-light">
+              REALITY <span className="font-bold text-brand-400">SCULPTOR</span>
+            </h2>
+          </div>
+
+          <p className="max-w-xl text-xs md:text-sm font-sans text-white/40 leading-loose tracking-[0.2em] uppercase text-center translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_1.1s_forwards]">
+            Bridging the gap between design vision and physical reality through a decade of mastery in cross-disciplinary fabrication.
+          </p>
         </div>
-
-        <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-[10rem] font-serif text-white tracking-widest leading-[0.85] mb-4 md:mb-8 italic translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.2s_forwards]">
-          CAIDEN <span className="text-white/60 md:text-white/30 block md:inline">DRI</span>
-        </h1>
-
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-8 md:mb-12 translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.4s_forwards]">
-          <h2 className="text-sm md:text-xl font-sans tracking-[0.5em] -mr-[0.5em] text-white uppercase font-light">
-            PROFESSIONAL <span className="font-bold text-brand-400">PROPMAKER</span>
-          </h2>
-          <span className="hidden md:block text-brand-400/80 font-sans text-sm tracking-widest font-bold">//</span>
-          <h2 className="text-sm md:text-xl font-sans tracking-[0.5em] -mr-[0.5em] text-white uppercase font-light">
-            REALITY <span className="font-bold text-brand-400">SCULPTOR</span>
-          </h2>
-        </div>
-        
-        <p className="max-w-xl text-xs md:text-sm font-sans text-white/40 leading-loose tracking-[0.2em] uppercase text-center translate-y-4 opacity-0 animate-[fade-in-up_1s_ease-out_0.6s_forwards]">
-          Bridging the gap between design vision and physical reality through a decade of mastery in cross-disciplinary fabrication.
-        </p>
-
-
       </div>
     </section>
   );
