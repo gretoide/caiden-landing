@@ -1,6 +1,6 @@
 export const starWarsData = {
   title: 'Lucasfilm',
-  subtitle: 'Star Wars',
+  subtitle: 'Star Wars // 2017',
   subtitleClassName: 'text-[#ef4444]',
   description: 'Praetorian Guard armor, the red elite protectors of the Supreme Leader.',
   descBorderClassName: 'border-[#ef4444]',

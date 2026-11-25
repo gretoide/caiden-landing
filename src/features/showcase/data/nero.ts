@@ -1,6 +1,6 @@
 export const neroData = {
   title: 'Capcom',
-  subtitle: 'Devil May Cry 5',
+  subtitle: 'Devil May Cry 5 // 2019',
   subtitleClassName: 'text-[#38bdf8]',
   description: 'Nero, built around the costume, wig styling and signature gear of the demon hunter.',
   descBorderClassName: 'border-[#38bdf8]',

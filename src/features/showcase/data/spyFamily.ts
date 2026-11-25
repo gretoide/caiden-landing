@@ -1,6 +1,6 @@
 export const spyFamilyData = {
   title: 'Wit Studio',
-  subtitle: 'Spy x Family',
+  subtitle: 'Spy x Family // 2022',
   subtitleClassName: 'text-[#eab308]',
   description: 'Loid Forger, a clean and tailored take on the spy known as Twilight.',
   descBorderClassName: 'border-[#eab308]',

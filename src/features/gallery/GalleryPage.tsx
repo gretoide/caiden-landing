@@ -14,6 +14,8 @@ import Leon from '../showcase/sections/Leon';
 import Nero from '../showcase/sections/Nero';
 import SpyFamily from '../showcase/sections/SpyFamily';
 import StarWars from '../showcase/sections/StarWars';
+import CompactBuilds from '../showcase/sections/CompactBuilds';
+import { compactBuilds, propBuilds } from '../showcase/data/compactBuilds';
 import { SCROLL_TO_SKILLS_MESSAGE } from '../../shared/lib/scrollToSkills';
 
 const SUITS = [
@@ -29,6 +31,11 @@ const SUITS = [
   { id: 'nero', label: 'Nero' },
   { id: 'spy-family', label: 'Spy x Family' },
   { id: 'star-wars', label: 'Star Wars' },
+  { id: 'aion', label: 'Aion' },
+  { id: 'hazbin-hotel', label: 'Hazbin Hotel' },
+  { id: 'vikings', label: 'Vikings' },
+  { id: 'zombie', label: 'Zombie' },
+  { id: 'props', label: 'Props & Weapons' },
 ];
 
 // Set when one of the "back" links already decided where the landing tab should be.
@@ -165,6 +172,8 @@ export default function GalleryPage() {
         <Nero onOpen={setExpandedPublicId} />
         <SpyFamily onOpen={setExpandedPublicId} />
         <StarWars onOpen={setExpandedPublicId} />
+        <CompactBuilds id="more-builds" heading="More builds" builds={compactBuilds} onOpen={setExpandedPublicId} />
+        <CompactBuilds id="props" heading="Props & weapons" builds={propBuilds} onOpen={setExpandedPublicId} />
       </div>
 
       <section className="bg-black border-t border-white/5 py-20 md:py-28">

@@ -9,11 +9,12 @@ export const hipoData = {
   bg: 'caiden_landing_images/gallery/hipo/hipo_3',
   bgOverlayClassName: 'bg-red-600/20 mix-blend-overlay',
   blurClassName: 'blur-md',
-  // [0] and [1] are the two context photos, [2] is the one used for the zoom studies
+  // [0], [1] and [3] are context photos, [2] is the one used for the zoom studies
   gallery: [
     'caiden_landing_images/gallery/hipo/hipo_2',
     'caiden_landing_images/gallery/hipo/hipo_4',
     'caiden_landing_images/gallery/hipo/hipo_3',
+    'caiden_landing_images/gallery/hipo/hipo_6', // third context photo
   ],
   zoomDetails: [
     { id: 1, label: 'Detail', zoom: 1.1, position: '50% 35%' },

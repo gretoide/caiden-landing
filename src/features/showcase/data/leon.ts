@@ -1,6 +1,6 @@
 export const leonData = {
   title: 'Capcom',
-  subtitle: 'Resident Evil 4',
+  subtitle: 'Resident Evil 4 // 2023',
   subtitleClassName: 'text-[#a8a29e]',
   description: 'Leon S. Kennedy, recreated with attention to wardrobe, gear and the look of the character.',
   descBorderClassName: 'border-[#a8a29e]',

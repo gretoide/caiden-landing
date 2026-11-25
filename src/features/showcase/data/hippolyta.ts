@@ -1,6 +1,6 @@
 export const hippolytaData = {
   title: 'DC Comics',
-  subtitle: 'Wonder Woman',
+  subtitle: 'Wonder Woman // 2017',
   subtitleClassName: 'text-[#d4a373]',
   description: 'Hippolyta, queen of the Amazons, with armor pieces, fur layers and a crown inspired by Themyscira.',
   descBorderClassName: 'border-[#d4a373]',

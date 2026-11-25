@@ -14,7 +14,7 @@ type ZoomDetail = {
 };
 
 type Props = {
-  imageIds: string[]; // Two static images + one zoomable
+  imageIds: string[]; // Two static images + one zoomable, plus an optional third static one
   details: ZoomDetail[];
   onOpen: (publicId: string) => void;
   reversed?: boolean;
@@ -28,7 +28,8 @@ type Props = {
 };
 
 export default function DetailGrid({ imageIds, details, onOpen, reversed = false, studies = 2, studyInMiddle = false, context1Position, context2Position }: Props) {
-  const [img1, img2, zoomImg] = imageIds;
+  const [img1, img2, zoomImg, img3] = imageIds;
+  const span = img3 ? 'md:col-span-3' : 'md:col-span-4';
   const containerRef = useRef<HTMLDivElement>(null);
   const studyDetails = (() => {
     const base = details.slice(0, 2);
@@ -69,7 +70,7 @@ export default function DetailGrid({ imageIds, details, onOpen, reversed = false
   return (
     <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-3 h-auto md:h-[70vh]">
       {/* Zoom Study Column (Ordered first or last) */}
-      <div className={`compact-item-anim md:col-span-4 grid ${studies === 1 ? 'grid-rows-1' : 'grid-rows-2'} gap-2 md:gap-3 h-[60vh] md:h-full ${studyInMiddle ? 'order-2' : reversed ? 'md:order-last' : 'md:order-first'}`}>
+      <div className={`compact-item-anim ${span} grid ${studies === 1 ? 'grid-rows-1' : 'grid-rows-2'} gap-2 md:gap-3 h-[60vh] md:h-full ${studyInMiddle ? 'order-2' : reversed ? 'md:order-last' : 'md:order-first'}`}>
         {orderedStudyDetails.slice(0, studies).map((detail, idx) => (
           <div key={detail.id} className="relative group overflow-hidden border border-white/5 h-full">
             <Image
@@ -91,7 +92,7 @@ export default function DetailGrid({ imageIds, details, onOpen, reversed = false
       </div>
 
        {/* Static View 1 */}
-       <div className={`${studyInMiddle ? 'order-1 ' : ''}compact-item-anim md:col-span-4 h-[40vh] md:h-full relative group overflow-hidden border border-white/5`}>
+       <div className={`${studyInMiddle ? 'order-1 ' : ''}compact-item-anim ${span} h-[40vh] md:h-full relative group overflow-hidden border border-white/5`}>
          <Image
            publicId={img1}
            alt="Compact View 1"
@@ -108,7 +109,7 @@ export default function DetailGrid({ imageIds, details, onOpen, reversed = false
        </div>
 
        {/* Static View 2 */}
-       <div className={`${studyInMiddle ? 'order-3 ' : ''}compact-item-anim md:col-span-4 h-[40vh] md:h-full relative group overflow-hidden border border-white/5`}>
+       <div className={`${studyInMiddle ? 'order-3 ' : ''}compact-item-anim ${span} h-[40vh] md:h-full relative group overflow-hidden border border-white/5`}>
          <Image
            publicId={img2}
            alt="Compact View 2"
@@ -123,6 +124,23 @@ export default function DetailGrid({ imageIds, details, onOpen, reversed = false
            Context // 02
          </div>
        </div>
+
+       {img3 && (
+         <div className={`${studyInMiddle ? 'order-4 ' : ''}compact-item-anim ${span} h-[40vh] md:h-full relative group overflow-hidden border border-white/5`}>
+           <Image
+             publicId={img3}
+             alt="Compact View 3"
+             variant="full"
+             className="w-full h-full"
+             imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 cursor-pointer object-cover"
+             onClick={() => onOpen(img3)}
+           />
+           <div className="absolute inset-0 border-[0.5px] border-white/10 pointer-events-none"></div>
+           <div className="absolute top-4 left-4 text-[10px] text-white/30 tracking-[0.3em] uppercase bg-black/40 px-2 py-1 backdrop-blur-sm pointer-events-none">
+             Context // 03
+           </div>
+         </div>
+       )}
      </div>
    );
  }

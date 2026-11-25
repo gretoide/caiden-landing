@@ -1,6 +1,6 @@
 export const attackOnTitanData = {
   title: 'MAPPA',
-  subtitle: 'Attack on Titan',
+  subtitle: 'Attack on Titan // 2020',
   subtitleClassName: 'text-[#a3b18a]',
   description: 'Survey Corps uniform and signature ODM gear, built for an advertising campaign with IVREA, the manga publisher.',
   descBorderClassName: 'border-[#a3b18a]',

@@ -17,6 +17,7 @@ import { leonData } from './data/leon';
 import { neroData } from './data/nero';
 import { spyFamilyData } from './data/spyFamily';
 import { starWarsData } from './data/starWars';
+import { compactBuilds, propBuilds } from './data/compactBuilds';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -50,7 +51,10 @@ const ALL_BUILDS = [
   spyFamilyData,
   starWarsData,
 ];
-const TOTAL_PHOTOS = ALL_BUILDS.reduce((total, build) => total + build.gallery.length, 0);
+// Cards at the end of /gallery. The extra Skyrim pieces belong to the Skyrim build, so they only add photos.
+const CARDS = [...compactBuilds, ...propBuilds];
+const TOTAL_BUILDS = ALL_BUILDS.length + CARDS.filter((card) => !card.id.startsWith('skyrim-')).length;
+const TOTAL_PHOTOS = [...ALL_BUILDS, ...CARDS].reduce((total, build) => total + build.gallery.length, 0);
 
 // Spread every project evenly along the list, so neighbouring tiles come from different builds.
 const PHOTOS: Photo[] = PROJECTS.flatMap(({ project, ids }, p) =>
@@ -309,7 +313,7 @@ export default function ArmourShowcase() {
             The Gallery
           </h2>
           <p className="portfolio-reveal mt-4 md:mt-6 text-white/80 font-sans text-[10px] md:text-sm font-bold uppercase tracking-[0.3em] leading-relaxed">
-            {ALL_BUILDS.length} builds · {TOTAL_PHOTOS} photos
+            {TOTAL_BUILDS} builds · {TOTAL_PHOTOS} photos
           </p>
 
           {/* Site button style (glass + blue frame on hover) with a pulsing glow */}
