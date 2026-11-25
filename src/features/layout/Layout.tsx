@@ -66,6 +66,7 @@ export default function Layout({ children, navHideAfter = HIDE_AFTER }: LayoutPr
 
       {/* Navigation — transparent gradient bar: brand + contact only */}
       <nav
+        data-site-nav
         // Keyboard users tabbing into the navbar always get it back on screen.
         onFocusCapture={() => setHidden(false)}
         style={{

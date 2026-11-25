@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Layout from '../layout/Layout';
+import SuitNav, { type Suit } from './SuitNav';
 import Lightbox from '../../shared/ui/Lightbox';
 import EldenRing from '../showcase/sections/EldenRing';
 import DiabloIV from '../showcase/sections/DiabloIV';
@@ -18,24 +19,25 @@ import CompactBuilds from '../showcase/sections/CompactBuilds';
 import { compactBuilds, propBuilds } from '../showcase/data/compactBuilds';
 import { SCROLL_TO_SKILLS_MESSAGE } from '../../shared/lib/scrollToSkills';
 
-const SUITS = [
-  { id: 'elden-ring', label: 'Elden Ring' },
-  { id: 'diablo-iv', label: 'Diablo IV' },
-  { id: 'skyrim', label: 'Skyrim' },
-  { id: 'chainsaw-man', label: 'Chainsaw Man' },
-  { id: 'hipo', label: 'Hiccup' },
-  { id: 'attack-on-titan', label: 'Attack on Titan' },
-  { id: 'gojo', label: 'Gojo' },
-  { id: 'hippolyta', label: 'Hippolyta' },
-  { id: 'leon', label: 'Leon' },
-  { id: 'nero', label: 'Nero' },
-  { id: 'spy-family', label: 'Spy x Family' },
-  { id: 'star-wars', label: 'Star Wars' },
-  { id: 'aion', label: 'Aion' },
-  { id: 'hazbin-hotel', label: 'Hazbin Hotel' },
-  { id: 'vikings', label: 'Vikings' },
-  { id: 'zombie', label: 'Zombie' },
-  { id: 'props', label: 'Props & Weapons' },
+// `group` gives the side index its sections.
+const SUITS: Suit[] = [
+  { id: 'elden-ring', label: 'Elden Ring', group: 'Studio builds' },
+  { id: 'diablo-iv', label: 'Diablo IV', group: 'Studio builds' },
+  { id: 'skyrim', label: 'Skyrim', group: 'Studio builds' },
+  { id: 'chainsaw-man', label: 'Chainsaw Man', group: 'Studio builds' },
+  { id: 'hipo', label: 'Hiccup', group: 'Characters' },
+  { id: 'attack-on-titan', label: 'Attack on Titan', group: 'Characters' },
+  { id: 'gojo', label: 'Gojo', group: 'Characters' },
+  { id: 'hippolyta', label: 'Hippolyta', group: 'Characters' },
+  { id: 'leon', label: 'Leon', group: 'Characters' },
+  { id: 'nero', label: 'Nero', group: 'Characters' },
+  { id: 'spy-family', label: 'Spy x Family', group: 'Characters' },
+  { id: 'star-wars', label: 'Star Wars', group: 'Characters' },
+  { id: 'aion', label: 'Aion', group: 'More builds' },
+  { id: 'hazbin-hotel', label: 'Hazbin Hotel', group: 'More builds' },
+  { id: 'vikings', label: 'Vikings', group: 'More builds' },
+  { id: 'zombie', label: 'Zombie', group: 'More builds' },
+  { id: 'props', label: 'Props & Weapons', group: 'Props' },
 ];
 
 // Set when one of the "back" links already decided where the landing tab should be.
@@ -95,6 +97,7 @@ function returnToSite(e: React.MouseEvent<HTMLAnchorElement>, sectionId?: string
  */
 export default function GalleryPage() {
   const [expandedPublicId, setExpandedPublicId] = useState<string | null>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.title = 'Full Gallery | CAIDEN DRI';
@@ -145,7 +148,7 @@ export default function GalleryPage() {
           <p className="text-white/50 font-sans mt-6 max-w-xl leading-relaxed">
             Every photo of each build, in detail. Click any image to view it full size.
           </p>
-          <nav aria-label="Suits" className="flex flex-wrap gap-3 mt-10">
+          <nav aria-label="Suits overview" className="flex flex-wrap gap-3 mt-10">
             {SUITS.map((suit) => (
               <a
                 key={suit.id}
@@ -159,7 +162,10 @@ export default function GalleryPage() {
         </div>
       </header>
 
-      <div className="bg-black w-full flex flex-col">
+      {/* Vertical index on the right edge: follows the scroll, opens on hover, click to jump. */}
+      <SuitNav suits={SUITS} galleryRef={galleryRef} />
+
+      <div ref={galleryRef} className="bg-black w-full flex flex-col">
         <EldenRing onOpen={setExpandedPublicId} />
         <DiabloIV onOpen={setExpandedPublicId} />
         <Skyrim onOpen={setExpandedPublicId} />
