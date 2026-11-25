@@ -15,8 +15,6 @@ export type CompactBuild = {
   zoom?: number;
   /** Takes two columns. */
   wide?: boolean;
-  /** Wide card with its two photos side by side. */
-  split?: boolean;
   /** The card photo changes on its own through the gallery. */
   rotate?: boolean;
   /** Rotating photos shown whole (over a blurred copy) because cropping would cut the piece. */
@@ -62,11 +60,9 @@ export const compactBuilds: readonly CompactBuild[] = [
   {
     ...skyrim,
     id: 'skyrim-companion',
-    subtitle: 'Skyrim // 2016',
-    description: 'The Daedric armor on site, and the companion armor made for a dog, with horned helmet and layered plates.',
-    gallery: [`${ROOT}/skyrim/skyrim_event_1`, `${ROOT}/skyrim/skyrim_dog_1`],
-    wide: true,
-    split: true,
+    subtitle: 'Skyrim',
+    description: 'Companion armor made for a dog, with horned helmet and layered plates.',
+    gallery: [`${ROOT}/skyrim/skyrim_dog_1`],
   },
   {
     id: 'zombie',
@@ -76,7 +72,8 @@ export const compactBuilds: readonly CompactBuild[] = [
     descBorderClassName: 'border-[#f87171]',
     description: 'Undead makeup with a large mutated arm piece.',
     gallery: [`${ROOT}/unassigned/zombie_1`],
-    position: '40% 50%',
+    position: '40% 30%',
+    wide: true,
   },
 ];
 

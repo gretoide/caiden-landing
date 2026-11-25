@@ -91,23 +91,9 @@ export default function CompactBuilds({ id, heading, builds, onOpen }: Props) {
               <article key={build.id} id={build.id} className={`flex min-w-0 flex-col ${build.wide ? 'sm:col-span-2' : ''}`}>
                 {/* Square cards; a wide one is 2:1, so both end up the same height in a row. */}
                 <div
-                  className={`relative overflow-hidden border border-white/5 bg-[#0a0a0a] group ${build.split ? 'aspect-[1/2] grid grid-rows-2 gap-0.5 sm:grid-rows-1 sm:grid-cols-2' : 'aspect-square'} ${build.wide ? 'sm:aspect-auto sm:flex-1' : ''}`}
+                  className={`relative aspect-square overflow-hidden border border-white/5 bg-[#0a0a0a] group ${build.wide ? 'sm:aspect-auto sm:flex-1' : ''}`}
                 >
-                  {build.split ? (
-                    build.gallery.map((publicId, index) => (
-                      <div key={publicId} className="relative min-h-0">
-                        <Image
-                          publicId={publicId}
-                          alt={`${build.subtitle} photo ${index + 1}`}
-                          variant="full"
-                          fill
-                          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                          imgClassName={PHOTO_CLASS}
-                          onClick={() => onOpen(publicId)}
-                        />
-                      </div>
-                    ))
-                  ) : build.rotate ? (
+                  {build.rotate ? (
                     <RotatingPhotos build={build} sizes="(min-width: 1024px) 66vw, 100vw" onOpen={onOpen} />
                   ) : (
                   <>
