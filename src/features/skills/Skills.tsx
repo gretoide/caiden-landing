@@ -22,6 +22,13 @@ const defaultGallery = defaultCategory.subSkills.find((s) => s.id === defaultSki
 const defaultAutoPlayDisabled =
   defaultSkillId !== null && (defaultGallery.length <= 1 || defaultGallery[0]?.type === 'video');
 
+// Slanted slides: as tall as fits under the navbar and heading, between 360px and 600px.
+const STRIP_VARS = {
+  '--strip': 'clamp(360px, calc(100svh - 250px), 600px)',
+  // How far a 12deg skew pushes the top and bottom edges sideways: tan(12deg) / 2 of the height.
+  '--slant': 'calc(var(--strip) * 0.1063)',
+} as React.CSSProperties;
+
 // Lazy Details Component
 const SkillDetails = lazy(() => import('./SkillDetails'));
 
@@ -41,7 +48,7 @@ export default function Skills() {
   const [isMobile, setIsMobile] = useState(false);
   
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -127,9 +134,9 @@ export default function Skills() {
   }, []);
 
   return (
-    <section ref={containerRef} className="w-full bg-black relative flex flex-col justify-center overflow-hidden py-12 md:py-24">
+    <section ref={containerRef} className="w-full bg-black relative flex flex-col justify-center overflow-hidden py-12 md:py-16">
       {/* Section header: same style and container as the Armour section, so both titles line up */}
-      <div data-skills-heading className="container mx-auto px-6 mb-12 lg:mb-16 flex flex-col items-start text-left gap-4">
+      <div data-skills-heading className="container mx-auto px-6 mb-8 flex flex-col items-start text-left gap-4">
         <div className="flex items-center gap-4">
           <div className="w-10 h-[1px] bg-brand-400/80" />
           <span className="text-brand-400 font-sans text-[10px] md:text-xs tracking-[0.5em] uppercase font-bold">Expertise</span>
@@ -142,8 +149,8 @@ export default function Skills() {
       <div className="max-w-[1600px] mx-auto w-full px-0 md:px-6 flex flex-col gap-12 lg:gap-16">
 
         {/* Top visual section: Tabs Banner */}
-        <div className="relative w-[100vw] ml-[calc(50%-50vw)] overflow-hidden bg-black border-y border-white/5">
-          <div className="hidden md:flex absolute top-0 bottom-0 -left-[64px] -right-[64px] transform skew-x-12 origin-center overflow-hidden bg-black z-10 h-[600px]">
+        <div style={STRIP_VARS} className="relative w-[100vw] ml-[calc(50%-50vw)] overflow-hidden bg-black border-y border-white/5">
+          <div className="hidden lg:flex absolute top-0 bottom-0 left-[calc(var(--slant)*-1)] right-[calc(var(--slant)*-1)] transform skew-x-12 origin-center overflow-hidden bg-black z-10 h-[var(--strip)]">
              {SKILLS_CONTENT.categories.map((craft, index) => {
               const isActive = activeTab === craft.id;
               const isEdge = index === 0 || index === SKILLS_CONTENT.categories.length - 1;
@@ -173,9 +180,9 @@ export default function Skills() {
                     <div className={`absolute inset-0 bg-black transition-opacity duration-500 ${isActive ? 'opacity-0' : 'opacity-40 group-hover:opacity-10'}`} />
                   </div>
                   
-                  <div className="absolute bottom-8 z-20 w-max pointer-events-none transition-all duration-500" style={{ left: craft.id === SKILLS_CONTENT.categories[0].id ? 'calc(50% + 24px)' : craft.id === SKILLS_CONTENT.categories[SKILLS_CONTENT.categories.length - 1].id ? 'calc(50% - 24px)' : '50%', transform: 'translateX(-50%) skewX(-12deg)' }}>
-                    <div className={`flex flex-col items-center justify-center font-sans font-medium leading-tight tracking-[0.25em] uppercase transition-all duration-500 ${isActive ? 'text-white text-sm' : 'text-white/40 text-xs group-hover:text-white/70'}`}>
-                      {(craft.title === 'Skilled Materials' ? craft.title.split(' ') : craft.title.replace(' & ', '\n&\n').split('\n')).map((line, i) => (
+                  <div className="absolute bottom-8 z-20 w-max pointer-events-none transition-all duration-500" style={{ left: index === 0 ? 'calc(50% + 6px)' : index === SKILLS_CONTENT.categories.length - 1 ? 'calc(50% - var(--slant))' : '50%', transform: 'translateX(-50%) skewX(-12deg)' }}>
+                    <div className={`flex flex-col items-center justify-center font-sans font-medium leading-tight tracking-[0.15em] xl:tracking-[0.25em] uppercase transition-all duration-500 ${isActive ? 'text-white text-xs xl:text-sm' : 'text-white/40 text-[10px] xl:text-xs group-hover:text-white/70'}`}>
+                      {craft.title.split(' ').map((line, i) => (
                         <span key={i} className={line === '&' ? 'text-[0.8em] opacity-60' : ''}>{line}</span>
                       ))}
                     </div>
@@ -185,11 +192,11 @@ export default function Skills() {
             })}
           </div>
 
-          <div className="mobile-blades-wrapper flex md:hidden flex-col w-full bg-black">
+          <div className="mobile-blades-wrapper flex lg:hidden flex-col w-full bg-black">
             {SKILLS_CONTENT.categories.map((craft, index) => {
               const isActive = activeTab === craft.id;
               return (
-                <div key={craft.id} className={`mobile-blade-anim relative w-full cursor-pointer transition-colors duration-500 ease-in-out group overflow-hidden border-b border-white/5 last:border-b-0 ${isActive ? 'h-[160px] is-active' : 'h-[60px]'}`} onClick={() => { selectCategory(craft.id); requestAnimationFrame(() => requestAnimationFrame(scrollToDetails)); }}>
+                <div key={craft.id} className={`mobile-blade-anim relative w-full cursor-pointer transition-colors duration-500 ease-in-out group overflow-hidden border-b border-white/5 last:border-b-0 ${isActive ? 'h-[130px] is-active' : 'h-[56px]'}`} onClick={() => { selectCategory(craft.id); requestAnimationFrame(() => requestAnimationFrame(scrollToDetails)); }}>
                   <div className="absolute inset-0 mobile-blade-bg">
                     <div className="mobile-blade-img-inner absolute inset-0">
                        <Image publicId={craft.publicId} alt={craft.title} variant="hero" fill imgClassName={`object-cover transition-all duration-1000 ${isActive ? 'opacity-100' : 'opacity-80'}`} sizes="100vw" />
@@ -197,8 +204,8 @@ export default function Skills() {
                     </div>
                   </div>
                   <div className="mobile-blade-content absolute inset-0 flex items-center px-8 z-20">
-                     <div className="flex flex-col items-start gap-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                        <span className={`font-sans tracking-[0.3em] uppercase transition-all duration-500 ${isActive ? 'text-brand-400 text-[10px] font-bold' : 'text-white/20 text-[9px]'}`}>{`0${index + 1} // ${craft.subtitle.split(' & ')[0]}`}</span>
+                     <div className="flex min-w-0 flex-col items-start gap-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                        <span className={`max-w-full truncate font-sans tracking-[0.3em] uppercase transition-all duration-500 ${isActive ? 'text-brand-400 text-[10px] font-bold' : 'text-white/20 text-[9px]'}`}>{`0${index + 1} // ${craft.subtitle.split(' & ')[0]}`}</span>
                         <h3 className={`font-serif uppercase tracking-widest transition-all duration-500 ${isActive ? 'text-white text-2xl' : 'text-white/40 text-sm'}`}>{craft.title}</h3>
                         <div className={`h-[1px] bg-brand-400 transition-all duration-700 ${isActive ? 'w-12 opacity-100' : 'w-0 opacity-0'}`} />
                      </div>
@@ -208,7 +215,7 @@ export default function Skills() {
               );
             })}
           </div>
-          <div className="hidden md:block h-[600px]" />
+          <div className="hidden lg:block h-[var(--strip)]" />
         </div>
 
         {/* Content Section */}

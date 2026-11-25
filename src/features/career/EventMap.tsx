@@ -214,7 +214,7 @@ export default function EventMap() {
   };
 
   return (
-    <section id="events-section" className="w-full bg-[#050505] pt-24 md:pt-32 pb-12 md:pb-16 relative overflow-hidden border-t border-white/5">
+    <section id="events-section" className="w-full bg-[#050505] pt-24 md:pt-32 pb-12 md:pb-16 lg:py-12 relative overflow-hidden border-t border-white/5">
       <div className="absolute bottom-0 left-0 w-full h-[40%] bg-gradient-to-t from-brand-400/10 to-transparent z-[1] pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(circle,rgba(96,165,250,0.08)_0%,transparent_60%)] z-0 pointer-events-none" />
 
@@ -260,9 +260,9 @@ export default function EventMap() {
 
       <div className="max-w-[1400px] mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
-            <div className="order-2 lg:order-1 flex justify-center lg:justify-start relative">
+            <div className="order-2 lg:order-1 flex justify-center relative">
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-brand-400/5 blur-[120px] rounded-full pointer-events-none" />
-               <div className="relative w-full max-w-[650px] aspect-square bg-[#080808] border border-white/10 group/preview overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8)] hover:border-brand-400/40 transition-colors duration-500">
+               <div className="relative w-full max-w-[650px] lg:max-w-[clamp(360px,calc(100svh-160px),650px)] aspect-square bg-[#080808] border border-white/10 group/preview overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8)] hover:border-brand-400/40 transition-colors duration-500">
                   <div className="absolute inset-0 z-10 pointer-events-none opacity-20">
                      <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(96,165,250,0.15) 1px, transparent 1px)', backgroundSize: '25px 25px' }} />
                      <motion.div animate={{ y: ['0%', '100%', '0%'] }} transition={{ duration: 10, repeat: Infinity, ease: 'linear' }} className="absolute w-full h-[2px] bg-brand-400/30 z-20" />
@@ -302,7 +302,7 @@ export default function EventMap() {
 
            <div className="order-1 lg:order-2 flex flex-col items-start lg:pl-12">
               <div className="mb-12 md:mb-16">
-                  <h2 className="text-7xl sm:text-8xl md:text-[10rem] font-serif text-white tracking-widest leading-none mb-4 uppercase">CAREER</h2>
+                  <h2 className="text-7xl sm:text-8xl md:text-[10rem] lg:text-[min(10rem,calc((100vw-260px)/9))] font-serif text-white tracking-widest leading-none mb-4 uppercase">CAREER</h2>
                   <div className="flex items-center gap-6 mt-2">
                      <p className="text-brand-400 font-sans text-xl md:text-2xl font-bold uppercase tracking-[0.3em]">PARTICIPATIONS</p>
                      <div className="h-[1px] flex-grow bg-gradient-to-r from-brand-400 to-transparent opacity-30 mt-1"></div>
@@ -408,7 +408,7 @@ export default function EventMap() {
 
                 {/* Sidebar - Desktop Only */}
                 <div className="w-full md:w-2/5 h-full hidden md:flex flex-col bg-[#0a0a0a] border-l border-white/10 overflow-hidden rounded-none">
-                    <div className="p-10 pr-20 border-b border-white/5 bg-gradient-to-r from-brand-400/5 via-transparent to-transparent">
+                    <div className="p-10 pr-20 [@media(max-height:800px)]:py-5 border-b border-white/5 bg-gradient-to-r from-brand-400/5 via-transparent to-transparent">
                        <div className="flex items-center justify-between mb-2">
                           <div className="flex flex-col gap-4">
                              <div className="flex items-center gap-4 text-brand-400 font-sans text-[9px] uppercase tracking-[0.5em] font-bold">

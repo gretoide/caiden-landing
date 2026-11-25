@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import Map, { Marker } from 'react-map-gl';
 import type { ViewState } from 'react-map-gl';
 import type { Map as MapboxMap } from 'mapbox-gl';
@@ -26,7 +27,30 @@ type Props = {
   onMarkerClick: (marker: CityMarker) => void;
 };
 
-const MAX_BOUNDS: [[number, number], [number, number]] = [[-95, -65], [-35, -5]];
+const MAX_BOUNDS: [[number, number], [number, number]] = [[-130, -72], [0, 5]];
+const FIT_PADDING = { top: 56, bottom: 40, left: 32, right: 32 };
+
+// Web Mercator: longitude/latitude <-> fraction of the world map (0..1).
+const toX = (lng: number) => (lng + 180) / 360;
+const toY = (lat: number) => (1 - Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360)) / Math.PI) / 2;
+const toLat = (y: number) => (Math.atan(Math.exp(Math.PI * (1 - 2 * y))) * 360) / Math.PI - 90;
+
+/** Camera that shows every marker inside a map of the given size. */
+function overviewCamera(markers: CityMarker[], width: number, height: number) {
+  const xs = markers.map((m) => toX(m.lng));
+  const ys = markers.map((m) => toY(m.lat));
+  const [minX, maxX, minY, maxY] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  // Mapbox draws the world 512px wide at zoom 0.
+  const scale = Math.min(
+    (width - FIT_PADDING.left - FIT_PADDING.right) / ((maxX - minX) * 512),
+    (height - FIT_PADDING.top - FIT_PADDING.bottom) / ((maxY - minY) * 512)
+  );
+  const zoom = Math.min(5, Math.max(2, Math.log2(scale)));
+  const worldPx = 512 * 2 ** zoom;
+  // Shift the center so the larger top padding leaves room for the pins, which sit above their point.
+  const centerY = (minY + maxY) / 2 - (FIT_PADDING.top - FIT_PADDING.bottom) / 2 / worldPx;
+  return { longitude: ((minX + maxX) / 2) * 360 - 180, latitude: toLat(centerY), zoom, pitch: 0, bearing: 0 };
+}
 
 const MAP_STYLES = `
   .mapboxgl-ctrl-logo, .mapboxgl-ctrl-attrib { display: none !important; }
@@ -59,14 +83,31 @@ export default function InteractiveMap({
   selectedCityId,
   onMarkerClick,
 }: Props) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  // The camera is controlled by the parent, so a new view is reported to it.
+  const changeViewRef = useRef(onViewStateChange);
+  useEffect(() => {
+    changeViewRef.current = onViewStateChange;
+  });
+
+  // Overview (on open and on "Reset view"): zoom so every city fits, whatever the screen height.
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (selectedCityId || !wrapper || !markers.length) return;
+    const camera = overviewCamera(markers, wrapper.clientWidth, wrapper.clientHeight);
+    changeViewRef.current({ ...camera, padding: { top: 0, bottom: 0, left: 0, right: 0 } });
+  }, [selectedCityId, markers]);
+
   return (
-    <div className="w-full h-full relative">
+    <div ref={wrapperRef} className="w-full h-full relative">
       <Map
         {...viewState}
         onMove={(evt) => onViewStateChange(evt.viewState)}
         onClick={onBackgroundClick}
         maxBounds={MAX_BOUNDS}
-        minZoom={3}
+        minZoom={2}
+        // Flat map: the overview math assumes Mercator (v3 styles default to a globe at low zoom).
+        projection={{ name: "mercator" }}
         onLoad={(e) => applyDarkTheme(e.target)}
         style={{ width: '100%', height: '100%' }}
         mapStyle="mapbox://styles/mapbox/dark-v11"

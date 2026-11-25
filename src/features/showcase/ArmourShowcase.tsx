@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -21,7 +21,7 @@ import { starWarsData } from './data/starWars';
 gsap.registerPlugin(ScrollTrigger);
 
 const GALLERY_HREF = '/gallery';
-/** Each tile of the wall changes photo about this often. */
+/** Touch screens (no hover): each tile of the wall changes photo about this often. */
 const TILE_MS = 24000;
 const PARALLAX_PX = 60;
 
@@ -80,7 +80,7 @@ function useColumnCount() {
 }
 
 /** One frame of the wall: when its photo changes, the new one slides up and pushes the old one out. */
-function Tile({ photo }: { photo: Photo }) {
+function Tile({ photo, duration, onHover }: { photo: Photo; duration: number; onHover?: () => void }) {
   const [layers, setLayers] = useState<{ current: Photo; previous: Photo | null }>({ current: photo, previous: null });
   if (layers.current.id !== photo.id) setLayers({ current: photo, previous: layers.current });
   const currentRef = useRef<HTMLDivElement>(null);
@@ -89,16 +89,21 @@ function Tile({ photo }: { photo: Photo }) {
   useLayoutEffect(() => {
     if (!layers.previous) return;
     const tweens = [
-      gsap.fromTo(currentRef.current, { yPercent: 100 }, { yPercent: 0, duration: 1.6, ease: 'power3.inOut' }),
-      gsap.fromTo(previousRef.current, { yPercent: 0 }, { yPercent: -100, duration: 1.6, ease: 'power3.inOut' }),
+      gsap.fromTo(currentRef.current, { yPercent: 100 }, { yPercent: 0, duration, ease: 'power3.inOut' }),
+      gsap.fromTo(previousRef.current, { yPercent: 0 }, { yPercent: -100, duration, ease: 'power3.inOut' }),
     ];
     return () => tweens.forEach((t) => t.progress(1).kill());
-  }, [layers]);
+  }, [layers, duration]);
 
   const visible = layers.previous ? [layers.previous, layers.current] : [layers.current];
 
   return (
-    <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#0a0a0a]">
+    <div
+      onPointerEnter={(e) => {
+        if (e.pointerType === 'mouse') onHover?.();
+      }}
+      className="relative aspect-[3/4] w-full overflow-hidden bg-[#0a0a0a]"
+    >
       {visible.map((layer) => (
         <div key={layer.id} ref={layer.id === layers.current.id ? currentRef : previousRef} className="absolute inset-0">
           <img
@@ -117,14 +122,19 @@ function Tile({ photo }: { photo: Photo }) {
   );
 }
 
-/** Staggered columns of photos; one tile at a time swaps to a photo that is not on screen. */
+/**
+ * Staggered columns of photos. A tile swaps to a photo that is not on screen when the mouse passes
+ * over it; without a mouse, one tile at a time swaps on a timer.
+ */
 function PhotoWall({
   columns,
   running,
+  hoverSwap,
   columnRefs,
 }: {
   columns: number;
   running: boolean;
+  hoverSwap: boolean;
   columnRefs: React.RefObject<(HTMLDivElement | null)[]>;
 }) {
   // Fewer columns means smaller tiles, so more rows are needed to fill the height.
@@ -134,32 +144,39 @@ function PhotoWall({
   const shownRef = useRef(shown);
   const queueRef = useRef(PHOTOS.map((_, i) => i).filter((i) => !shown.includes(i)));
   const stepRef = useRef(0);
+  /** Tiles waiting for their next photo to load. */
+  const pendingRef = useRef(new Set<number>());
+
+  const swap = useCallback((tile: number) => {
+    if (pendingRef.current.has(tile)) return;
+    const next = queueRef.current.shift();
+    if (next === undefined) return;
+    pendingRef.current.add(tile);
+    // Preload first: the tile only changes once the new photo can be painted.
+    const loader = new window.Image();
+    loader.onload = () => {
+      pendingRef.current.delete(tile);
+      const updated = [...shownRef.current];
+      queueRef.current.push(updated[tile]);
+      updated[tile] = next;
+      shownRef.current = updated;
+      setShown(updated);
+    };
+    loader.onerror = () => {
+      pendingRef.current.delete(tile);
+      queueRef.current.push(next);
+    };
+    loader.src = photoUrl(PHOTOS[next].id);
+  }, []);
 
   useEffect(() => {
     if (!running) return;
-    let cancelled = false;
     const timer = window.setInterval(() => {
-      const next = queueRef.current[0];
-      if (next === undefined) return;
       // Walk the tiles with a stride so consecutive changes happen in different columns.
-      const tile = (stepRef.current++ * (rows + 1)) % tiles;
-      // Preload first: the tile only changes once the new photo can be painted.
-      const loader = new window.Image();
-      loader.onload = () => {
-        if (cancelled || queueRef.current[0] !== next) return;
-        const updated = [...shownRef.current];
-        queueRef.current = [...queueRef.current.slice(1), updated[tile]];
-        updated[tile] = next;
-        shownRef.current = updated;
-        setShown(updated);
-      };
-      loader.src = photoUrl(PHOTOS[next].id);
+      swap((stepRef.current++ * (rows + 1)) % tiles);
     }, TILE_MS / tiles);
-    return () => {
-      cancelled = true;
-      window.clearInterval(timer);
-    };
-  }, [running, rows, tiles]);
+    return () => window.clearInterval(timer);
+  }, [running, rows, tiles, swap]);
 
   return (
     <div className="absolute inset-0 flex items-start gap-2 md:gap-3 px-2 md:px-3">
@@ -172,7 +189,12 @@ function PhotoWall({
             className="flex flex-col gap-2 md:gap-3 will-change-transform"
           >
             {Array.from({ length: rows }, (_, row) => (
-              <Tile key={row} photo={PHOTOS[shown[col * rows + row]]} />
+              <Tile
+                key={row}
+                photo={PHOTOS[shown[col * rows + row]]}
+                duration={hoverSwap ? 0.7 : 1.6}
+                onHover={hoverSwap ? () => swap(col * rows + row) : undefined}
+              />
             ))}
           </div>
         </div>
@@ -275,7 +297,7 @@ export default function ArmourShowcase() {
         aria-label="View the full gallery (opens in a new tab)"
         className="group absolute inset-0 block outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-400"
       >
-        {near && <PhotoWall key={columns} columns={columns} running={inView && !reducedMotion} columnRefs={columnRefs} />}
+        {near && <PhotoWall key={columns} columns={columns} running={inView && !reducedMotion && !mouseEffects} hoverSwap={mouseEffects} columnRefs={columnRefs} />}
 
         {/* Dark spot behind the text, and fades to black into the hero above and Skills below */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.85)_0%,rgba(0,0,0,0.5)_32%,transparent_62%)] pointer-events-none" />
