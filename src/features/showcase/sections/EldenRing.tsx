@@ -203,7 +203,7 @@ export default function EldenRing({ onOpen }: Props) {
           loading="eager"
           fetchPriority="high"
           className="absolute inset-0"
-          imgClassName="w-full h-full object-cover object-[65%_35%] opacity-80"
+          imgClassName="w-full h-full object-cover object-[65%_35%] opacity-90"
           sizes="100vw"
         />
         {/* Darker on the left, where the title sits. The whole banner fades out at the bottom (mask)

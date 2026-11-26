@@ -153,8 +153,8 @@ export default function GalleryPage() {
       {/* Vertical index on the right edge: follows the scroll, opens on hover, click to jump. */}
       <SuitNav suits={SUITS} galleryRef={galleryRef} />
 
-      {/* On xl the content of each build makes room for the side index on the right (backgrounds stay full width). */}
-      <div ref={galleryRef} className="bg-black w-full flex flex-col xl:[&_.container]:pr-56">
+      {/* Full-width builds: the side index floats over the right edge. */}
+      <div ref={galleryRef} className="bg-black w-full flex flex-col">
         <EldenRing onOpen={setExpandedPublicId} />
         <DiabloIV onOpen={setExpandedPublicId} />
         <Skyrim onOpen={setExpandedPublicId} />
