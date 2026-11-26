@@ -68,7 +68,7 @@ export default function DetailGrid({ imageIds, details, onOpen, reversed = false
   }, { scope: containerRef });
 
   return (
-    <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-3 h-auto md:h-[70vh]">
+    <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-12 md:grid-rows-1 gap-2 md:gap-3 h-auto md:h-[70vh]">
       {/* Zoom Study Column (Ordered first or last) */}
       <div className={`compact-item-anim ${span} grid ${studies === 1 ? 'grid-rows-1' : 'grid-rows-2'} gap-2 md:gap-3 h-[60vh] md:h-full ${studyInMiddle ? 'order-2' : reversed ? 'md:order-last' : 'md:order-first'}`}>
         {orderedStudyDetails.slice(0, studies).map((detail, idx) => (
