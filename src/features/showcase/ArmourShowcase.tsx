@@ -54,7 +54,9 @@ const ALL_BUILDS = [
 // Cards at the end of /gallery. The extra Skyrim pieces belong to the Skyrim build, so they only add photos.
 const CARDS = [...compactBuilds, ...propBuilds];
 const TOTAL_BUILDS = ALL_BUILDS.length + CARDS.filter((card) => !card.id.startsWith('skyrim-')).length;
-const TOTAL_PHOTOS = [...ALL_BUILDS, ...CARDS].reduce((total, build) => total + build.gallery.length, 0);
+// Plus the extra photos some builds show outside their main gallery (Skyrim events, Nero's arm).
+const EXTRA_PHOTOS = skyrimData.events.length + (neroData.feature ? 1 : 0);
+const TOTAL_PHOTOS = [...ALL_BUILDS, ...CARDS].reduce((total, build) => total + build.gallery.length, EXTRA_PHOTOS);
 
 // Spread every project evenly along the list, so neighbouring tiles come from different builds.
 const PHOTOS: Photo[] = PROJECTS.flatMap(({ project, ids }, p) =>

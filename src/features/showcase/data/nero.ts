@@ -13,6 +13,8 @@ export const neroData = {
     'caiden_landing_images/gallery/nero/nero_4',
     'caiden_landing_images/gallery/nero/nero_3',
   ],
+  // Wide shot under the grid, to show off the glowing Devil Bringer arm
+  feature: 'caiden_landing_images/gallery/nero/nero_1',
   zoomDetails: [
     { id: 1, label: 'Detail', zoom: 1.1, position: '50% 40%' },
     { id: 2, label: 'Full', zoom: 1.0, position: '50% 50%' },

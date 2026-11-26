@@ -4,7 +4,7 @@ export const hipoData = {
   title: 'DreamWorks',
   subtitle: 'Hiccup – How to Train Your Dragon // 2022',
   subtitleClassName: 'text-[#dc2626]',
-  description: 'Study of organic surfaces and anatomy through a multi-material sculpture build.',
+  description: 'Made for a DreamWorks advertising campaign. A study of organic surfaces and anatomy through a multi-material sculpture build.',
   descBorderClassName: 'border-[#dc2626]',
   bg: 'caiden_landing_images/gallery/hipo/hipo_3',
   bgOverlayClassName: 'bg-red-600/20 mix-blend-overlay',

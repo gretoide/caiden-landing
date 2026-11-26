@@ -107,6 +107,26 @@ export default function Skyrim({ onOpen }: Props) {
             </div>
           </div>
         </div>
+
+        {/* Out in the wild: conventions and stage */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mt-2 md:mt-4">
+          {data.events.map((publicId, i) => (
+            <div key={publicId} className="skyrim-item-anim relative group overflow-hidden border border-white/5 aspect-[2/3]">
+              <Image
+                publicId={publicId}
+                alt={`Skyrim Daedric armor at an event ${i + 1}`}
+                variant="full"
+                className="w-full h-full"
+                imgClassName="grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 cursor-pointer object-cover"
+                sizes="(min-width: 768px) 25vw, 50vw"
+                onClick={() => onOpen(publicId)}
+              />
+              <div className="absolute top-3 left-3 md:top-4 md:left-4 text-[7px] md:text-[10px] text-white/40 tracking-[0.3em] uppercase z-20 pointer-events-none">
+                On stage // {String(i + 4).padStart(2, '0')}
+              </div>
+            </div>
+          ))}
+        </div>
         </div>
     </>
   );

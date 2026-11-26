@@ -54,7 +54,7 @@ export const compactBuilds: readonly CompactBuild[] = [
     subtitle: 'Vikings // 2017',
     subtitleClassName: 'text-[#7dd3fc]',
     descBorderClassName: 'border-[#7dd3fc]',
-    description: 'Lagertha, with leather armor, layered fabrics and sword.',
+    description: 'Made for an MGM Television advertising campaign. Lagertha, with leather armor, layered fabrics and sword.',
     gallery: [`${ROOT}/vikings/vikings_1`],
   },
   {

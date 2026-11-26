@@ -88,10 +88,16 @@ export default function CompactBuilds({ id, heading, builds, onOpen }: Props) {
           {builds.map((build) => {
             const [main, ...extras] = build.gallery;
             return (
-              <article key={build.id} id={build.id} className={`flex min-w-0 flex-col ${build.wide ? 'sm:col-span-2' : ''}`}>
-                {/* Square cards; a wide one is 2:1, so both end up the same height in a row. */}
+              <article
+                key={build.id}
+                id={build.id}
+                // Subgrid: photo, title, subtitle and text share rows with the cards beside it, so frames
+                // and text line up even when one description runs longer.
+                className={`row-span-4 grid min-w-0 grid-rows-subgrid gap-y-0 ${build.wide ? 'sm:col-span-2' : ''}`}
+              >
+                {/* Square cards; a wide one fills the row height set by the square ones. */}
                 <div
-                  className={`relative aspect-square overflow-hidden border border-white/5 bg-[#0a0a0a] group ${build.wide ? 'sm:aspect-auto sm:flex-1' : ''}`}
+                  className={`relative aspect-square overflow-hidden border border-white/5 bg-[#0a0a0a] group ${build.wide ? 'sm:aspect-auto sm:h-full' : ''}`}
                 >
                   {build.rotate ? (
                     <RotatingPhotos build={build} sizes="(min-width: 1024px) 66vw, 100vw" onOpen={onOpen} />
@@ -128,7 +134,7 @@ export default function CompactBuilds({ id, heading, builds, onOpen }: Props) {
                 </div>
                 <h2 className="mt-6 font-serif text-4xl leading-none text-white">{build.title}</h2>
                 <p className={`mt-3 font-sans text-sm font-bold uppercase tracking-widest ${build.subtitleClassName}`}>{build.subtitle}</p>
-                <p className={`mt-4 border-l-2 pl-4 font-sans text-sm leading-relaxed tracking-wide text-white/50 ${build.descBorderClassName}`}>
+                <p className={`mt-4 self-start border-l-2 pl-4 font-sans text-sm leading-relaxed tracking-wide text-white/50 ${build.descBorderClassName}`}>
                   {build.description}
                 </p>
               </article>

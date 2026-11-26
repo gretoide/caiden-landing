@@ -12,5 +12,12 @@ export const skyrimData = {
     'skyrim_6_b9efrf', // Column 1
     'skyrim_7_yqhwyx', // Column 2
     'skyrim_8_nabnf5', // Column 3
-  ]
+  ],
+  // At conventions and on stage, shown in a row below the studio shots
+  events: [
+    'caiden_landing_images/gallery/skyrim/skyrim_1',
+    'caiden_landing_images/gallery/skyrim/skyrim_3',
+    'caiden_landing_images/gallery/skyrim/skyrim_2',
+    'caiden_landing_images/gallery/skyrim/skyrim_event_1',
+  ],
 } as const;

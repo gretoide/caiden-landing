@@ -2,7 +2,7 @@ export const starWarsData = {
   title: 'Lucasfilm',
   subtitle: 'Star Wars // 2017',
   subtitleClassName: 'text-[#ef4444]',
-  description: 'Praetorian Guard armor, the red elite protectors of the Supreme Leader.',
+  description: 'Made for a Lucasfilm advertising campaign. Praetorian Guard armor, the red elite protectors of the Supreme Leader.',
   descBorderClassName: 'border-[#ef4444]',
   bg: 'caiden_landing_images/gallery/star_wars/star_wars_2',
   bgOverlayClassName: 'bg-red-700/20 mix-blend-overlay',
