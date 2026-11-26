@@ -195,7 +195,7 @@ export default function EldenRing({ onOpen }: Props) {
     <section ref={containerRef} id="elden-ring" className="relative w-full min-h-screen bg-[#0a0202] overflow-hidden pb-24 md:pb-32">
       {/* Opening banner of /gallery: the first photo ("Warrior of the lands") fills the first screen
           behind the header, so the page starts like a cover and the gallery begins below it. */}
-      <div className="elden-banner-anim absolute inset-x-0 top-0 h-svh z-0 pointer-events-none overflow-hidden mask-b-from-50% mask-b-to-100%">
+      <div className="elden-banner-anim absolute inset-x-0 top-0 h-svh z-0 pointer-events-none overflow-hidden mask-b-from-80% mask-b-to-100%">
         <Image
           publicId={data.gallery[0]}
           alt=""
@@ -203,13 +203,11 @@ export default function EldenRing({ onOpen }: Props) {
           loading="eager"
           fetchPriority="high"
           className="absolute inset-0"
-          imgClassName="w-full h-full object-cover object-[65%_35%] opacity-90"
+          imgClassName="w-full h-full object-cover object-[65%_35%]"
           sizes="100vw"
         />
-        {/* Darker on the left, where the title sits. The whole banner fades out at the bottom (mask)
-            into the section colour, so there is no visible band where the photo ends. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent z-[1]"></div>
-        <div className="absolute inset-0 bg-[#0a0202]/30 mix-blend-multiply z-[1] pointer-events-none"></div>
+        {/* The photo as it is; only its bottom edge fades out (mask) into the section colour, so there
+            is no visible band where it ends. */}
       </div>
       
       <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-black to-transparent z-[5]"></div>
